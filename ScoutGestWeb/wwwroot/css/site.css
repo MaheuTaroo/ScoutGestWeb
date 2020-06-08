@@ -1,0 +1,289 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+}
+body {
+    /*height: 100%;*/
+    overflow: hidden; /*esconder todas as scrollbars, em caso so seja preciso esconder so uma avisar para alterar*/
+    display: flex;
+    flex-direction: column;
+}
+#body-dash {
+    background-color: rgba(0,0,0,0.05);
+    background-image: url(../imgs/cross_transparent.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 1px;
+    grid-template-areas: "dash-pio dash-caminh" "dash-explo dash-lob";
+    padding: 0px 0px 0px 0px;
+}
+#dash-lob {
+    grid-area: dash-lob;
+    background: linear-gradient(to bottom right, rgba(255, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+}
+#dash-explo {
+    grid-area: dash-explo;
+    background: linear-gradient(to bottom left, rgba(0, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+}
+#dash-pio {
+    grid-area: dash-pio;
+    background: linear-gradient(to top left, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+}
+#dash-caminh {
+    grid-area: dash-caminh;
+    background: linear-gradient(to top right, rgba(255, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+}
+
+#powell {
+    background-image: url(../imgs/baden_powell_transparent_fig.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: calc(inherit / 2);
+}
+
+#login {
+    display: table;
+}
+
+.split {
+    height: 100%; 
+    width: 50%; 
+    position: fixed;
+    overflow-x: hidden;
+    text-align: center;
+    vertical-align: middle;
+    z-index: 1;
+    top: 0;
+}
+.left {
+    left: 0;
+    direction:rtl
+}
+.right {
+    right: 0;
+    direction: ltr;
+    /*width: 35%;*/
+    /*isto em ecras maiores ou menores n vai resultar
+        hold up, eu vi uma resolucao na net*/
+    /*oki*/
+    /*so how does it look for u?*/
+    /*a c t u a l l y   c e n t e r e d
+        you?*/
+    /*same*/
+    /*well i have to go make dinner , so see ya*/
+    /*ja?*/
+}
+
+#login form {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+}
+
+.button {
+    border-radius: 12px;
+}
+
+
+.container {
+    /*position: absolute;*/
+    right: 0; /*nao alterar se nao da cabo da imagem... somehow -_-*/
+    /*margin: 20px;
+    max-width: 300px;
+    padding: 16px;*/
+    background-color: transparent;
+    height: 30%; /*menor vai para cima*/
+    width: 100%; /*can't see the diference*/
+    /*vertical-align: middle;*/
+    animation: fadeIn ease 3s;
+    -webkit-animation: fadeIn ease 3s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-ms-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/*there esta com animation e esta centrado,o que falta fazer no log in?*/
+/*fzr com q qd o ecra for pequeno apareca a img como fundo do form em vez d pareado, i think
+    enquanto isso, vou tentando perceber como tratar do body do dashboard*/
+/*podes dividir em 4 caixas e dp e so alterar cor*/
+/*eu sei, mas o body ta a extender ate atras do footer qd n e suposto*/
+/*oh oki*/
+/*o login n ta centrado*/
+/*nao tou a conseguir encontrar codigo codigo que faça o que tavas a pedir, e em relaçao
+    ao log in, vou ja tratar disso*/
+/*how about now? how does it looked?*/
+/*answer in wpp*/
+/*i saw it don't worry*/
+/*try it now*/
+/*whatsapp*/
+
+nav * {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+    margin-bottom:auto;
+    float:left;
+    text-align:center;
+}
+h1 h2 h3 h4 h5 h6 {
+    text-align: center;
+}
+table td {
+    border: 2px solid black;
+}
+table th {
+    border: 2px solid black;
+}
+.column {
+    float: right;
+    width: 25%;
+    padding: 10px;
+}
+
+
+/*por favor deixa isto estar como esta por agora*/
+/*ok entao what should i do for now?*/
+/*tentar ver como por a img a esquerda sem mexer na estrutura do form, apenas p o por a direita*/
+/*oki vou ver isso entao*/
+/*wait what happened? o coiso tava no meio*/
+/*eu n fiz nd,ja ta assim ha bastante tempo*/
+/*eu nao fiz nada eu passei maioria do tempo a procura de um cod... eu vou ver o que fiz*/
+/*a cena e q eu queria incluir o corpo td e a assinatura, mas dps fica c um border q n sei tirar*/
+/*nao ha algo do genero  de um image escale que podiamos utilizar? maybe com width 100 e height auto?  */
+/*doesnt work*/
+/*yeah saw it*/
+/*da para utilizar java? in this project*/
+/*nos ja temos um ficheiro javascript, mas eu queria evitar usar isso pq as pessoas podem desativa-lo*/
+/*oh oki*/
+
+/*@media screen and (width: 600px) {
+    #powell{
+        display: none;
+    }
+    #login {
+        background-image: url(../imgs/baden_powell_transparent_fig.png);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+}
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}*/
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+* {
+    box-sizing: border-box;
+}
+
+
+
+/*hey queres parar por agora para ires estudar uma beca?*/
+/*e dp continuamos?*/
+/*se calhar e mlhr*/
+/*ok lembra te com calma e boa sorte*/
+/*habits*/
+/*tens mais algumas ideias para o log in?*/
+/*oh wait maybe we could add fb and insta button but for that i think we need those type of links that give us
+    resources, idk what do u think?
+*/
+/*i think this should be better*/
+/*u mean leaving less space open?*/
+/*yea, and beautifying this*/
+/*well we could add the footer and change the button style and some fonts but how about we try moving both of the st
+    stuff more to the center the image a bit more.
+*/
+
+/*queres que eu tente puxar mais o log in para o centro da pag ou esta good e avanço para detalhes do log in ?*/
+/*ta bom acho eu, deixa ver
+    acho q deviamos tirar o footer e fzr c q o "benvindo ao scoutgest" fosse uma animacao em q aparecesse e
+    desaparecesse 1 seg dps, p dps aparecer o form e a img dps disso*/
+/*animaçao fine by me, mas achas que deviamos mesmo tirar o footer?*/
+/*estorva um bocado*/
+/*mmmm oki entao vou ja tirar e dp começo a tratar da animação*/
+/*o prob e q o login da p fzr scroll horizontal, e n e suposto
+    consegues tratar disso?*/
+/*il see what i can do in the meantime vou tb ver essa parte da animação*/
+/*mas trata primeiro do scroll*/
+/*okii*/
+/*scrollbar gone now animations and brb*/
+/*im back*/
+footer {
+    text-align: center;
+    padding: 3px;
+    color: black;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+/*like it think it look good, but whatd do u think?*/
+/*i dont have any fuckin idea, unless we mess up with the media tag*/
+/*lunch time, see ya at 14h
+    want me to let this open? i can do it*/
+/*let me just try this then il go*/
+/*u can turn it off */
+/*cya at 14h then
+        vais fzr o teste d melhoria?*/
+/*i still haven't decided */
