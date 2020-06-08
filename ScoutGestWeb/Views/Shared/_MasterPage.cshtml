@@ -1,0 +1,209 @@
+﻿@{
+    Layout = null;
+
+}
+<html lang="pt-pt">
+<head>
+    <meta name="viewport" content="width=device-width" initial-scale="1" charset="windows-1252" />
+    <title>@ViewData["Title"] - ScoutGest</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/animate.min.css" rel="stylesheet" />
+    <script src="~/js/site.js"></script>
+</head>
+<body class="bg-white text-dark">
+    <!--<label>Aqui o texto antes do dropdown</label>
+    <select label="Tesouraria">
+        <option>Tesouraria</option>
+        <optgroup label="Entradas">
+            <option>Criar</option>
+            <option>Editar</option>
+            <option>Remover</option>
+        </optgroup>
+        <optgroup label="Despesas">
+            <option>Criar</option>
+            <option>Editar</option>
+            <option>Remover</option>
+        </optgroup>
+        <optgroup label="Transf. dinheiro entre caixas">
+            <option>Criar</option>
+            <option>Editar</option>
+            <option>Remover</option>
+        </optgroup>-->
+    <!--<option value="o que acontece">texto dessa opção</option>-->
+    <!--adicionei aqui cenas-->
+    <!--Header-->
+    <!--im going now when ur mom is finish don't forget to sent it to me the thing -->
+    <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
+        <partial name="Partial/_Header" />
+
+        <ul class="nav container-fluid bg-dark text-center">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Atividades" asp-action="Index"><h6>Atividades</h6></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="" asp-action=""><h6>Tesouraria</h6></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="" asp-action=""><h6>Contactos</h6></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="" asp-action=""><h6>Regulamento</h6></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="LogOut"><h6>Log out</h6></a>
+            </li>
+        </ul>
+    </div>
+    <!--<div id="starter" class="animate__animated animate__fadeOut animate__delay-2s" style="position: absolute;">
+        <h1>Benvindo/a ao ScoutGest, <br /> @ScoutGestWeb.UserData.UserData.userData["User"]</h1>
+    </div>-->
+
+    @if (ViewData["Title"].ToString() == "Página inicial")
+    {
+    <div class="container-fluid animate__animated animate__fadeIn" id="body-dash">
+        @RenderBody()
+    </div>
+    }
+    else
+    {
+    <div class="container-fluid animate__animated animate__fadeIn" style="margin:auto">
+        @RenderBody()
+    </div>
+    }
+    <!--Footer-->
+    <footer class="footer bg-dark text-white text-center">
+        ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
+    </footer>
+</body>
+</html>
+<!--
+ /*oops sry my bad
+            //its alright at least nao foi um grande prob
+            //ja falei c o stor acerca disto, ele mandou me uns links p remediar. vai ser um grande pain in the ass p fzr as migrations tds
+            //remediar? and yeah mas nao podes simplesmente mandar isto em zip para ele?
+            /*eu ja disse ao stor como e q tinha feito, e ele recomendou-me usar o identity q o asp.net tem
+            a cena e q eu n criei o projeto c a parte do identity, portanto vou ter d criar manualmente agr*/
+            //ouch e ha alguma coisa que eu possa fazer para ajudar te nisso?
+            /*deixa mandar te os links e tu avalias, hold up
+            pq eu tb n sei se preciso d ajuda ou n lmao*/
+-->
+<!--brb-->
+<!--oki lets get back to businsess-->
+<!--qd eu faco commit das cenas, aparece no teu lado q eu tnh um commit p fzr push?-->
+<!--nope a unica -->
+<!--but does u have something saying it is in source control? or does it say anything at all on the lower right corner?-->
+<!--no can't see anything saying that-->
+<!--gonna start ok?-->
+<!--yea-->
+<!--what did you make?-->
+<!--retirei o texto antes da coisa, diminui as letras e tb fiz com que o container nao ficasse tao grande so yeah o-->
+<!--tb temos d tratar d centrar o navbar e criar o look p o login-->
+<!--oki vou começar pelo nave bar e dp vou para o log in-->
+<!--so, a mnh mae teve uma ideia p a view d inicio
+    ela disse q dps ia fzr um esquema no corel, eu dps converto e mando te no wpp-->
+<!--ta td a correr bem? ja fizeste alguma cena?-->
+<!--sim mas tbh acho que nao tou a contribuir o suficiente u know :v-->
+<!--mas o q e q fizeste ate agr?
+    just curious-->
+<!--bem tive a organizar os nosso comentarios, adicinei alguns em algumas partes, tb mudei so algumas cenas tipo
+    titulos, dp tb dei um pouco de visual flare-->
+<!--ja tou a ver q n tas a ter mts ideias p isto
+    imo a img d fundo do header n fica mt bem, achas q es capaz d pensar em alguma ideia?-->
+<!--tas te a referir a cor ou ao arco iris que fizeste? ou header no geral-->
+<!--tava a referir ao arco iris, mas se tiveres mais alguma ideia p alterar forca-->
+<!--then how about tiramos acho qyue a imagem com o titulo ficaria bem num fundo branco-->
+<!--tu ficaste d tratar da parte grafica, tu sbs
+    can i does the start?-->
+<!--yeee-->
+<!--hello there decidi por uma biblioteca css d animacoes q encontrei ha pelo menos uns meses atras-->
+<!--o que e que eu tenho para fazer hoje?-->
+<!--continuar o q temos d fzr, views e censura d login
+e obviamente o resto do trabalho-->
+<!--so basically tenho de começar as views para as outras oçoes-->
+<!--mas ainda n comecaste as views?-->
+<!--nao pq tava concentrado na master page-->
+<!--alias nem consigo criar as outras views-->
+<!-- como e q n consegues? deves ter permissao d escrita-->
+<!--a unica cena que consigo criar e um novo arquivo que e so um txt file-->
+<!--ent diz me qd quiseres criar views e da o nome
+    ou ent eu crio os controllers p as cenas e dps crio as views
+    hold up-->
+<!--im holding-->
+<!--tou a criar os controllers lmao-->
+<!--oki oki-->
+<!--pds editar as views q tens agr, dps crio novas
+    tou so a resolver um problema-->
+<!--ok will do-->
+<!--just wanted to test foooter-->
+<!--yep-->
+<!--o que achas da area do evento?-->
+<!--acho q so falta meter uma foto a esquerda. vou tratar da tabela agr-->
+<!--brb-->
+<!--tb eu posso tratar do cod enquanto tu pegas numa imagem-->
+<!--Em que sitio esta os comentarios que fizemos antes da ´hora do almoço?-->
+<!--no mm sitio lmao
+    deve tar no home controller no final do ficheiro-->
+<!--oki thnaks-->
+<!--J a fizeste a parte do codigo onde se meter um user vai para um sitio se meter outro vai para para outro? -->
+<!--ainda temos tb d tratar do q aparece na view
+    mas acho q n-->
+<!--oki so tou a perguntar pq a cena da lista de escoteiros ta a aparecer em ciima das cenas que eu criei, e tratar d
+    do q?-->
+<!--esse botao so vai aparecer qd se fizer login como admin
+    um exemplo do q temos d tratar-->
+<!--e como e que sujere tratar disso?-->
+<!--razor nas views
+    eu dou um exemplo
+    hold up-->
+<!--esta merda teve uma excecao e agr n me deixa entrar no dashboard-->
+<!--queres fechar o prog e voltar a abrir?-->
+<!--obvio-->
+<!--oki-->
+<!-- fazemos ja uncomment p ver?-->
+<!--i guess mas a cena e que tenho medo se o cod nao tiver no sitio certo-->
+<!-- p isso e q vamos fzr build lmao-->
+<!--oki then-->
+<!-- ainda n fizemos uncomment lmao-->
+<!-- lets go -->
+<!--commit & push to repo done-->
+<!--oki, quando acabarmos por hoje vou la buscar para tb ter no meu pc-->
+<!--:ok_hand:
+    mas d cada vez q fizer um commit & push, dps hais ter d sacar essas alteracoes p o teu pc
+    d tds as vezes q acontecer-->
+<!--yeah but i don't mind tbh having at least the copy of or work it makes me feel better XD bcz things can happen -->
+<!--metes aqui os campos temos de ver se isto funciona-->
+<!--dafuq? is this tag a thing?-->
+<!--que tal meter a imagem como background?-->
+<!--era o q tava a fzr, bruh xd-->
+<!--pensei que querias meter no header-->
+<!--btw toma atenção as horas-->
+<!--ah yes, me be recordin if u need something-->
+<!-- e tava a meter no header xd-->
+<!--e como eu disse em caso o stor dizer que e para eu estar na reuniao manda me mensagem, e lol XD acontece -->
+<!--o teams diz q a reuniao e as 16h30
+    portanto mais 1h15 p nos-->
+<!--oki then, podes so ver se o drop down funciona? e btw lol ja da para ver mais um bocadinho XD-->
+<!--deixa so criar uma pag d teste-->
+<!--oki-->
+<!-- my error, my bad-->
+<!--its alright tbh it's funny when out of nowhere an error comes on my screen XD-->
+<!-- tinha escrito viewbag em vez d viewdata xd-->
+<!--there u go, ur test-->
+<!--im not ready for this test XD-->
+<!--u more ready than me, u knew this and i didnt, eu tive a fzr a pag enquanto olhava p os exemplos dos tutoriais
+    do asp.net antigo xd-->
+<!--se quiseres podes ver os videos, ainda tens tempo, o stor deu nos ate dia 22-->
+<!--MAS O TESTE N E DOS MODS 9 E 10? caps xd e acho q ja sei a resolucao-->
+<!--ah tas a falar disso eu pensei que tivesses a falar do asp.net-->
+<!-- tb eu, mas n sabia q tinhamos teste d asp.net dia 22-->
+<!--o teste e de mod 10 so no worries-->
+<!-- Y O U   G O T   M E   A   C A R D I A C   A R R E S T-->
+<!--sorry x\-->
+<!--dp faz copy paste para teres a quantidade que queres-->
+<!--se quiseres eu posso mandar pic do codigo-->
+<!--yeah we did it XD-->
+<!--</select>-->

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ScoutGestWeb.Models.GrupoViewModel>
+
+@{
+    ViewData["Title"] = "Grupos";
+}
+
+<h1>Informação geral sobre os grupos</h1>
+<!--Informação dos grupos-->
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Sigla)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Seccao)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Pseudonimo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sigla)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seccao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pseudonimo)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

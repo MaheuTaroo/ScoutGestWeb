@@ -1,0 +1,169 @@
+﻿@model ScoutGestWeb.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ScoutGest</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="icon" href="~/favicon.ico" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+</head>
+
+<body id="login" class="row">
+    <div class="split left" id="powell"></div>
+    <div class="split right" id="login">
+        <form asp-action="Index" method="post">
+            <h2>Login</h2>
+            <label asp-for="Username">Username: </label>
+            <input asp-for="Username" /><br />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Username)</div>
+            <label asp-for="Password">Password: </label>
+            <input asp-for="Password" type="password" /><br />
+            <button class="btn btn-primary" type="submit">Login</button>
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Password)</div>
+        </form>
+        <div class="bg-img">
+
+            <!--<img src="~/imgs/baden_powell_transparent.png" style="width: 35%; position: absolute; float: left;"> -->
+            <div class="container">
+
+            </div>
+        </div>
+    </div>
+
+    <!--hey i think i found the solution to our prob: https://www.youtube.com/watch?v=bh3UAetYkUI, btw have to go
+    because fazer almoço mas e obvio que volto a tarde-->
+    <!-- https://www.figma.com/file/83UUjKtzlsacz6VeeIuJuO/ScoutGestWeb -->
+
+</body>
+</html>
+
+
+
+
+<!--eu sei que ja probably tentamos mas que tal tentar tirar a imagem fora do comentario-->
+<!--acabei d ter uma ideia
+e q tal se pusessemos a img como fundo e dps puxassemos td p a direita-->
+<!--well that would make things easier -->
+<!--acabei d ter uma ideia-->
+<!--lay it on me-->
+<!--ok *lays idea on corpse*
+a ideia q tive era recortar a parte util da figura (ja recortei) e dps dividir o body em 2 rows:
+1 figura
+2 form-->
+<!--mas com isso dp nao iria ver se a borda da divisao?-->
+<!--1: maybe, lets check
+2: i just had a fuckin deja vu somehow, bruh-->
+<!--oki lets try it and the deja vu thing probably is because last week we had test and today we have technically another -->
+<!--o ecra ja esta dividido? as in code-->
+<!--ja pusemos 2 divs, eu a te pus css, n te lembras?-->
+<!--oh yeah..., e let me guess tb ja meteste o coiso do log in na direita e a imagem na esquerda-->
+<!--entao a partia e so centrar o coiso do log in? i mean it does make sense..   -->
+<!--parece q n tiveste cmg ontem
+also whatsapp-->
+<!--can i start?-->
+<!--finished loading out the 2 main pages
+  criei conta no figma, u should do it too
+  also i need to do that too
+  cria conta no figma q eu mando te o export do layout-->
+<!--okii-->
+<!--jj-dev-->
+<!--File not found
+Either this file doesn’t exist or you don’t have permission to view it. Ask the file owner to
+        verify the link and/or update permissions.-->
+<!--giv email-->
+<!--jjoao916arrobagmail.com
+yes eu sei que ha um botao mas esse botao nao funciona-->
+<!--o q e q tas a flr?-->
+<!--escrevi arroba em vez de meter o arroba-->
+<!--also brb going to make almoçoe dp eu volto-->
+<!--tb tnh d fzr lmao-->
+<!--well technically este ficheiro  pode servir como o layout do log in pq ja ta aqui o cod e tb o form ja ta dentro do body -->
+<!--vou testar uma cena-->
+<!--okiii-->
+<!--eu nao compreendo o que falta? eu vou ver se consigo encontrar o projeto que estava a falar-->
+<!--acho q ja sei o q falta-->
+<!--diz la-->
+<!--segue o meu rato
+reparaste o q era?-->
+<!--yeah mas se so foi por causa disso eu vou ter um ataque XD mas continuando -->
+<!--esqueceste te q tinhas comentado o css-->
+<!--yea mas como no cod de w3schools nao tava la eu pensei que não era necessario e comentei, mas pronto bora la
+tentar agora meter a imagem bem-->
+<!--ja fizeste login?-->
+<!--nao ainda tou a ver se consigo meter a imagem no lado esquerdo do log in-->
+<!--brb-->
+<!--brb too-->
+<!--im back and ookii-->
+<!--hey going to leave bcz reuniao-->
+<!--am back after too much time
+    am sry-->
+<!--it's alright-->
+<!--<head />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="~/css/main.css" rel="stylesheet" />
+<body class="bg-dark text-white" />
+    <!--Titulo/Header-
+<div class="container-fluid bg-dark text-white pt-3 pb-3"></div>
+
+
+<div class="container-fluid bg-white text-dark pt-3 pb-3">
+    <div class="container mt-5 mb-5">
+        (arroba)RenderBody()
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>-->
+<!--btw isto e o login-->
+<!--Looks nice -->
+<!--the part of the inserting data needs a bit of formating but it' s looking nic-->
+<!-- claro q precisa, ainda so tou a testar xd-->
+<!-- I can see that XD-->
+<!--what do u want me to do?-->
+<!-- work on the layout, think bout functions, etc
+    meanwhile im workin on this
+    ill always ask when i need to build, no worries xd-->
+<!--Oki entao vou sair e cvou começar a fazer isso em papel dp digo te algo-->
+<!-- tava a flr aqui, mas td bem xd-->
+<!--Aqui onde esta style text- align nao pode so estar style="text-center?"-->
+<!--acho q isso n e um atributo valido no css-->
+<!--okiiiiiiiiiiii Xd-->
+<!--can i build?-->
+<!--yeah e eu vou ver os exercicios praticos do vid para ver se tiro algum codigo basicaly copy paste -->
+<!--cOpY PaStA
+btw qrs q te passe os ficheiros disto p o whatsapp?-->
+<!--sim mas guarda primeiro, btw eu teho conta no github -->
+<!-- so do i, ja tnh 5 cenas la, ja tnh conta desde q tinhamos d fzr o proj d software xd
+lemme just build to send u-->
+<!--oki btw um dos exercicios era guardar,eliminar e alterar registos em caso queiras, que eu coloque
+isso ai avisa -->
+<!-- eu ja tava  fzr isso p os escuteiros xd-->
+<!--ookii-->
+<!--ja tenho-->
+<!-- ja tens o q?
+<!acabei de transferir o projeto just that XD-->
+<!--bem ja sei mais ou menos como podemosn fazer o log out, mas so sei voltar atras da pag com um click, nao
+a parte do log out-->
+<!--what-->
+<!--meti para ver se da para aproveitar alguma coisa, como por exemplo aqui podemos copiar a maneira que ele fez o header-->
+<!-- where did u steal this from tho-->
+<!--videos-->
+<!-- and u translated all this shit into text
+    damn son-->
+<!--o gajo mostra o codigo-->
+<!--ik, but damn
+    btw-->

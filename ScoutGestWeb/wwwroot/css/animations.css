@@ -1,0 +1,10 @@
+﻿@keyframes fadein {
+    0% { opacity: 1;}
+    0% {
+        opacity: 0;
+    }
+    /*os keyframes tem de estar num ficheiro css diferente? */
+    /*n, acho eu*/
+    /*so tou a perguntar pq acho que encontrei um cod que deve fun mas tem key frames*/
+    /*as keyframes sao obrigatorias*/
+}
