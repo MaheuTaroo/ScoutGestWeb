@@ -67,6 +67,7 @@ namespace ScoutGestWeb.Controllers
                         cmd.Prepare();
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
+                            //my login is broke for now
                             while (dr.Read()) UserData.UserData.userData.Add("Nome", dr["Nome"]);
                         }
                         cmd.CommandText = "select * from eventos";

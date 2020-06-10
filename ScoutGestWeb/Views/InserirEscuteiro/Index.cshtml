@@ -1,0 +1,126 @@
+﻿@model IEnumerable<ScoutGestWeb.Models.InserirEscuteiroViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<h1>Informação geral sobre os escuteiros</h1>
+
+<p>
+    <a asp-action="InserirEscuteiro">Inserir novo escuteiro</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Totem)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Cargo)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Seccao)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Idade)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.NumTelefone)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Morada)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Morada2)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.CodPostal)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.GrupoSanguineo)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Alergias)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Medicacao)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Problemas)
+            </th>
+            <th style="background-color:lightblue">
+                @Html.DisplayNameFor(model => model.Observacoes)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Totem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cargo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seccao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumTelefone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Morada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Morada2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodPostal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GrupoSanguineo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Alergias)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Medicacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Problemas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observacoes)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

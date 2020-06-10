@@ -1,0 +1,112 @@
+﻿@model ScoutGestWeb.Models.InserirEscuteiroViewModel
+@{
+			ViewData["Title"] = "InserirEscuteiro";
+			Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+<!--Aqui esta o código para a página de inserir novos escuteiros -->
+<h1>Inserir escuteiro</h1>
+
+<h4>Dados</h4>
+<hr />
+<div class="text-center">
+    <form asp-for="InserirEscuteiro" class="row" style="margin:auto" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" />
+        <div class="form-group col-xl-3 text-sm-left">
+            <label asp-for="Nome">Nome:</label>
+            <input asp-for="Nome" /><br />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Nome)</div>
+            <br />
+            <label asp-for="Totem">Totem:</label>
+            <input asp-for="Totem" />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Totem)</div>
+            <br />
+            <label asp-for="Seccao">Secção:</label>
+            <select asp-for="Seccao">
+                <option>Lobitos</option>
+                <option>Exploradores</option>
+                <option>Pioneiros</option>
+                <option>Caminheiros</option>
+                <option>Dirigentes</option>
+            </select>
+            <br />
+            <label asp-for="Estado">Estado da promessa:</label>
+            <select asp-for="Estado">
+                <option>Inscrito</option>
+                <option>Noviço</option>
+                <option>Aspirante</option>
+                <option>Promessa feita</option>
+            </select>
+            <br />
+            <label asp-for="Foto">Fotografia:</label>
+            <input asp-for="Foto" type="file" accept=".jpg,.png" />
+        </div>
+        <div class="col-xl-3 text-sm-left">
+            @*await Html.PartialAsync("Partial/_CheckBoxList")*@
+            <!--<partial name="Partial/_CheckBoxList" />-->
+            <label asp-for="Cargo">Cargo:</label>
+            <div>
+                @{
+                    List<Cargos> _cargo = new List<Cargos>() { new Cargos() { Cargo = "Guia", Selecionado = false }, new Cargos() { Cargo = "Animador", Selecionado = false }, new Cargos() { Cargo = "Cozinheiro", Selecionado = false }, new Cargos() { Cargo = "Guarda-material", Selecionado = false }, new Cargos() { Cargo = "Secretário", Selecionado = false }, new Cargos() { Cargo = "Tesoureiro", Selecionado = false }, new Cargos() { Cargo = "Relações públicas", Selecionado = false }, new Cargos() { Cargo = "Socorrista", Selecionado = false }, new Cargos() { Cargo = "Guia de região", Selecionado = false }, new Cargos() { Cargo = "Sub-guia", Selecionado = false }, new Cargos() { Cargo = "Chefe", Selecionado = false } };
+                }
+                @for (var i = 1; i < 12; i++)
+                {
+                    <input id = "@_cargo[i - 1].Cargo.ToLower()" type = "checkbox" asp-for= "@Model._cargo[i].Selecionado" onclick = "return selectiveCheck()" />
+                    <label asp-for="@Model._cargo[i]" >@_cargo[i - 1].Cargo</label ><input type="hidden" asp -for= "Cargo[i].Cargo" /><br />
+                }
+            </div>
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Cargo)</div>
+        </div>
+        <div class="col-xl-3 text-sm-left">
+            <label asp-for="Idade">Idade:</label>
+            <input asp-for="Idade" type="number" value="6" min="6" max="150" />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Idade)</div>
+            <br />
+            <label asp-for="NumTelefone">Telefone: +351</label>
+            <input asp-for="NumTelefone" />
+            <br />
+            <label asp-for="Morada">Morada:</label>
+            <input asp-for="Morada" />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada)</div>
+            <br />
+            <label asp-for="Morada2">Cidade:</label>
+            <input asp-for="Morada2" />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada2)</div>
+            <br />
+            <label asp-for="CodPostal">Código-postal:</label>
+            <input asp-for="CodPostal" />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.CodPostal)</div>
+            <br />
+        </div>
+        <div class="col-xl-3 text-sm-left">
+            <label asp-for="GrupoSanguineo">Grupo sanguíneo:</label>
+            <select asp-for="GrupoSanguineo">
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+                <option>O+</option>
+                <option>O-</option>
+            </select>
+            <br />
+            <label asp-for="Alergias">Alergias:</label>
+            <input asp-for="Alergias" type="text" />
+            <br />
+            <label asp-for="Medicacao">Medicação:</label>
+            <input asp-for="Medicacao" type="text" />
+            <br />
+            <label asp-for="Problemas">Problemas de saúde:</label>
+            <input asp-for="Problemas" type="text" />
+            <br />
+            <label asp-for="Observacoes">Observações:</label>
+            <input asp-for="Observacoes" type="text" />
+            <br />
+        </div>
+        <input class="text-center btn btn-primary container-fluid" type="submit" value="Create" />
+    </form>
+</div>
+<!--botão para voltar à lista de escuteiros-->
+<p class="text-center">
+    <a asp-action="Index">Voltar à listagem</a>
+</p>

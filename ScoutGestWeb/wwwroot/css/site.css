@@ -1,6 +1,8 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+/*vou estar a ver os vids d formacao, qq cena manda p o whatsapp*/
+/*tb*/
 html, body {
     height: 100%;
     width: 100%;
@@ -14,7 +16,7 @@ body {
 }
 #body-dash {
     background-color: rgba(0,0,0,0.05);
-    background-image: url(../imgs/cross_transparent.png);
+    background-image: url(../imgs/cross_transparent_2.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     flex-grow: 1;
@@ -28,19 +30,40 @@ body {
 #dash-lob {
     grid-area: dash-lob;
     background: linear-gradient(to bottom right, rgba(255, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    transition: transform 1s;
+}
+#dash-lob:hover {
+    transform: translate(10%, 10%);
 }
 #dash-explo {
     grid-area: dash-explo;
     background: linear-gradient(to bottom left, rgba(0, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    transition: transform 1s;
+}
+#dash-explo:hover{
+    margin-top:0;
+    margin-right:0;
+    transform: translate(-10%, 10%);
 }
 #dash-pio {
     grid-area: dash-pio;
     background: linear-gradient(to top left, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    transition: transform 1s;
+}
+#dash-pio:hover {
+    transform: translate(-10%, -10%);
 }
 #dash-caminh {
     grid-area: dash-caminh;
     background: linear-gradient(to top right, rgba(255, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    transition: transform 1s;
 }
+#dash-caminh:hover {
+    transform: translate(10%, -10%);
+}
+/*#dash-caminh *, #dash-pio *, #dash-explo *, #dash-lob * {
+    text-align: center;
+}*/
 
 #powell {
     background-image: url(../imgs/baden_powell_transparent_fig.png);
@@ -70,27 +93,23 @@ body {
 .right {
     right: 0;
     direction: ltr;
-    /*width: 35%;*/
-    /*isto em ecras maiores ou menores n vai resultar
-        hold up, eu vi uma resolucao na net*/
-    /*oki*/
-    /*so how does it look for u?*/
-    /*a c t u a l l y   c e n t e r e d
-        you?*/
-    /*same*/
-    /*well i have to go make dinner , so see ya*/
-    /*ja?*/
-    /*now onto how to work with this shit*/ /*also have u been able to create the other files?*/
-    /*yea, i guess*/ /*well that's good news ;-; im sorry that i couldnt do much now*/
-    /*ainda tou a tentar perceber esta merda, portanto estamos os dois no caralho*/ 
-    /*oHo*/
-    /*eu tou a tentar perguntar ao professor se ele me consegue esclarecer nesta merda*/
-    /*okii*/
-    /*mas ele devE ESTAR NUMA CHAMADA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
-    /*aa indeed well today was kinda of a bust*/
-    /*ok back */
 }
-
+/*ja consegui alinhar as animacoes, agr so preciso d fzr c q o texto fique em cada canto em vez do topo*/
+/*right on it gonna see if there is a way to put/the animation ends  in the center */
+/*n mexas na animacao
+    como se costuma dzr, se funciona n mexas
+    o q tou a dzr e p pegar no paragrafo ou no q tu quiseres q tenha o txt e por num canto
+    eu dps vou por imgs numa metade d cada div,portanto vou ter d fzr 2 divs como no login*/
+/*entao o que tas a dizer e dividir cada caixa e meter iuma imagen e texto como esta no log in?*/
+/*yes*/
+/*oki then, mas isso deve ser facil entao, nao envolve so o mesmo codigo do log in? claro com algumas alterações 
+    se for necessário
+*/
+/*ainda tnh d fzr as imgs, mas o q te peco p fzrs e p veres como alinhar o texto ao canto*/
+/*ok im right on it*/
+/*ja dividi as cenas, so qr agr q alinhes ao canto*/
+/*yea tou agora a acabar de ver isso*/
+/*ok mostra me aqui onde o texto esta, as in which css thing is it located  */
 #login form {
     display: table-cell;
     vertical-align: middle;
@@ -98,11 +117,9 @@ body {
     width: 100%;
     margin: 0;
 }
-
 .button {
     border-radius: 12px;
 }
-
 /*btww ja que nao consigo fazer muita coisa tou a ver as cenas dos links*/
 .container {
     /*position: absolute;*/
@@ -117,57 +134,161 @@ body {
     animation: fadeIn ease 3s;
     -webkit-animation: fadeIn ease 3s;
 }
-
-@keyframes fadeIn {
+.slide-tr /*up right*/ {
+    -webkit-animation: slide-tr 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-tr 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+@-webkit-keyframes slide-tr {
     0% {
-        opacity: 0;
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
     }
 
     100% {
-        opacity: 1;
+        -webkit-transform: translateY(-10%) translateX(10%);
+        transform: translateY(-10%) translateX(10%);
     }
 }
-
-@-moz-keyframes fadeIn {
+@keyframes slide-tr {
     0% {
-        opacity: 0;
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
     }
 
     100% {
-        opacity: 1;
+        -webkit-transform: translateY(-10%) translateX(10%);
+        transform: translateY(-10%) translateX(10%);
     }
 }
 
-@-webkit-keyframes fadeIn {
+.slide-br /*down right*/ {
+    -webkit-animation: slide-br 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-br 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+@-webkit-keyframes slide-br {
     0% {
-        opacity: 0;
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
     }
 
     100% {
-        opacity: 1;
+        -webkit-transform: translateY(10%) translateX(10%);
+        transform: translateY(10%) translateX(10%);
     }
 }
-
-@-o-keyframes fadeIn {
+@keyframes slide-br {
     0% {
-        opacity: 0;
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
     }
 
     100% {
-        opacity: 1;
+        -webkit-transform: translateY(10%) translateX(10%);
+        transform: translateY(10%) translateX(10%);
     }
 }
 
-@-ms-keyframes fadeIn {
+.slide-bl /*down left*/ {
+    -webkit-animation: slide-bl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-bl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+@-webkit-keyframes slide-bl {
     0% {
-        opacity: 0;
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
     }
 
     100% {
-        opacity: 1;
+        -webkit-transform: translateY(10%) translateX(-10%);
+        transform: translateY(10%) translateX(-10%);
+    }
+}
+@keyframes slide-bl {
+    0% {
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
+    }
+
+    100% {
+        -webkit-transform: translateY(10%) translateX(-10%);
+        transform: translateY(10%) translateX(-10%);
     }
 }
 
+.slide-tl /*up left*/ {
+    -webkit-animation: slide-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+@-webkit-keyframes slide-tl {
+    0% {
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
+    }
+
+    100% {
+        -webkit-transform: translateY(-10%) translateX(-10%);
+        transform: translateY(-10%) translateX(-10%);
+    }
+}
+@keyframes slide-tl {
+    0% {
+        -webkit-transform: translateY(0) translateX(0);
+        transform: translateY(0) translateX(0);
+    }
+
+    100% {
+        -webkit-transform: translateY(-10%) translateX(-10%);
+        transform: translateY(-10%) translateX(-10%);
+    }
+}
+
+/*isto em ecras maiores ou menores n vai resultar
+        hold up, eu vi uma resolucao na net*/
+/*oki*/
+/*so how does it look for u?*/
+/*a c t u a l l y   c e n t e r e d
+        you?*/
+/*same*/
+/*well i have to go make dinner , so see ya*/
+/*ja?*/
+/*now onto how to work with this shit*/ /*also have u been able to create the other files?*/
+/*yea, i guess*/ /*well that's good news ;-; im sorry that i couldnt do much now*/
+/*ainda tou a tentar perceber esta merda, portanto estamos os dois no caralho*/
+/*oHo*/
+/*eu tou a tentar perguntar ao professor se ele me consegue esclarecer nesta merda*/
+/*okii*/
+/*mas ele devE ESTAR NUMA CHAMADA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
+/*aa indeed well today was kinda of a bust*/
+/*ok back */
+/*ok o que tenho de fazer hoje?*/
+/*what stuff that I need to do*/
+/*eu agr tou a ver um prob q temos c a insercao d escuteiros na tabela, tou a perguntar num discord server q criei ontem e q ja tem cerca d 90 pessoas dentro lmao
+        original post here https://www.reddit.com/r/csharp/comments/gz2i8w/anyone_want_to_start_a_beginners_discord_support/ftgekta/?context=3*/
+/*damm that's nice mas qual e o prob que esta a axontecerc */
+/*cant insert cargos in the list<cargos> shit in the model*/
+/*besides the obvious stuff did u see if everything is spelled corrrectly*/
+/*i think so, the other fields are working fine, and i did spell it nice, if that wasnt the case i wouldve gotten an error already on the asp-for tag part (i think)
+        also care to join the server? maybe can take some questions related to c# there, there are some c# veterans there*/
+/*i guess i can join*/
+/*send me an invite link */
+/*its in the reddit post lmao
+        go down the comment list
+        i keep forgetting not to ping @everyone lmao*/
+/*lol, well moving on o que e que eu tenho tratar em relação as views?*/
+/*o q eu tava a pensar em relacao ao dashboard era fzr c q as labels fizessem fade in do centro do ecra p o centro do div respetivo
+        tenta fzr isso e dps avancamos p o proximo passo*/
+/*oki il start with it that*/
+/*i t   t h a t*/
+/*posso comecar o server real quicc? preciso d gravar um vid p o server*/
+/*ok ja tenho a animação mas agora so falta resolver o fact de a animação ficar parado no sitio also brb  */
 /*there esta com animation e esta centrado,o que falta fazer no log in?*/
 /*fzr com q qd o ecra for pequeno apareca a img como fundo do form em vez d pareado, i think
     enquanto isso, vou tentando perceber como tratar do body do dashboard*/

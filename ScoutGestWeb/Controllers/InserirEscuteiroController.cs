@@ -42,14 +42,19 @@ namespace ScoutGestWeb.Controllers
             }
             return View(escuteiros);
         }
-        [Route("/InserirEscuteiro/InserirEscuteiro", Name = "InserirEscuteiro")]
+        //[Route("/InserirEscuteiro/InserirEscuteiro", Name = "InserirEscuteiro")]
         public IActionResult InserirEscuteiro()
         {
+            //login problem not yet solved; trying to adapt to identity
             return UserData.UserData.userData.Count == 0 ? RedirectToAction("Index", "Home") : (IActionResult)View();
         }
-
-        public IActionResult InserirEscuteiro(InserirEscuteiroViewModel insert)
+        [HttpPost]
+        public async Task<IActionResult> InserirEscuteiro(InserirEscuteiroViewModel insert)
         {
+            foreach (Cargos cargo in insert._cargo)
+            {
+                if (cargo.Selecionado == true) insert.Cargo.Add(cargo);
+            }
             //Tenta inserir os seguintes valores na tabela escuteiros
             try
             {
@@ -90,7 +95,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Prepare();
                     cmd.ExecuteNonQuery();
                 }
-                return View("../../Controllers/HomeController/Index");
+                return await Task.Run(() => View("../../Controllers/HomeController/Index"));
             }
             catch (MySqlException mse)
             {

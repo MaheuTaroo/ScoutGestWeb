@@ -1,11 +1,11 @@
 ﻿@model ScoutGestWeb.Models.InserirEscuteiroViewModel
+@*{ ScoutGestWeb.Models.Cargos[] cargos = Model.cargos;}*@
 <label asp-for="Cargo">Cargo:</label>
 <div>
-    @{ScoutGestWeb.Models.Cargos[] cargos = new ScoutGestWeb.Models.Cargos[11] { new ScoutGestWeb.Models.Cargos() { Cargo = "Guia", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Animador", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Cozinheiro", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Guarda-material", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Secretário", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Tesoureiro", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Relações públicas", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Socorrista", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Guia de região", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Sub-guia", Selecionado = false }, new ScoutGestWeb.Models.Cargos() { Cargo = "Chefe", Selecionado = false } };}
     @for (var i = 1; i < 12; i++)
     {
-        <input class="cargo" id="@cargos[i - 1].Cargo.ToLower()" type="checkbox" asp-for="Cargo[i].Selecionado" onclick="return selectiveCheck()" />
-        <label asp-for="Cargo[i].Selecionado">@cargos[i - 1].Cargo</label>
+        <input id="@Model.Cargo[i - 1].Cargo.ToLower()" type="checkbox" asp-for="@Model.Cargo[i].Selecionado" onclick="return selectiveCheck()" />
+        <label asp-for="Cargo[i]">@Model.Cargo[i - 1].Cargo</label>
         <input type="hidden" asp-for="Cargo[i].Cargo" />
         <br />
     }
