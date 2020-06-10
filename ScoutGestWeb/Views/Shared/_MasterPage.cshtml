@@ -2,6 +2,9 @@
     Layout = null;
 
 }
+
+<!--mudar as cores para um verde mais agradavel, ou um azul tb agradavel onde no container com o titulo em vez ser
+    branco poderia ser relva, ou ficava branco(claro com o logo) e o head mudava para uma  cor -->
 <html lang="pt-pt">
 <head>
     <meta name="viewport" content="width=device-width" initial-scale="1" charset="windows-1252" />
@@ -37,6 +40,8 @@
     <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
         <partial name="Partial/_Header" />
 
+        @if (ViewData["Title"].ToString() != "Página inicial")
+        {
         <ul class="nav container-fluid bg-dark text-center">
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
@@ -57,7 +62,9 @@
                 <a class="nav-link" asp-controller="Home" asp-action="LogOut"><h6>Log out</h6></a>
             </li>
         </ul>
+        }
     </div>
+
     <!--<div id="starter" class="animate__animated animate__fadeOut animate__delay-2s" style="position: absolute;">
         <h1>Benvindo/a ao ScoutGest, <br /> @ScoutGestWeb.UserData.UserData.userData["User"]</h1>
     </div>-->

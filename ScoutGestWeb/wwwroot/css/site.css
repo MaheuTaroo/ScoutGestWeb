@@ -30,6 +30,8 @@ body {
 #dash-lob {
     grid-area: dash-lob;
     background: linear-gradient(to bottom right, rgba(255, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    border-image: url(../imgs/info_logout.png) 0 0 0 0;
+    -webkit-border-image: url(../imgs/info_logout.png) 0 0 0 0;
     transition: transform 1s;
 }
 #dash-lob:hover {
@@ -38,6 +40,8 @@ body {
 #dash-explo {
     grid-area: dash-explo;
     background: linear-gradient(to bottom left, rgba(0, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    border-image: url(../imgs/escuteiros.png) 0 0 0 0;
+    -webkit-border-image: url(../imgs/escuteiros.png) 0 0 0 0;
     transition: transform 1s;
 }
 #dash-explo:hover{
@@ -47,7 +51,10 @@ body {
 }
 #dash-pio {
     grid-area: dash-pio;
-    background: linear-gradient(to top left, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    background-image: linear-gradient(to top left, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    border-image: url(../imgs/atividades.png) 0 0 0 0;
+    -webkit-border-image: url(../imgs/atividades.png) 0 0 0 0;
+    background-size: cover cover;
     transition: transform 1s;
 }
 #dash-pio:hover {
@@ -56,6 +63,8 @@ body {
 #dash-caminh {
     grid-area: dash-caminh;
     background: linear-gradient(to top right, rgba(255, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
+    border-image: url(../imgs/tesouraria.png) 0 0 0 0;
+    -webkit-border-image: url(../imgs/tesouraria.png) 0 0 0 0;
     transition: transform 1s;
 }
 #dash-caminh:hover {

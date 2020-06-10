@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
+<!--bc image com lenços na relva, e tb mudar o light blue para maybe light green se a imagem for colocada, senao
+    mudar para light green anyway-->
 <h1>Informação geral sobre os escuteiros</h1>
 
 <p>
@@ -65,7 +67,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ID)
@@ -121,6 +123,6 @@
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

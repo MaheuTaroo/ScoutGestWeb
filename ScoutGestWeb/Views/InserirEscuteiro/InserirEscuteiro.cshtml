@@ -1,9 +1,10 @@
 ﻿@model ScoutGestWeb.Models.InserirEscuteiroViewModel
 @{
-			ViewData["Title"] = "InserirEscuteiro";
-			Layout = "~/Views/Shared/_MasterPage.cshtml";
+    ViewData["Title"] = "InserirEscuteiro";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 <!--Aqui esta o código para a página de inserir novos escuteiros -->
+<!--maos unidas num circulo com maybe junte se a nos no meio-->
 <h1>Inserir escuteiro</h1>
 
 <h4>Dados</h4>
@@ -50,8 +51,8 @@
                 }
                 @for (var i = 1; i < 12; i++)
                 {
-                    <input id = "@_cargo[i - 1].Cargo.ToLower()" type = "checkbox" asp-for= "@Model._cargo[i].Selecionado" onclick = "return selectiveCheck()" />
-                    <label asp-for="@Model._cargo[i]" >@_cargo[i - 1].Cargo</label ><input type="hidden" asp -for= "Cargo[i].Cargo" /><br />
+                <input id="@_cargo[i - 1].Cargo.ToLower()" type="checkbox" asp-for="@Model._cargo[i].Selecionado" onclick="return selectiveCheck()" />
+                <label asp-for="@Model._cargo[i]">@_cargo[i - 1].Cargo</label><input type="hidden" asp -for="Cargo[i].Cargo" /><br />
                 }
             </div>
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Cargo)</div>
