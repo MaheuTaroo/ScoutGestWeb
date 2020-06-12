@@ -10,7 +10,7 @@
 <h4>Dados</h4>
 <hr />
 <div class="text-center">
-    <form asp-for="InserirEscuteiro" class="row" style="margin:auto" method="post">
+    <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger" />
         <div class="form-group col-xl-3 text-sm-left">
             <label asp-for="Nome">Nome:</label>
@@ -38,8 +38,8 @@
                 <option>Promessa feita</option>
             </select>
             <br />
-            <label asp-for="Foto">Fotografia:</label>
-            <input asp-for="Foto" type="file" accept=".jpg,.png" />
+            <label asp-for="FotoUp">Fotografia:</label>
+            <input asp-for="FotoUp" type="file" accept=".jpg,.png" />
         </div>
         <div class="col-xl-3 text-sm-left">
             @*await Html.PartialAsync("Partial/_CheckBoxList")*@

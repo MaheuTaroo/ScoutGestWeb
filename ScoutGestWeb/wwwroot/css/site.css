@@ -1,8 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-/*vou estar a ver os vids d formacao, qq cena manda p o whatsapp*/
-/*tb*/
+
 html, body {
     height: 100%;
     width: 100%;
@@ -27,12 +26,10 @@ body {
     grid-template-areas: "dash-pio dash-caminh" "dash-explo dash-lob";
     padding: 0px 0px 0px 0px;
 }
-/*a cena e que nao da para adicionar um link to the image aqui no css */
+
 #dash-lob {
     grid-area: dash-lob;
     background: linear-gradient(to bottom right, rgba(255, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
-    border-image: url(../imgs/info_logout.png) 0 0 0 0;
-    -webkit-border-image: url(../imgs/info_logout.png) 0 0 0 0;
     transition: transform 1s;
 }
 #dash-lob:hover {
@@ -41,8 +38,6 @@ body {
 #dash-explo {
     grid-area: dash-explo;
     background: linear-gradient(to bottom left, rgba(0, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
-    border-image: url(../imgs/escuteiros.png) 0 0 0 0;
-    -webkit-border-image: url(../imgs/escuteiros.png) 0 0 0 0;
     transition: transform 1s;
 }
 #dash-explo:hover{
@@ -53,8 +48,6 @@ body {
 #dash-pio {
     grid-area: dash-pio;
     background-image: linear-gradient(to top left, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
-    /**/
-    background-size: cover cover;
     transition: transform 1s;
 }
 #dash-pio:hover {
@@ -63,8 +56,6 @@ body {
 #dash-caminh {
     grid-area: dash-caminh;
     background: linear-gradient(to top right, rgba(255, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
-    border-image: url(../imgs/tesouraria.png) 0 0 0 0;
-    -webkit-border-image: url(../imgs/tesouraria.png) 0 0 0 0;
     transition: transform 1s;
 }
 #dash-caminh:hover {
@@ -80,13 +71,29 @@ body {
     -webkit-border-image: url(../imgs/atividades.png) 0 0 0 0;*/
 }
 
+#info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 3em 3em;
+    grid-template-areas: "regulamento conta" "eventos eventos";
+}
+#eventos {
+    grid-area: eventos;
+}
+#conta {
+    grid-area: conta;
+}
+#regulamento {
+    grid-area: regulamento;
+}
+
 #powell {
     background-image: url(../imgs/baden_powell_transparent_fig.png);
     background-size: contain;
     background-repeat: no-repeat;
     width: calc(inherit / 2);
 }
-
 #login {
     display: table;
 }
@@ -109,22 +116,7 @@ body {
     right: 0;
     direction: ltr;
 }
-/*ja consegui alinhar as animacoes, agr so preciso d fzr c q o texto fique em cada canto em vez do topo*/
-/*right on it gonna see if there is a way to put/the animation ends  in the center */
-/*n mexas na animacao
-    como se costuma dzr, se funciona n mexas
-    o q tou a dzr e p pegar no paragrafo ou no q tu quiseres q tenha o txt e por num canto
-    eu dps vou por imgs numa metade d cada div,portanto vou ter d fzr 2 divs como no login*/
-/*entao o que tas a dizer e dividir cada caixa e meter iuma imagen e texto como esta no log in?*/
-/*yes*/
-/*oki then, mas isso deve ser facil entao, nao envolve so o mesmo codigo do log in? claro com algumas alterações 
-    se for necessário
-*/
-/*ainda tnh d fzr as imgs, mas o q te peco p fzrs e p veres como alinhar o texto ao canto*/
-/*ok im right on it*/
-/*ja dividi as cenas, so qr agr q alinhes ao canto*/
-/*yea tou agora a acabar de ver isso*/
-/*ok mostra me aqui onde o texto esta, as in which css thing is it located  */
+
 #login form {
     display: table-cell;
     vertical-align: middle;
@@ -135,7 +127,7 @@ body {
 .button {
     border-radius: 12px;
 }
-/*btww ja que nao consigo fazer muita coisa tou a ver as cenas dos links*/
+
 .container {
     /*position: absolute;*/
     right: 0; /*nao alterar se nao da cabo da imagem... somehow -_-*/
@@ -265,6 +257,145 @@ body {
     }
 }
 
+
+
+nav * {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+    margin-bottom:auto;
+    float:left;
+    text-align:center;
+}
+h1 h2 h3 h4 h5 h6 {
+    text-align: center;
+}
+table td {
+    border: 2px solid black;
+}
+table th {
+    border: 2px solid black;
+}
+.column {
+    float: right;
+    width: 25%;
+    padding: 10px;
+}
+
+
+
+/*@media screen and (width: 600px) {
+    #powell{
+        display: none;
+    }
+    #login {
+        background-image: url(../imgs/baden_powell_transparent_fig.png);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+}
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}*/
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+* {
+    box-sizing: border-box;
+}
+
+
+footer {
+    text-align: center;
+    padding: 3px;
+    color: black;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+ 
+}
+
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+    .sidenav a {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+    }
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+}
+
+.main {
+    margin-left: 140px; 
+    padding: 0px 10px;
+}
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+}
+.column {
+    float: left;
+    width: 30%; /*50% mete as coisas no meio*/
+    padding: 10px;
+    
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/*a cena e que nao da para adicionar um link to the image aqui no css */
+/*ja consegui alinhar as animacoes, agr so preciso d fzr c q o texto fique em cada canto em vez do topo*/
+/*right on it gonna see if there is a way to put/the animation ends  in the center */
+/*n mexas na animacao
+    como se costuma dzr, se funciona n mexas
+    o q tou a dzr e p pegar no paragrafo ou no q tu quiseres q tenha o txt e por num canto
+    eu dps vou por imgs numa metade d cada div,portanto vou ter d fzr 2 divs como no login*/
+/*entao o que tas a dizer e dividir cada caixa e meter iuma imagen e texto como esta no log in?*/
+/*yes*/
+/*oki then, mas isso deve ser facil entao, nao envolve so o mesmo codigo do log in? claro com algumas alterações 
+    se for necessário
+*/
+/*ainda tnh d fzr as imgs, mas o q te peco p fzrs e p veres como alinhar o texto ao canto*/
+/*ok im right on it*/
+/*ja dividi as cenas, so qr agr q alinhes ao canto*/
+/*yea tou agora a acabar de ver isso*/
+/*ok mostra me aqui onde o texto esta, as in which css thing is it located  */
+/*btww ja que nao consigo fazer muita coisa tou a ver as cenas dos links*/
 /*isto em ecras maiores ou menores n vai resultar
         hold up, eu vi uma resolucao na net*/
 /*oki*/
@@ -318,31 +449,6 @@ body {
 /*i saw it don't worry*/
 /*try it now*/
 /*whatsapp*/
-
-nav * {
-    display: inline;
-    list-style-type: none;
-    padding-right: 20px;
-    margin-bottom:auto;
-    float:left;
-    text-align:center;
-}
-h1 h2 h3 h4 h5 h6 {
-    text-align: center;
-}
-table td {
-    border: 2px solid black;
-}
-table th {
-    border: 2px solid black;
-}
-.column {
-    float: right;
-    width: 25%;
-    padding: 10px;
-}
-
-
 /*por favor deixa isto estar como esta por agora*/
 /*ok entao what should i do for now?*/
 /*tentar ver como por a img a esquerda sem mexer na estrutura do form, apenas p o por a direita*/
@@ -357,33 +463,6 @@ table th {
 /*da para utilizar java? in this project*/
 /*nos ja temos um ficheiro javascript, mas eu queria evitar usar isso pq as pessoas podem desativa-lo*/
 /*oh oki*/
-
-/*@media screen and (width: 600px) {
-    #powell{
-        display: none;
-    }
-    #login {
-        background-image: url(../imgs/baden_powell_transparent_fig.png);
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-    }
-}
-@media screen and (max-width: 600px) {
-    .column {
-        width: 100%;
-    }
-}*/
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-* {
-    box-sizing: border-box;
-}
-
-
-
 /*hey queres parar por agora para ires estudar uma beca?*/
 /*e dp continuamos?*/
 /*se calhar e mlhr*/
@@ -414,14 +493,30 @@ table th {
 /*okii*/
 /*scrollbar gone now animations and brb*/
 /*im back*/
-footer {
-    text-align: center;
-    padding: 3px;
-    color: black;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-}
+/*nav barr*/
+/*!--nao tou a encontrar any other way than to dividir a parte onde estão as cenas em dois */
+/*u there?*/
+/*tou, so q tou a trabalhar numa cena diferente*/
+/*okiii. btw ja ta ficar tarde e tenho de ir fzer o jantar e dp ou das me a resposta no whats ou amanha  */
+/*posso começar?*/
+/*sim mas queres dividiar a cena em dois?*/
+/*yep*/
+/*oki then*/
+/*brb*/
+/*can i start?*/
+/*brb again lmao*/
+/*okii*/
+/*vou estar a ver os vids d formacao, qq cena manda p o whatsapp*/
+/*tb*/
+/*n acho q essa cor fique mt bem
+        e tb acho q o navbar podia ficar d lado. o q achas?*/
+/*o light green ye concordo, e em relação ao navbar, i guess mas tenho de ver como e que vou fazer isso mas tas 
+        a falar tipo clica e aparece ou esta sempre la?*/
+/*e fixo
+        also brb*/
+/*oki*/
+/*bacc, i is*/
+/*searching is a i*/
 
 /*like it think it look good, but whatd do u think?*/
 /*i dont have any fuckin idea, unless we mess up with the media tag*/

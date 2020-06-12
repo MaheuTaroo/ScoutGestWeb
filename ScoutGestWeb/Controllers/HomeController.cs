@@ -117,7 +117,7 @@ namespace ScoutGestWeb.Controllers
             UserData.UserData.userData.Clear();
             return RedirectToAction("Index");
         }
-        public IActionResult Privacy()
+        public IActionResult InfoLogout()
         {
             return View();
         }

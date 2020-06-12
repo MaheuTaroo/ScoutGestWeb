@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Página inicial";
 }
+<!--olha vou sair ara rearar o meu quarto q reunião-->
 <!--<table>
    <thead>
        <tr>-->
@@ -35,6 +36,29 @@
         }
     }*@-->
 <!--<table>-->
+<!-- transition: 0.3s;
+ opacity:0;
+ transition: opacity 1400ms;
+
+    dentro do segundo css blabla:hover
+   opacity: 1;
+   -->
+
+
+
+<div id="dash-pio">
+    <a asp-action="Index" asp-controller="Atividades"><img src="~/imgs/atividades.png" class="dash-img" /></a>
+</div>
+<div id="dash-caminh">
+    <a asp-action="Index" asp-controller="Tesouraria"><img src="~/imgs/tesouraria.png" class="dash-img" /></a>
+</div>
+<div id="dash-lob">
+    <a asp-action="InfoLogout" asp-controller="Home"><img src="~/imgs/info_logout.png" class="dash-img" /></a>
+</div>
+<div id="dash-explo">
+    <a asp-action="Index" asp-controller="InserirEscuteiro"><img src="~/imgs/escuteiros.png" class="dash-img" /></a>
+</div>
+
 <!--o que vi foi o text-align:right para css-->
 <!--mas e p alinhar literalmente aos cantos d cada div-->
 <!--entao tenta meter na classe topright-->
@@ -67,14 +91,7 @@
     com :hover e dp metes o que queres que acontecça, -->
 <!--deixa tar os divs como tao, vou tentar fzr isto-->
 <!--vou meter aqui o cod em comentario for u to see it
-    dentro do primeiro css blabla
-  transition: 0.3s;
-  opacity:0;
-  transition: opacity 1400ms;
-
-     dentro do segundo css blabla:hover
-    opacity: 1;
-    -->
+    dentro do primeiro css blabla-->
 <!--n era o fadein q queria lmao, eu ja mostro o q era
     deixa so testar-->
 <!--pera so um bocado
@@ -105,39 +122,6 @@
     what do u think?-->
 <!--mas escolhe tds do mm tipo. e desta vez anota p n me perguntares outra vez lmao-->
 <!--sim sao do tipo escuteiro/amizade/natureza e ja anotei as possiveis alterações -->
-
-
-<div id="dash-pio">
-    <!--<div class="split left"></div>
-    <div class="split right">
-        <p class="slide-tl">Gestão de atividades</p>
-    </div>-->
-    <!--src="~/imgs/atividades.png"-->
-    <a asp-action="Index" asp-controller="Atividades"><img src="~/imgs/atividades.png" class="dash-img"/></a>
-</div>
-<div id="dash-caminh">
-    <!--<div class="split right">
-        <p class="slide-tr">Gestão da tesouraria</p>
-    </div>
-    <div class="split left"></div>-->
-    <a asp-action="Index" asp-controller="Tesouraria"><img src="~/imgs/tesouraria.png" class="dash-img" /></a>
-</div>
-<div id="dash-lob">
-    <!--<div class="split right">
-        <p class="slide-br">Escuteiros</p>
-    </div>
-    <div class="split left"></div>-->
-    <a asp-action="Index" asp-controller="Tesouraria"><img src="~/imgs/info_logout.png" class="dash-img" /></a>
-</div>
-<div id="dash-explo">
-    <!--<div class="split left"></div>
-    <div class="split right">
-        <p class="slide-bl">Informações</p>
-    </div>-->
-    <a asp-action="Index" asp-controller="InserirEscuteiro"><img src="~/imgs/escuteiros.png" class="dash-img" /></a>
-</div>
-
-
 <!--Aqui achas que o light blue fica bem?-->
 <!--n ta mal
 btw n te importas q corra um teste?-->

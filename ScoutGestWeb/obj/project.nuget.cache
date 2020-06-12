@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CUYnDFWJ2E2YY0oRjTO6urnbzdV6OBRzLIO+eLblO1GHFEdlGNmR0oG+4CKievj3XZpt3I230Hu51HXTvYqlyg==",
+  "dgSpecHash": "QVtCZx5rUI+G7B0SeQ9EIVCim1B+b5H2bv++Fm2tXx3lKo1UpIm0S0yE9T/rOS0c+7s9gRyLyxrBbrXFEFZOOg==",
   "success": true,
   "projectFilePath": "D:\\GitHub\\ScoutGestWeb\\ScoutGestWeb\\ScoutGestWeb.csproj",
   "expectedPackageFiles": [
@@ -89,6 +89,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\pantu\\.nuget\\packages\\sixlabors.imagesharp\\1.0.0-rc0002\\sixlabors.imagesharp.1.0.0-rc0002.nupkg.sha512",
     "C:\\Users\\pantu\\.nuget\\packages\\ssh.net\\2016.1.0\\ssh.net.2016.1.0.nupkg.sha512",
     "C:\\Users\\pantu\\.nuget\\packages\\sshnet.security.cryptography\\1.2.0\\sshnet.security.cryptography.1.2.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",

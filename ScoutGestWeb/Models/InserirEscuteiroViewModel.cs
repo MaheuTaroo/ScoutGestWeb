@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp;
 namespace ScoutGestWeb.Models
 {
     //model right here
@@ -67,7 +68,8 @@ namespace ScoutGestWeb.Models
         public string Estado { get; set; }
         [Required(ErrorMessage = "Por favor, introduza a idade")]
         public int Idade { get; set; }
-        public IFormFile Foto { get; set; }
+        public IFormFile FotoUp { get; set; }
+        public string FotoDown { get; set; }
         public (bool, string) Adicionar()
         {
             try
