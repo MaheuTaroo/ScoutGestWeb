@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace ScoutGestWeb.Controllers
 {
-    //the bacc is i
     public class InserirEscuteiroController : Controller
     {
         public IActionResult Index()
@@ -53,7 +52,7 @@ namespace ScoutGestWeb.Controllers
             }
             return View(escuteiros);
         }
-        //[Route("/InserirEscuteiro/InserirEscuteiro", Name = "InserirEscuteiro")]
+        [HttpGet]
         public IActionResult InserirEscuteiro()
         {
             //login problem not yet solved; trying to adapt to identity

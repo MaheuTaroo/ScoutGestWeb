@@ -4,94 +4,99 @@
     ViewData["Title"] = "Detalhes";
 }
 
-<h1>Detalhes</h1>
+<div class="table">
+    <div class="row"><h1>Detalhes</h1>
+    </div>
+    <div class="row">
+        <div class="column split right" style="height: auto; position:initial; top: initial;">
+            <dl class="row">
+                <!--<dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.ID)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.ID)
+                </dd>-->
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Nome):
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Totem):
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Totem)
+                </dd>
+                <dt class="col-sm-2">
+                    Secção:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Seccao)
+                </dd>
+                <dt class="col-sm-2">
+                    Estado:
+                </dt>
+                <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Estado)
+                </dd>
+                <dt class="col-sm-2">
+                    Idade:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Idade)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Morada):
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Morada), @Html.DisplayFor(model => model.Morada2)
+                </dd>
+                <dt class="col-sm-2">
+                    Código-postal:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CodPostal)
+                </dd>
+                <dt class="col-sm-2">
+                    Grupo sanguíneo:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.GrupoSanguineo)
+                </dd>
+                <dt class="col-sm-2">
+                    Alergias:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Alergias)
+                </dd>
+                <dt class="col-sm-2">
+                    Medicação:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Medicacao)
+                </dd>
+                <dt class="col-sm-2">
+                    Problemas:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Problemas)
+                </dd>
+                <dt class="col-sm-2">
+                    Observações:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Observacoes)
+                </dd>
+                </dl>
+        </div>
+        <div class="column split left">
+            <img src="@Html.DisplayFor(model => model.FotoDown)" style="position: absolute; right: 0; width: 100%;" />
+        </div>
+    </div>
 
-<div>
-    <h4>AtividadeViewModel</h4>
-    <hr />
-    <dl class="row">
-        <img src="@Html.DisplayFor(model => model.FotoDown)" />
-        <!--<dt class = "col-sm-2">
-        @Html.DisplayNameFor(model => model.ID)
-    </dt>
-    <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.ID)
-    </dd>-->
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome):
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Totem):
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Totem)
-        </dd>
-        <dt class="col-sm-2">
-            Secção:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Seccao)
-        </dd>
-        <dt class="col-sm-2">
-            Estado:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class="col-sm-2">
-            Idade:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Idade)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Morada):
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Morada), @Html.DisplayFor(model => model.Morada2)
-        </dd>
-        <dt class="col-sm-2">
-            Código-postal:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CodPostal)
-        </dd>
-        <dt class="col-sm-2">
-            Grupo sanguíneo:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GrupoSanguineo)
-        </dd>
-        <dt class="col-sm-2">
-            Alergias:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Alergias)
-        </dd>
-        <dt class="col-sm-2">
-            Medicação:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Medicacao)
-        </dd>
-        <dt class="col-sm-2">
-            Problemas:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Problemas)
-        </dd>
-        <dt class="col-sm-2">
-            Observações:
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Observacoes)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Voltar à listagem</a>
+    <div class="row">
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        <a asp-action="Index">Voltar à listagem</a>
+    </div>
 </div>

@@ -1,11 +1,13 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
+@import url(animations.css);
 
 html, body {
     height: 100%;
     width: 100%;
     padding: 0px;
+    margin: 0px;
+    overflow-x: hidden;
 }
 body {
     /*height: 100%;*/
@@ -13,6 +15,129 @@ body {
     display: flex;
     flex-direction: column;
 }
+/*acho q tnh uma ideia, pera ai*/
+/*diz la*/
+/*queres que eu continue com o que tava a fazer com o side nav, ou queres que eu continue com o tentar eliminar
+    o branco?
+*/
+/*como assim eliminar o branco? o branco n e p eliminar*/
+/*diminuir o body, quis dizer isso*/
+/*eu tb tou a ver como isso se faz, pq n consigo ver mt bem as mnh alteracoes
+    p isso e q n me tas a ver a fzr nd*/
+/*eu nao tou concentrado no que tas a fazer, eu simplesmente tou a ver coisas relacionadas com isso, eu tb so
+    tou a perguntar pq tu dizeste pera ai, 
+*/
+/*o meu plano falhou*/
+/*oki*/
+/*..................................ooooooooooooooooooooooooooooooorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr..........................................................*/
+/*yes?*/
+/*problem solved. now to fix the font being too big problem*/
+/*thats easy just diminuir font*/
+/*e ja que tamos a fazer da tua maneira mais vale tirar o que eu fiz para nao ficar um indentation estranho*/
+/*nos tamos a fzr da tua maneira, so q uma medida diferente*/
+/*mas disseste no whats para nao fazer da minha maneira*/
+/*em relacao ao resizing do body q tavas a fzr, o q eu fiz foi so tratar da margem e do width*/
+/*eu nao tava a fazer resizing, isso foi a tua ideia*/
+/*mas sbs q p inserir uma cena no mm espaco e preciso mudar a medida q as duas coisas ocupam, n sbs? isso e q e resizing
+    e tu tavas a fzr um resizing q era so praticamente mover txt
+    o q eu fiz foi por o sidebar a ocupar 20% do viewport e por uma margem d esses 20% no div
+    foi por isso q me viste a meter width 20vh no sidebar e margin-left 20vh no body*/
+/*look dude tbh idc o que importa e que temos isto feito, but now if u excuse me vou fazer o almoço*/
+/*piece of shit internet, walks slow
+    also, fair enough*/
+
+.split {
+    height: 100%; 
+    width: 50%; 
+    position: fixed;
+    overflow-x: hidden;
+    text-align: center;
+    vertical-align: middle;
+    z-index: 1;
+    top: 0;
+}
+.left {
+    left: 0;
+    direction:rtl
+}
+.right {
+    right: 0;
+    direction: ltr;
+}
+
+#powell {
+    background-image: url(../imgs/baden_powell_transparent_fig.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: calc(inherit / 2);
+}
+#login {
+    display: table;
+}
+#login form {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+}
+
+header {
+    height: 10vh;
+}
+
+.sidenav {
+    height: 100%;
+    width: 10vw;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    overflow-x: hidden;
+    padding-top: 20px;
+    margin: 11vh 0 auto 0;
+}
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #818181;
+    display: block;
+    /*font-family: "Lucida Console", Monaco, monospace;*/
+    /*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
+    /*ooh, o que qeures que eu faça com o side nav? */
+    /*tenta fzr c q a caixa principal recupere o tamanho total. eu pus a margem esquerda igual a largura do sidenav,
+    mas n tou a conseguir c q ela recupere essa margem. tenta fzr isso pfv*/
+    /*okiii*/
+    /*tipo assim?*/
+    /*o q e q tentaste fzr?*/
+    /*nao era assim pois nao?*/
+    /*simplesmente comentei o main pq o main é utilizado para meter as cenas de lado do side nav */
+    /*eu vou tirar, ja percebi que nao era isso que querias */
+    /*onde e q comentaste? n encontro*/
+}
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+@media screen and (max-width: 1100px) {
+    .sidenav a {
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 999px) {
+    .sidenav {
+        width: 0;
+        height: 0;
+    }
+    .main {
+        margin-left: 0vw !important;
+    }
+}
+/*.main {
+    margin-left: 10vw;
+}*/
+
 #body-dash {
     background-color: rgba(0,0,0,0.05);
     background-image: url(../imgs/cross_transparent_2.png);
@@ -25,8 +150,8 @@ body {
     grid-gap: 1px;
     grid-template-areas: "dash-pio dash-caminh" "dash-explo dash-lob";
     padding: 0px 0px 0px 0px;
+    width: 100%;
 }
-
 #dash-lob {
     grid-area: dash-lob;
     background: linear-gradient(to bottom right, rgba(255, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
@@ -61,9 +186,6 @@ body {
 #dash-caminh:hover {
     transform: translate(10%, -10%);
 }
-/*#dash-caminh *, #dash-pio *, #dash-explo *, #dash-lob * {
-    text-align: center;
-}*/
 .dash-img {
     width: 100%;
     height: 100%;
@@ -88,42 +210,6 @@ body {
     grid-area: regulamento;
 }
 
-#powell {
-    background-image: url(../imgs/baden_powell_transparent_fig.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: calc(inherit / 2);
-}
-#login {
-    display: table;
-}
-
-.split {
-    height: 100%; 
-    width: 50%; 
-    position: fixed;
-    overflow-x: hidden;
-    text-align: center;
-    vertical-align: middle;
-    z-index: 1;
-    top: 0;
-}
-.left {
-    left: 0;
-    direction:rtl
-}
-.right {
-    right: 0;
-    direction: ltr;
-}
-
-#login form {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    width: 100%;
-    margin: 0;
-}
 .button {
     border-radius: 12px;
 }
@@ -141,123 +227,6 @@ body {
     animation: fadeIn ease 3s;
     -webkit-animation: fadeIn ease 3s;
 }
-.slide-tr /*up right*/ {
-    -webkit-animation: slide-tr 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: slide-tr 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-}
-@-webkit-keyframes slide-tr {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(-10%) translateX(10%);
-        transform: translateY(-10%) translateX(10%);
-    }
-}
-@keyframes slide-tr {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(-10%) translateX(10%);
-        transform: translateY(-10%) translateX(10%);
-    }
-}
-
-.slide-br /*down right*/ {
-    -webkit-animation: slide-br 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: slide-br 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-}
-@-webkit-keyframes slide-br {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(10%) translateX(10%);
-        transform: translateY(10%) translateX(10%);
-    }
-}
-@keyframes slide-br {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(10%) translateX(10%);
-        transform: translateY(10%) translateX(10%);
-    }
-}
-
-.slide-bl /*down left*/ {
-    -webkit-animation: slide-bl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: slide-bl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-}
-@-webkit-keyframes slide-bl {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(10%) translateX(-10%);
-        transform: translateY(10%) translateX(-10%);
-    }
-}
-@keyframes slide-bl {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(10%) translateX(-10%);
-        transform: translateY(10%) translateX(-10%);
-    }
-}
-
-.slide-tl /*up left*/ {
-    -webkit-animation: slide-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: slide-tl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-}
-@-webkit-keyframes slide-tl {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(-10%) translateX(-10%);
-        transform: translateY(-10%) translateX(-10%);
-    }
-}
-@keyframes slide-tl {
-    0% {
-        -webkit-transform: translateY(0) translateX(0);
-        transform: translateY(0) translateX(0);
-    }
-
-    100% {
-        -webkit-transform: translateY(-10%) translateX(-10%);
-        transform: translateY(-10%) translateX(-10%);
-    }
-}
-
-
 
 nav * {
     display: inline;
@@ -308,7 +277,6 @@ table th {
     box-sizing: border-box;
 }
 
-
 footer {
     text-align: center;
     padding: 3px;
@@ -319,55 +287,24 @@ footer {
  
 }
 
-.sidenav {
-    height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #333;
-    overflow-x: hidden;
-    padding-top: 20px;
-}
-    .sidenav a {
-        padding: 6px 8px 6px 16px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #818181;
-        display: block;
-    }
-        .sidenav a:hover {
-            color: #f1f1f1;
-        }
-@media screen and (max-height: 450px) {
-    .sidenav {
-        padding-top: 15px;
-    }
+/*isto e preciso p q?*/
+/*isso a partida era para alinhar as cenas com o side nav, tava no cod quano o tirei */
+/*acho que ja sei como resolver, este main nao estava a fazer o seu trabalho pq o div de onde estava as cenas nao 
+    estava a class= main, e por isso nao tava a funcionar*/
+/*yayaya finalmente descobri o coiso*/
+/*q coiso?*/
+/*as cenas tavam a ficar atras do nav bar e tava a tentar resolver isso, e consegui*/
+/*posso testar?*/
+/*yeah so que agora falta meter o titulo ao lado tb */
+/*...ainda estao atras...*/
+/*u mean the tittle right? e o header*/
+/*e q tal incorporares o sidebar juntamente c o ecra da master page e diminuir o tamanho do body?*/
 
-        .sidenav a {
-            font-size: 18px;
-        }
-}
-
-.main {
-    margin-left: 140px; 
-    padding: 0px 10px;
-}
-@media screen and (max-height: 450px) {
-    .sidenav {
-        padding-top: 15px;
-    }
-
-        .sidenav a {
-            font-size: 18px;
-        }
-}
+/* ter cuidado ao mexer aqui */
 .column {
     float: left;
-    width: 30%; /*50% mete as coisas no meio*/
+    width: 50%; /* mete as coisas no meio*/
     padding: 10px;
-    
 }
 
 /* Clear floats after the columns */
@@ -376,7 +313,6 @@ footer {
     display: table;
     clear: both;
 }
-
 
 /*a cena e que nao da para adicionar um link to the image aqui no css */
 /*ja consegui alinhar as animacoes, agr so preciso d fzr c q o texto fique em cada canto em vez do topo*/

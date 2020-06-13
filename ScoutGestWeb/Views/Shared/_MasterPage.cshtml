@@ -49,14 +49,24 @@
     <!--<option value="o que acontece">texto dessa opção</option>-->
     <!--adicionei aqui cenas-->
     <!--Header-->
-
-    <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3" style="background-color:Lightgreen">
+    <!--qunandd-->
+    <!--preciso d ir fzr o jantar
+        mas querias ligar o server?-->
+    <!--nao eu ia dizer em caso precises do cod do side navbar avisa me que tenho aqui e so fazer cp -->
+    <!--ainda n tiveste a fzr isso?-->
+    <!--ia alterar o sitio daqui na master mas dp tu disseste que tratavas disso por isso eu tive a ver as fontes, ver algumas imagens,e tb
+        a ver algumas cenas relacionadas com o side nav-->
+    <!--qd e q disse q ia tratar disso?-->
+    <!--se nao disseste entao peço desculpa, percebi mal.p-->
+    <!--d qq modo eu vou precisar dela, mas n hj. amnh tratamos disso-->
+    <!--tb entao xau ate amanha-->
+    <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
         <partial name="Partial/_Header" />
+    </div>
+    @if (ViewData["Title"].ToString() != "Página inicial")
+    {
 
-        @if (ViewData["Title"].ToString() != "Página inicial")
-        {
-
-        <ul class="nav container-fluid text-center">
+        <!--<ul class="nav container-fluid text-center">
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
             </li>
@@ -76,31 +86,48 @@
                 <a class="nav-link" asp-controller="Home" asp-action="LogOut"><h6>Log out</h6></a>
             </li>
         </ul>
-        }
-
-    </div>
 
 
+
+        <aside class="sidenav">
+            <a asp-action="Index" asp-controller="Home">Início</a>
+            <a asp-action="Index" asp-controller="Atividades">Atividades</a>
+            <a asp-action="Index" asp-controller="Tesouraria">Tesouraria</a>
+            <a asp-action="">Contactos</a>
+            <a asp-action="">Regulamentos</a>
+            <a asp-action="LogOut" asp-controller="Home">Logout</a>
+        </aside>-->
+    }
     <!--<div id="starter" class="animate__animated animate__fadeOut animate__delay-2s" style="position: absolute;">
         <h1>Benvindo/a ao ScoutGest, <br /> @ScoutGestWeb.UserData.UserData.userData["User"]</h1>
     </div>-->
-
     @if (ViewData["Title"].ToString() == "Página inicial")
     {
     <div class="container-fluid animate__animated animate__fadeIn" id="body-dash">
         @RenderBody()
     </div>
-    }
-    else
-    {
+}
+else
+{
     <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="margin:auto">
         @RenderBody()
     </div>
-    }
-    <!--Footer-->
-    <footer class="footer bg-dark text-white text-center">
-        ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
-    </footer>
+    <!--este e onde ta a ser usado o main. n comentes, e necessario p mostrar a pag bem--><!--mas a cena e que o main que meti no css tava a afetar o main do dashboard-->
+    <!--havia algum main no dashboard?
+    o dashboard sao so as caixas d selecao, e n encontrei nada d mal-->
+    <!--desculpa quis dizer index das atividades-->
+    <!--esse main das atividades tava a funcionar com o main do css foi assim que consegui puxar o texto para o lado
+        do nav-->
+    <!--ok nvm ja consegui tratar da situacao do margin-->
+    <!--ok thats good now wuts next?-->
+    <!--hold up-->
+    <!--holding up-->
+    <!--whatsapp-->
+}
+<!--Footer-->
+<footer class="footer bg-dark text-white text-center">
+    ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
+</footer>
 </body>
 </html>
 <!--im going now when ur mom is finish don't forget to sent it to me the thing -->
