@@ -15,135 +15,146 @@ namespace ScoutGestWeb.Controllers
 {
     public class InserirEscuteiroController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
-            List<InserirEscuteiroViewModel> escuteiros = new List<InserirEscuteiroViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", UserData.UserData.con))
+            if (UserData.UserData.userData.Count != 0)
             {
-                //Abrir a ligação
-                if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
-                cmd.Prepare();
-                using (MySqlDataReader dr = cmd.ExecuteReader())
-                {  //Vai buscar a seguinte informação à base de dados e coloca na tabela
-                    int i = 0;
-                    while (dr.Read())
-                    {
-                        escuteiros.Add(new InserirEscuteiroViewModel()
+                //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
+                List<InserirEscuteiroViewModel> escuteiros = new List<InserirEscuteiroViewModel>();
+                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", UserData.UserData.con))
+                {
+                    //Abrir a ligação
+                    if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                    cmd.Prepare();
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {  //Vai buscar a seguinte informação à base de dados e coloca na tabela
+                        int i = 0;
+                        while (dr.Read())
                         {
-                            ID = int.Parse(dr["IDEscuteiro"].ToString()),
-                            Nome = dr["Nome"].ToString(),
-                            FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]),
-                            Totem = dr["Totem"].ToString(),
-                            Morada = dr["Morada"].ToString(),
-                            Morada2 = dr["Morada2"].ToString(),
-                            CodPostal = dr["CodPostal"].ToString(),
-                            Alergias = dr["Alergias"].ToString(),
-                            Medicacao = dr["Medicacao"].ToString(),
-                            Problemas = dr["Problemas"].ToString(),
-                            Observacoes = dr["Observacoes"].ToString(),
-                            Idade = int.Parse(dr["Idade"].ToString()),
-                            Seccao = int.Parse(dr["Seccao"].ToString()) == 0 ? "Teste" : int.Parse(dr["Seccao"].ToString()) == 1 ? "Lobitos" : int.Parse(dr["Seccao"].ToString()) == 2 ? "Exploradores" : int.Parse(dr["Seccao"].ToString()) == 3 ? "Pioneiros" : int.Parse(dr["Seccao"].ToString()) == 4 ? "Caminaheiros" : "Dirigentes"
-                        });
-                        i++;
+                            escuteiros.Add(new InserirEscuteiroViewModel()
+                            {
+                                ID = int.Parse(dr["IDEscuteiro"].ToString()),
+                                Nome = dr["Nome"].ToString(),
+                                FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]),
+                                Totem = dr["Totem"].ToString(),
+                                Morada = dr["Morada"].ToString(),
+                                Morada2 = dr["Morada2"].ToString(),
+                                CodPostal = dr["CodPostal"].ToString(),
+                                Alergias = dr["Alergias"].ToString(),
+                                Medicacao = dr["Medicacao"].ToString(),
+                                Problemas = dr["Problemas"].ToString(),
+                                Observacoes = dr["Observacoes"].ToString(),
+                                Idade = int.Parse(dr["Idade"].ToString()),
+                                Seccao = int.Parse(dr["Seccao"].ToString()) == 0 ? "Teste" : int.Parse(dr["Seccao"].ToString()) == 1 ? "Lobitos" : int.Parse(dr["Seccao"].ToString()) == 2 ? "Exploradores" : int.Parse(dr["Seccao"].ToString()) == 3 ? "Pioneiros" : int.Parse(dr["Seccao"].ToString()) == 4 ? "Caminaheiros" : "Dirigentes"
+                            });
+                            i++;
+                        }
                     }
                 }
-                cmd.CommandText = "select Cargo from ";
+                return await Task.Run(() => View(escuteiros));
             }
-            return View(escuteiros);
+            return await Task.Run(() => View());
         }
         [HttpGet]
-        public IActionResult InserirEscuteiro()
+        public async Task<IActionResult> InserirEscuteiro()
         {
             //login problem not yet solved; trying to adapt to identity
-            return UserData.UserData.userData.Count == 0 ? RedirectToAction("Index", "Home") : (IActionResult)View();
+            return await Task.Run(() => UserData.UserData.userData.Count == 0 ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
         [HttpPost]
         public async Task<IActionResult> InserirEscuteiro(InserirEscuteiroViewModel insert)
         {
-            foreach (Cargos cargo in insert._cargo)
+            if (ModelState.IsValid)
             {
-                if (cargo.Selecionado == true) insert.Cargo.Add(cargo);
-            }
-            //Tenta inserir os seguintes valores na tabela escuteiros
-            try
-            {
-                using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(212, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", UserData.UserData.con))
+                foreach (Cargos cargo in insert._cargo)
                 {
-                    cmd.Parameters.AddWithValue("@nome", insert.Nome);
-                    cmd.Parameters.AddWithValue("@totem", insert.Totem);
-                    if (insert.FotoUp == null) cmd.Parameters.AddWithValue("@foto", '\0');
-                    else
+                    if (cargo.Selecionado == true) insert.Cargo.Add(cargo);
+                }
+                //Tenta inserir os seguintes valores na tabela escuteiros
+                try
+                {
+                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(212, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", UserData.UserData.con))
                     {
-                        using (MemoryStream ms = new MemoryStream())
-                        using (Image i = Image.Load(insert.FotoUp.OpenReadStream()))
+                        cmd.Parameters.AddWithValue("@nome", insert.Nome);
+                        cmd.Parameters.AddWithValue("@totem", insert.Totem);
+                        if (insert.FotoUp == null) cmd.Parameters.AddWithValue("@foto", '\0');
+                        else
                         {
-                            i.Save(ms, SixLabors.ImageSharp.Formats.Png.PngFormat.Instance);
-                            cmd.Parameters.AddWithValue("@foto", ms.ToArray());
+                            using (MemoryStream ms = new MemoryStream())
+                            using (Image i = Image.Load(insert.FotoUp.OpenReadStream()))
+                            {
+                                i.Save(ms, SixLabors.ImageSharp.Formats.Png.PngFormat.Instance);
+                                cmd.Parameters.AddWithValue("@foto", ms.ToArray());
+                            }
                         }
+                        using (MySqlCommand cmd3 = new MySqlCommand("select IDSeccao from seccoes where Nome = @seccao", cmd.Connection))
+                        {
+                            cmd3.Parameters.AddWithValue("@seccao", insert.Seccao);
+                            cmd3.Prepare();
+                            using (MySqlDataReader dr3 = cmd3.ExecuteReader()) while (dr3.Read()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
+                        }
+                        //Inserir valores na base de dados
+                        cmd.Parameters.AddWithValue("@estado", insert.Estado);
+                        cmd.Parameters.AddWithValue("@cargos", insert.Cargo);
+                        cmd.Parameters.AddWithValue("@idade", insert.Idade);
+                        cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone);
+                        cmd.Parameters.AddWithValue("@morada", insert.Morada);
+                        cmd.Parameters.AddWithValue("@morada2", insert.Morada2);
+                        cmd.Parameters.AddWithValue("@codpostal", insert.CodPostal);
+                        cmd.Parameters.AddWithValue("@gruposanguineo", insert.GrupoSanguineo);
+                        cmd.Parameters.AddWithValue("@alergias", insert.Alergias);
+                        cmd.Parameters.AddWithValue("@medicacao", insert.Medicacao);
+                        cmd.Parameters.AddWithValue("@problemas", insert.Problemas);
+                        cmd.Parameters.AddWithValue("@observacoes", insert.Observacoes);
+                        cmd.Prepare();
+                        await cmd.ExecuteNonQueryAsync();
                     }
-                    using (MySqlCommand cmd3 = new MySqlCommand("select IDSeccao from seccoes where Nome = @seccao", cmd.Connection))
-                    {
-                        cmd3.Parameters.AddWithValue("@seccao", insert.Seccao);
-                        cmd3.Prepare();
-                        using (MySqlDataReader dr3 = cmd3.ExecuteReader()) while (dr3.Read()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
-                    }
-                    //Inserir valores na base de dados
-                    cmd.Parameters.AddWithValue("@estado", insert.Estado);
-                    cmd.Parameters.AddWithValue("@cargos", insert.Cargo);
-                    cmd.Parameters.AddWithValue("@idade", insert.Idade);
-                    cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone);
-                    cmd.Parameters.AddWithValue("@morada", insert.Morada);
-                    cmd.Parameters.AddWithValue("@morada2", insert.Morada2);
-                    cmd.Parameters.AddWithValue("@codpostal", insert.CodPostal);
-                    cmd.Parameters.AddWithValue("@gruposanguineo", insert.GrupoSanguineo);
-                    cmd.Parameters.AddWithValue("@alergias", insert.Alergias);
-                    cmd.Parameters.AddWithValue("@medicacao", insert.Medicacao);
-                    cmd.Parameters.AddWithValue("@problemas", insert.Problemas);
-                    cmd.Parameters.AddWithValue("@observacoes", insert.Observacoes);
-                    cmd.Prepare();
-                    cmd.ExecuteNonQuery();
+                    return await Task.Run(() => RedirectToAction("Index"));
                 }
-                return await Task.Run(() => RedirectToAction("Index"));
-            }
-            catch (MySqlException mse)
-            {
-                //Em caso haja erros na inserção de dados 
-                ModelState.AddModelError("Erro de inserção na base de dados", mse.Message);
-                Console.WriteLine(ModelState.ErrorCount);
-                return View("InserirEscuteiro");
-            }
-        }
-        public IActionResult Detalhes(int id)
-        {
-            InserirEscuteiroViewModel ievm = null;
-            using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", UserData.UserData.con))
-            {
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.Prepare();
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                catch (MySqlException mse)
                 {
-                    while (dr.Read()) ievm = new InserirEscuteiroViewModel()
-                    {
-                        ID = int.Parse(dr["IDEscuteiro"].ToString()),
-                        Nome = dr["Nome"].ToString(),
-                        Totem = dr["Totem"].ToString(),
-                        NumTelefone = dr["numTelefone"].ToString(),
-                        Morada = dr["Morada"].ToString(),
-                        Morada2 = dr["Morada2"].ToString(),
-                        CodPostal = dr["CodPostal"].ToString(),
-                        GrupoSanguineo = dr["GrupoSang"].ToString(),
-                        Alergias = dr["Alergias"].ToString(),
-                        Medicacao = dr["Medicacao"].ToString(),
-                        Problemas = dr["Problemas"].ToString(),
-                        Observacoes = dr["Observacoes"].ToString(),
-                        Seccao = int.Parse(dr["Seccao"].ToString()) == 0 ? "Teste" : int.Parse(dr["Seccao"].ToString()) == 1 ? "Lobitos" : int.Parse(dr["Seccao"].ToString()) == 2 ? "Exploradores" : int.Parse(dr["Seccao"].ToString()) == 3 ? "Pioneiros" : int.Parse(dr["Seccao"].ToString()) == 4 ? "Caminheiros" : "Dirigentes",
-                        Idade = int.Parse(dr["Idade"].ToString()),
-                        FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"])
-                    };
+                    //Em caso haja erros na inserção de dados 
+                    ModelState.AddModelError("Erro de inserção na base de dados", mse.Message);
+                    Console.WriteLine(ModelState.ErrorCount);
+                    return await Task.Run(() => View("InserirEscuteiro"));
                 }
-                return View(ievm);
             }
+            return await Task.Run(() => View("InserirEscuteiro"));
+        }
+        public async Task<IActionResult> DetalhesAsync(int id)
+        {
+            if (UserData.UserData.userData.Count != 0)
+            {
+                InserirEscuteiroViewModel ievm = null;
+                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", UserData.UserData.con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Prepare();
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read()) ievm = new InserirEscuteiroViewModel()
+                        {
+                            ID = int.Parse(dr["IDEscuteiro"].ToString()),
+                            Nome = dr["Nome"].ToString(),
+                            Totem = dr["Totem"].ToString(),
+                            NumTelefone = dr["numTelefone"].ToString(),
+                            Morada = dr["Morada"].ToString(),
+                            Morada2 = dr["Morada2"].ToString(),
+                            CodPostal = dr["CodPostal"].ToString(),
+                            GrupoSanguineo = dr["GrupoSang"].ToString(),
+                            Alergias = dr["Alergias"].ToString(),
+                            Medicacao = dr["Medicacao"].ToString(),
+                            Problemas = dr["Problemas"].ToString(),
+                            Observacoes = dr["Observacoes"].ToString(),
+                            Seccao = int.Parse(dr["Seccao"].ToString()) == 0 ? "Teste" : int.Parse(dr["Seccao"].ToString()) == 1 ? "Lobitos" : int.Parse(dr["Seccao"].ToString()) == 2 ? "Exploradores" : int.Parse(dr["Seccao"].ToString()) == 3 ? "Pioneiros" : int.Parse(dr["Seccao"].ToString()) == 4 ? "Caminheiros" : "Dirigentes",
+                            Idade = int.Parse(dr["Idade"].ToString()),
+                            FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"])
+                        };
+                    }
+                    return await Task.Run(() => View(ievm));
+                }
+            }
+            return await Task.Run(() => RedirectToAction("Index", "Home"));
         }
     }
 }

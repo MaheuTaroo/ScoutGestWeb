@@ -1,0 +1,39 @@
+﻿@model ScoutGestWeb.Models.TiposDocsViewModel
+
+@{
+    ViewData["Title"] = "NovoDocumento";
+}
+
+<h1>Novo documento</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="NovoDocumento">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IDDocumento" class="control-label"></label>
+                <input asp-for="IDDocumento" class="form-control" />
+                <span asp-validation-for="IDDocumento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descricao" class="control-label"></label>
+                <input asp-for="Descricao" class="form-control" />
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoDocumento" class="control-label"></label>
+                <select asp-for="TipoDocumento" class="form-control">
+                    <option>Crédito</option>
+                    <option>Débito</option>
+                </select>
+                <span asp-validation-for="TipoDocumento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Voltar à listagem</a>
+</div>

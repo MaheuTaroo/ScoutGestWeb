@@ -186,3 +186,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcAppl
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cache
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\SixLabors.ImageSharp.dll
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\InserirEscuteiro\Detalhes.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\NovaCaixa.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposDocs\Index.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposDocs\NovoDocumento.cshtml.g.cs

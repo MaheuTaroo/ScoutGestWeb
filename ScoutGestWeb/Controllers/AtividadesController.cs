@@ -63,7 +63,7 @@ namespace ScoutGestWeb.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult InserirAtividade(AtividadeViewModel avm)
+        public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@inicio", avm.DataInicio);
                     cmd.Parameters.AddWithValue("@fim", avm.DataFim);
                     cmd.Prepare();
-                    cmd.ExecuteNonQuery();
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
             catch (MySqlException mse)
@@ -84,7 +84,7 @@ namespace ScoutGestWeb.Controllers
                 ModelState.AddModelError("Erro", "Erro na inserção na base de dados: " + mse.ToString());
                 return View();
             }
-            return RedirectToAction("Index");
+            return await Task.Run(() => RedirectToAction("Index"));
         }
     }
     //what do u need me to do?

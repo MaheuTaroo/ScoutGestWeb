@@ -4,7 +4,7 @@
 <div>
     @for (var i = 1; i < 12; i++)
     {
-        <input id="@Model.Cargo[i - 1].Cargo.ToLower()" type="checkbox" asp-for="@Model.Cargo[i].Selecionado" onclick="return selectiveCheck()" />
+        <input id="@Model.Cargo[i - 1].Cargo.ToLower()" class="cargo" type="checkbox" asp-for="@Model.Cargo[i].Selecionado" onclick="return selectiveCheck()" />
         <label asp-for="Cargo[i]">@Model.Cargo[i - 1].Cargo</label>
         <input type="hidden" asp-for="Cargo[i].Cargo" />
         <br />

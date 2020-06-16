@@ -10,7 +10,6 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Security.Cryptography;
 using System.Text;
-
 namespace ScoutGestWeb.Controllers
 {
     public class HomeController : Controller
@@ -22,17 +21,14 @@ namespace ScoutGestWeb.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return UserData.UserData.userData.Count == 0 ? View("Login") : View("Dashboard");
+            return await Task.Run(() => UserData.UserData.userData.Count == 0 ? View("Login") : View("Dashboard"));
         }
-
         [HttpPost]
-        public IActionResult Index(LoginViewModel login)
+        public async Task<IActionResult> IndexAsync(LoginViewModel login)
         {
-            List<EventoViewModel> evm = new List<EventoViewModel>();
-            if (string.IsNullOrEmpty(login.Password)) return View("Login");
-            else
+            if (ModelState.IsValid)
             {
                 StringBuilder sb = new StringBuilder();
                 using (MD5 md5 = new MD5CryptoServiceProvider())
@@ -60,7 +56,8 @@ namespace ScoutGestWeb.Controllers
                             while (dr.Read()) for (int i = 0; i < dr.FieldCount; i++) UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
                         }
                     }
-                    if (UserData.UserData.userData.Count > 0)
+                    return await Task.Run(() => View("Dashboard"));
+                    /*if (UserData.UserData.userData.Count > 0)
                     {
                         cmd.CommandText = "select Nome from grupos where IDGrupo = @id;";
                         cmd.Parameters.AddWithValue("@id", UserData.UserData.userData["IDGrupo"]);
@@ -70,7 +67,6 @@ namespace ScoutGestWeb.Controllers
                             //my login is broke for now
                             while (dr.Read()) UserData.UserData.userData.Add("Nome", dr["Nome"]);
                         }
-                        cmd.CommandText = "select * from eventos";
                         //ja conseguiste a imagem?
                         //q img?
                         //a imagem para um evento qlq ou referes que seja eu que arranje?
@@ -78,48 +74,24 @@ namespace ScoutGestWeb.Controllers
                         //okin entao eu vou arranjar uma so para ver se o cod funciona
                         //yeah forget it tens de seer yu a meter a imagen. 
 
-                        cmd.Prepare();
                         //n te ias embora?
                         //so estava a espera da tua resposta, pq eu nao me ia embora se ainda precissases de ajuda
                         //eu vou tar td o dia a trabalhar nisto, se entretanto quiseres vir vem
                         //oki then
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            while (dr.Read())
-                            {
-                                evm.Add(new EventoViewModel()
-                                {
-                                    ID = int.Parse(dr["IDEvento"].ToString()),
-                                    Nome = dr["Nome"].ToString(),
-                                    Descricao = dr["Descricao"].ToString(),
-                                    Seccao = dr["Seccao"].ToString(),
-                                    Local = dr["Local"].ToString(),
-                                    DataInicio = DateTime.Parse(dr["DataInicio"].ToString()),
-                                    DataFim = DateTime.Parse(dr["DataFim"].ToString())
-                                });
-                                /*hey acho que vou andado, vou passar para o relatorio, antes de ir precisas que eu faça
-                                mais alguma cena?*/
-                            }
-                        }
-                        return View("Dashboard", evm);
-                    }
+
+                    }*/
                 }
-                return View("Login");
             }
+            return await Task.Run(() => View("Login"));
         }
-        [Route("/Home/Escuteiros", Name = "Escuteiros")]
-        public IActionResult Escuteiros()
-        {
-            return RedirectToAction("Index", "InserirEscuteiro");
-        }
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
             UserData.UserData.userData.Clear();
-            return RedirectToAction("Index");
+            return await Task.Run(() => RedirectToAction("Index"));
         }
-        public IActionResult InfoLogout()
+        public async Task<IActionResult> InfoLogout()
         {
-            return View();
+            return await Task.Run(() => View());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

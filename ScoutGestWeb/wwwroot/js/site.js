@@ -13,6 +13,8 @@ function selectiveCheck() {
     if (checkedChecks.length > max) return false;
 }
 
+/**/
+
 document.querySelectorAll('select#chefe')[0].onclick = function () {
     var select = document.querySelectorAll("#chefe");
     Chefe = select.options[select.selectedIndex].text == "Sim";

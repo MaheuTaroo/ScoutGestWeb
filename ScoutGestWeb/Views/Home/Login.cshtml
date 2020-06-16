@@ -42,8 +42,9 @@
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Username)</div>
             <label asp-for="Password">Password: </label>
             <input asp-for="Password" type="password" /><br />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Password)</div><br />
             <button class="btn btn-primary" type="submit">Login</button>
-            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Password)</div>
+
         </form>
     </div>
 

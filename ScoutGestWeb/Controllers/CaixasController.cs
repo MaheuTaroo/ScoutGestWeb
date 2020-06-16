@@ -11,9 +11,9 @@ namespace ScoutGestWeb.Controllers
 {
     public class CaixasController : Controller
     {
-        readonly List<CaixaViewModel> cvm = new List<CaixaViewModel>();
-        readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
-        public IActionResult Index()
+        private readonly List<CaixaViewModel> cvm = new List<CaixaViewModel>();
+        private readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
+        public async Task<IActionResult> Index()
         {
             if (UserData.UserData.userData.Count == 0) return RedirectToAction("Index", "Home");
             using (MySqlCommand cmd = new MySqlCommand("select * from caixas", UserData.UserData.con))
@@ -56,7 +56,93 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.Clear();
                 }
             }
-            return View(cvm);
+            return await Task.Run(() => View(cvm));
+        }
+        public async Task<IActionResult> NovaCaixa()
+        {
+            if (UserData.UserData.userData.Count == 0) return RedirectToAction("Index", "Home");
+            using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", UserData.UserData.con))
+            using (MySqlDataReader dr = cmd.ExecuteReader())
+            {
+                List<string> grupos = new List<string>();
+                while (dr.Read()) grupos.Add(dr["Nome"].ToString());
+                grupos.Sort();
+                ViewBag.grupos = grupos;
+            }
+            return await Task.Run(() => View());
+        }
+        [HttpPost]
+        public async Task<IActionResult> NovaCaixa(CaixaViewModel cvm)
+        {
+            using (MySqlCommand cmd = new MySqlCommand("insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);", UserData.UserData.con))
+            {
+                cmd.Parameters.AddWithValue("@nome", cvm.Nome);
+                using (MySqlCommand cmd2 = new MySqlCommand("select IDGrupo from grupos where Nome = @nome", UserData.UserData.con))
+                {
+                    cmd2.Parameters.AddWithValue("@nome", cvm.Grupo);
+                    cmd2.Prepare();
+                    using (MySqlDataReader dr2 = cmd2.ExecuteReader())
+                    {
+                        if (!dr2.HasRows)
+                        {
+                            ModelState.AddModelError("Grupo não existente", "O grupo selecionado não existe");
+                            ViewData.Add(new KeyValuePair<string, object>("Error", "A equipa selecionada não existe"));
+                            return RedirectToAction("NovaCaixa");
+                        }
+                        else while (dr2.Read()) cmd.Parameters.AddWithValue("@grupo", int.Parse(dr2["IDGrupo"].ToString()));
+                    }
+                    cmd2.Parameters.Clear();
+                    cmd2.CommandText = "select * from escuteiros where ";
+                    if (int.TryParse(cvm.Responsavel, out _))
+                    {
+                        cmd2.CommandText += "IDEscuteiro = @id";
+                        cmd2.Parameters.AddWithValue("@id", cvm.Responsavel);
+                    }
+                    else
+                    {
+                        cmd.CommandText += "Nome = @nome or Totem = @totem";
+                        cmd2.Parameters.AddWithValue("@nome", cvm.Responsavel);
+                        cmd2.Parameters.AddWithValue("@totem", cvm.Responsavel);
+                    }
+                    cmd2.Prepare();
+                    using (MySqlDataReader dr2 = cmd2.ExecuteReader())
+                    {
+                        if (!dr2.HasRows)
+                        {
+                            ModelState.AddModelError("Escuteiro não existente", "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido");
+                            return RedirectToAction("NovaCaixa");
+                        }
+                        else while (dr2.Read()) cmd.Parameters.AddWithValue("@responsavel", int.Parse(dr2["IDEscuteiro"].ToString()));
+                    }
+                    //aproveita e v se o botao ja ta ao lado da imagem
+                    //n ta
+                    //
+                    ///try
+                    ///{
+                    ///    cmd.Parameters.AddWithValue("@id", int.Parse(cvm.Responsavel));
+                    ///}
+                    ///catch (FormatException)
+                    ///{
+                    ///    cmd.CommandText = cmd.CommandText.Replace("IDEscuteiro = @id", "Nome = @nome or Totem = @totem");
+                    ///    cmd.Parameters.AddWithValue("@nome", cvm.Responsavel);
+                    ///    cmd.Parameters.AddWithValue("@totem", cvm.Responsavel);
+                    ///}
+                    ///cmd.Prepare();
+                    ///using (MySqlDataReader dr = cmd.ExecuteReader())
+                    ///{
+                    ///    if (!dr.HasRows)
+                    ///    {
+                    ///        ViewBag.Error = "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido";
+                    ///        return RedirectToAction("NovaCaixa");
+                    ///    }
+                    ///}
+                    //Martins consegui passar o texto e o titulo, mas da maneira que eu fiz não dá para passar o botão
+                    //Pq form não dá para meter dentro de um p, mas vou tentar mudar para um div para ver se consigo
+                }
+                cmd.Prepare();
+                await cmd.ExecuteNonQueryAsync();
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
         }
     }
 }

@@ -132,24 +132,60 @@
     </tbody>
 </table>-->
 
-@foreach (var item in Model)
-{
-    <div class="row" style="margin:auto">
-        <div class="column"><img src="@Html.DisplayFor(modelItem => item.FotoDown)" /></div>
-        <div class="column">
-            <p>
-                <h3>
-                    @Html.DisplayFor(modelItem => item.Nome)
-                </h3>
-            </p>
-            <p>Secção: @Html.DisplayFor(modelItem => item.Seccao) | Totem: @Html.DisplayFor(modelItem => item.Totem) | </p>
-            <!--<p>
-                A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
-            </p>-->
-            <form method="get" asp-action="Detalhes">
-                <input type="hidden" value="@Html.DisplayFor(modelItem => item.ID)" />
-                <button class="btn btn-secondary" type="submit">Detalhes</button>
-            </form>
+<div style="overflow-y: scroll; height: 80%; vertical-align: middle">
+    @foreach (var item in Model)
+    {
+        <div class="row" style="margin:auto">
+  
+            <div class="column" style="float:left ; margin: 0px 15px 15px 0px; ">
+                <div>
+                    <form method="get" asp-action="Detalhes">
+                        <input type="hidden" value="@Html.DisplayFor(modelItem => item.ID)" />
+
+
+                        <img src="@Html.DisplayFor(modelItem => item.FotoDown)" style="float:left" /> <!--style="float:left"-->
+
+                        @Html.DisplayFor(modelItem => item.Nome)<br />
+                        <p> Secção: @Html.DisplayFor(modelItem => item.Seccao) | Totem: @Html.DisplayFor(modelItem => item.Totem) <br />
+                        <p><button class="btn btn-secondary" type="submit">Detalhes</button></p>
+
+                    </form>
+                        <!--sbs como e q se desativa a sobreposicao do build da app?-->
+                        <!--como assim?-->
+                        <!--e q eu tou a ver um prog d tesouraria numa maquina virtual q tnh, mas smp q tu fzs build da app a maquina virtual perde o foco
+                            e aparece o chrome p cima c o website-->
+                        <!--nao sei, mas deve tar alguma coisa sobre isso no vid sobre live share-->
+
+                        <!--well shietdf-->
+                        <!--s h i e t d f-->
+                        <!--yeaaaa...-->
+                        <!--am gonna save that lmao-->
+                        <!--but can i start again? -->
+                        <!--yes
+                            also brb again lmao-->
+                        <!--oki-->
+                        <!--i has the bacc-->
+                        <!--dont worry i noticed-->
+                        <!--noice-->
+                        <!--so good news and bad news, good is that i found a way to align the text, bad is that i kinda need to change the imagem size-->
+                        <!--ye, not gonna happen, its well sized rn-->
+                        <!-- k , already changed it back-->
+                    <!--ran out of ideias on how to align the text :/-->
+                    <!--have u searched well tho? being a programmer is essencially being a professional googler-->
+                    <!--i know and yes i did, but i guess i can search more-->
+                    <!--dew it-->
+                </div>
+                <!--brb-->
+                <!--okii-->
+                <!--once u come back can u start? i need to see a thing-->
+                <!--still below the image-->
+                <!--oki-->
+                <!--vou ver como se mete um botao ao lado de uma imagem com div-->
+                <!--<p>
+                      A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
+                 </p>-->
+              
+            </div>
         </div>
-    </div>
-}
+    }
+</div>

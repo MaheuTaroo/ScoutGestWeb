@@ -15,28 +15,30 @@
     -->
 <!--lmao este main n tava aqui a fzr nd
     come with me-->
-@foreach (var item in Model)
-{
-<div class="container-fluid" style="padding: 0 0 0 0">
-    <p>
-        <h2>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </h2>
-    </p>
-    <p>
-        <h5>
-            De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-        </h5>
-    </p>
-    <!--<p>
-    A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
-    </p>-->
-    <form method="get" asp-action="Detalhes">
-        <input type="hidden" value="@Html.DisplayFor(modelItem => item.IDAtividade)" />
-        <button class="btn btn-secondary" type="submit">Detalhes</button>
-    </form>
+<div style="overflow-y: scroll">
+    @foreach (var item in Model)
+    {
+        <div class="container-fluid" style="padding: 0 0 0 0">
+            <p>
+                <h2>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </h2>
+            </p>
+            <p>
+                <h5>
+                    De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
+                </h5>
+            </p>
+            <!--<p>
+            A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
+            </p>-->
+            <form method="get" asp-action="Detalhes">
+                <input type="hidden" value="@Html.DisplayFor(modelItem => item.IDAtividade)" />
+                <button class="btn btn-secondary" type="submit">Detalhes</button>
+            </form>
+        </div>
+    }
 </div>
-}
 <!--</div>
 <!--can i start?-->
 <!--ya-->
