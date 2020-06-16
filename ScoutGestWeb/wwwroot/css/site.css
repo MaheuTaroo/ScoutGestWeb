@@ -1,6 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 @import url(animations.css);
+@import url(dropdowns.css);
 
 html, body {
     height: 100%;
@@ -58,11 +59,11 @@ body {
 }
 .left {
     left: 0;
-    direction:rtl
+   /* direction:rtl*/
 }
 .right {
     right: 0;
-    direction: ltr;
+    /*direction: ltr;*/
 }
 
 #powell {
@@ -287,18 +288,7 @@ footer {
  
 }
 
-/*isto e preciso p q?*/
-/*isso a partida era para alinhar as cenas com o side nav, tava no cod quano o tirei */
-/*acho que ja sei como resolver, este main nao estava a fazer o seu trabalho pq o div de onde estava as cenas nao 
-    estava a class= main, e por isso nao tava a funcionar*/
-/*yayaya finalmente descobri o coiso*/
-/*q coiso?*/
-/*as cenas tavam a ficar atras do nav bar e tava a tentar resolver isso, e consegui*/
-/*posso testar?*/
-/*yeah so que agora falta meter o titulo ao lado tb */
-/*...ainda estao atras...*/
-/*u mean the tittle right? e o header*/
-/*e q tal incorporares o sidebar juntamente c o ecra da master page e diminuir o tamanho do body?*/
+
 
 /* ter cuidado ao mexer aqui */
 .column {
@@ -315,9 +305,73 @@ footer {
 }
 
 
+/*centrar o texto e o botão com a foto */
+.maine {
+    float: left;
+    min-height: 180px;
+    position: relative;
+}
+.cima {
+    /*vertical-align: middle;
+    line-height: 44px;*/
+    height: calc(100% / 3);
+}
+.centro {
+    /*text-align: left;*/
+    height: calc(100% / 3);
+    /*margin-top: calc(100% / 3);*/
+}
+.baixo {
+    /*position: absolute;
+    bottom: 0;
+    left: 0;*/
+    height: calc(100% / 3);
+    /*margin-top: calc(calc(100% / 3) * 2);*/
+}
 
-    
+.rowdeth {
+    content: "";
+    display: table;
+    clear: both;
+}
 
+.columndet {
+    float: left;
+    width: auto;
+    padding: 10px;
+  
+}
+
+.imagedeth {
+    position: absolute;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.imagedeth img {
+
+    width:300px;
+    height:300px;
+}
+
+.tabledeth {
+    padding-left: 200px;
+}
+
+/*isto e preciso p q?*/
+/*isso a partida era para alinhar as cenas com o side nav, tava no cod quano o tirei */
+/*acho que ja sei como resolver, este main nao estava a fazer o seu trabalho pq o div de onde estava as cenas nao 
+    estava a class= main, e por isso nao tava a funcionar*/
+/*yayaya finalmente descobri o coiso*/
+/*q coiso?*/
+/*as cenas tavam a ficar atras do nav bar e tava a tentar resolver isso, e consegui*/
+/*posso testar?*/
+/*yeah so que agora falta meter o titulo ao lado tb */
+/*...ainda estao atras...*/
+/*u mean the tittle right? e o header*/
+/*e q tal incorporares o sidebar juntamente c o ecra da master page e diminuir o tamanho do body?*/
 /*a cena e que nao da para adicionar um link to the image aqui no css */
 /*ja consegui alinhar as animacoes, agr so preciso d fzr c q o texto fique em cada canto em vez do topo*/
 /*right on it gonna see if there is a way to put/the animation ends  in the center */

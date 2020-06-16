@@ -25,5 +25,7 @@ namespace ScoutGestWeb.Models
         public DateTime DataInicio { get; set; }
         [Required(ErrorMessage = "Não foi definida uma data final à atividade")]
         public DateTime DataFim { get; set; }
+        [Required(ErrorMessage = "Não foi confirmada a abertura da atividade a movimentos")]
+        public bool Ativa { get; set; }
     }
 }

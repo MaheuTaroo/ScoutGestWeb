@@ -33,6 +33,10 @@
             <label asp-for="Responsavel" class="control-label">Responsável</label>
             <input asp-for="Responsavel" class="form-control" /><br />
             <div class="text-danger">@Html.ValidationMessageFor(x => x.Responsavel)</div>
+
+            <label asp-for="Saldo" class="control-label">Saldo</label>
+            <input asp-for="Saldo" class="form-control" type="number" max="99999999999999999999999999999999999999999999999999999999999999999.99" min="0.00" step="0.01" value="0.00" /><br />
+            <div class="text-danger">@Html.ValidationMessageFor(x => x.Saldo)</div>
             <!--quando poder começar avisa-->
             <button type="submit" class="btn btn-primary">Criar</button>
         </form>

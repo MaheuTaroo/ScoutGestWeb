@@ -3,14 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
+using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb.Controllers
 {
     public class TiposPagsController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<TiposPagsViewModel> tpvm = new List<TiposPagsViewModel>();
+            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            using (MySqlCommand cmd = new MySqlCommand("select * from tipos_pags where IDPag not like \"00\";", UserData.UserData.con))
+            using (MySqlDataReader dr = cmd.ExecuteReader())
+            {
+                while (await dr.ReadAsync())
+                {
+                    tpvm.Add(new TiposPagsViewModel()
+                    {
+                        IDPagamento = dr["IDPag"].ToString(),
+                        Pagamento = dr["Pagamento"].ToString()
+                    });
+                }
+            }
+            return await Task.Run(() => View(tpvm));
+        }
+        public async Task<IActionResult> NovoPagamento()
+        {
+            return await Task.Run(() => View());
+        }
+        [HttpPost]
+        public async Task<IActionResult> NovoPagamento(TiposPagsViewModel tpvm)
+        {
+            if (ModelState.IsValid)
+            {
+                using (MySqlCommand cmd = new MySqlCommand("insert into tipos_pags values(@id, @pagamento);", UserData.UserData.con))
+                {
+                    cmd.Parameters.AddWithValue("@id", tpvm.IDPagamento);
+                    cmd.Parameters.AddWithValue("@pagamento", tpvm.Pagamento);
+                    await cmd.PrepareAsync();
+                    await cmd.ExecuteNonQueryAsync();
+                    return await Task.Run(() => RedirectToAction("Index"));
+                }
+            }
+            return await Task.Run(() => RedirectToAction("NovoPagamento"));
         }
     }
 }

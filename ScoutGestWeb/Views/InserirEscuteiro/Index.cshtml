@@ -10,182 +10,197 @@
 <p>
     <a asp-action="InserirEscuteiro">Inserir novo escuteiro</a>
 </p>
-<!--<table class="table">
-    <thead>
-        <tr>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Totem)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.FotoDown)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Cargo)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Seccao)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Idade)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.NumTelefone)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Morada)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Morada2)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.CodPostal)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.GrupoSanguineo)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Alergias)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Medicacao)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Problemas)
-            </th>
-            <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Observacoes)
-            </th>
-            <th>Opções</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Totem)
-            </td>
-            <td>
-                <img src="@Html.DisplayFor(modelItem => item.FotoDown)" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cargo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Seccao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Idade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumTelefone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Morada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Morada2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodPostal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GrupoSanguineo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Alergias)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Medicacao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Problemas)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observacoes)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>-->
-
+@*<!--<table class="table">
+        <thead>
+            <tr>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Totem)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.FotoDown)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Cargo)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Seccao)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Estado)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Idade)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.NumTelefone)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Morada)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Morada2)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.CodPostal)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.GrupoSanguineo)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Alergias)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Medicacao)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Problemas)
+                </th>
+                <th style="background-color:lightgreen">
+                    @Html.DisplayNameFor(model => model.Observacoes)
+                </th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Totem)
+                </td>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.FotoDown)" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cargo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Seccao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Idade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumTelefone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Morada)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Morada2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CodPostal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GrupoSanguineo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Alergias)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medicacao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Problemas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observacoes)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>-->
+*@
 <div style="overflow-y: scroll; height: 80%; vertical-align: middle">
     @foreach (var item in Model)
     {
-        <div class="row" style="margin:auto">
-  
-            <div class="column" style="float:left ; margin: 0px 15px 15px 0px; ">
+        <div class="column" style="margin:auto">
+            <div class="row" style="float:left; margin: 0px 15px 15px 0px; max-height: 180px;">
                 <div>
-                    <form method="get" asp-action="Detalhes">
-                        <input type="hidden" value="@Html.DisplayFor(modelItem => item.ID)" />
-
-
-                        <img src="@Html.DisplayFor(modelItem => item.FotoDown)" style="float:left" /> <!--style="float:left"-->
-
-                        @Html.DisplayFor(modelItem => item.Nome)<br />
-                        <p> Secção: @Html.DisplayFor(modelItem => item.Seccao) | Totem: @Html.DisplayFor(modelItem => item.Totem) <br />
-                        <p><button class="btn btn-secondary" type="submit">Detalhes</button></p>
-
-                    </form>
-                        <!--sbs como e q se desativa a sobreposicao do build da app?-->
-                        <!--como assim?-->
-                        <!--e q eu tou a ver um prog d tesouraria numa maquina virtual q tnh, mas smp q tu fzs build da app a maquina virtual perde o foco
-                            e aparece o chrome p cima c o website-->
-                        <!--nao sei, mas deve tar alguma coisa sobre isso no vid sobre live share-->
-
-                        <!--well shietdf-->
-                        <!--s h i e t d f-->
-                        <!--yeaaaa...-->
-                        <!--am gonna save that lmao-->
-                        <!--but can i start again? -->
-                        <!--yes
-                            also brb again lmao-->
-                        <!--oki-->
-                        <!--i has the bacc-->
-                        <!--dont worry i noticed-->
-                        <!--noice-->
-                        <!--so good news and bad news, good is that i found a way to align the text, bad is that i kinda need to change the imagem size-->
-                        <!--ye, not gonna happen, its well sized rn-->
-                        <!-- k , already changed it back-->
-                    <!--ran out of ideias on how to align the text :/-->
-                    <!--have u searched well tho? being a programmer is essencially being a professional googler-->
-                    <!--i know and yes i did, but i guess i can search more-->
-                    <!--dew it-->
+                    <!--foto e texto alinhado-->
+                    <div class="column">
+                        <input type="hidden" value="" />
+                        <img src="@Html.DisplayFor(modelItem => item.FotoDown)" style="float:left; min-height:180px; height: 180px;" /> <!--style="float:left"-->
+                    </div>
+                    <div class="column" style="margin: calc(3vh / 2) 0 calc(3vh / 2) 0">
+                        <div class="row cima" style="vertical-align: middle">@Html.DisplayFor(modelItem => item.Nome)</div><br />
+                        <div class="row centro" style="vertical-align: middle">Secção: @Html.DisplayFor(modelItem => item.Seccao) | Totem: @Html.DisplayFor(modelItem => item.Totem)</div><br />
+                        <div class="row baixo" style="vertical-align: middle">
+                            <!--<button  type="submit">Detalhes</button>-->
+                            <a href="@Url.ActionLink("Detalhes", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Detalhes</a>
+                        </div>
+                    </div>
                 </div>
-                <!--brb-->
-                <!--okii-->
-                <!--once u come back can u start? i need to see a thing-->
-                <!--still below the image-->
-                <!--oki-->
-                <!--vou ver como se mete um botao ao lado de uma imagem com div-->
+                <!--olha meti o padding, dp de metermos o side nav se for preciso altero. 
+                    also have to go ,see ya tomorrow -->
                 <!--<p>
                       A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
                  </p>-->
-              
+
             </div>
         </div>
     }
 </div>
+
+<!--sbs como e q se desativa a sobreposicao do build da app?-->
+<!--como assim?-->
+<!--e q eu tou a ver um prog d tesouraria numa maquina virtual q tnh, mas smp q tu fzs build da app a maquina virtual perde o foco
+e aparece o chrome p cima c o website-->
+<!--nao sei, mas deve tar alguma coisa sobre isso no vid sobre live share-->
+<!--well shietdf-->
+<!--s h i e t d f-->
+<!--yeaaaa...-->
+<!--am gonna save that lmao-->
+<!--but can i start again? -->
+<!--yes
+also brb again lmao-->
+<!--oki-->
+<!--i has the bacc-->
+<!--dont worry i noticed-->
+<!--noice-->
+<!--so good news and bad news, good is that i found a way to align the text, bad is that i kinda need to change the imagem size-->
+<!--ye, not gonna happen, its well sized rn-->
+<!-- k , already changed it back-->
+<!--ran out of ideias on how to align the text :/-->
+<!--have u searched well tho? being a programmer is essencially being a professional googler-->
+<!--i know and yes i did, but i guess i can search more-->
+<!--brb-->
+<!--okii-->
+<!--once u come back can u start? i need to see a thing-->
+<!--still below the image-->
+<!--oki-->
+<!--vou ver como se mete um botao ao lado de uma imagem com div-->
+<!--dew it-->
+<!--btw  o que querias que eu fizesse nos detalhes?-->
+<!--esta parte ainda n esta acabada tho-->
+<!--entao o que e preciso agora fazer aqui?-->
+<!--centrar mlhr-->
+<!--centrar mlhr o que? o titu/secç/ botao?-->
+<!--im back. o que tenho de centrar mlhr?-->
+<!--agr ja n vale a pena, acho q ja centrei. diz me como e q te aparece-->
+<!--it looks fine, duas fotos por linha e ao lado de cada uma as coisas estao como deviam estar-->
+<!--as 2 cartas p linha fiz acidentalmente
+    guess what, a bug turned into a feature-->
+<!--well thats great. o que e que tenho de fazer com os detalhes?-->
+<!--se vires como estao vais perceber-->

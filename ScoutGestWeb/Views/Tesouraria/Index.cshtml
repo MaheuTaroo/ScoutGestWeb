@@ -3,13 +3,19 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 style="text-align: center">Index</h1>
 
 <form asp-action="Index" asp-controller="Caixas" method="get">
     <button type="submit">Caixas</button>
 </form>
 <form asp-action="Index" asp-controller="TiposDocs" method="get">
     <button type="submit">Documentos</button>
+</form>
+<form asp-action="Index" asp-controller="TiposPags" method="get">
+    <button type="submit">Pagamentos</button>
+</form>
+<form asp-action="Index" asp-controller="Movimentos" method="get">
+    <button type="submit">Movimentos</button>
 </form>
 <!--<form asp-action="Index" asp-controller="Caixas" method="get">
     <button type="submit">Caixas</button>

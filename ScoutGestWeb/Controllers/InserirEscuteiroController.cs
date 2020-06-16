@@ -25,11 +25,11 @@ namespace ScoutGestWeb.Controllers
                 {
                     //Abrir a ligação
                     if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
-                    cmd.Prepare();
+                    await cmd.PrepareAsync();
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {  //Vai buscar a seguinte informação à base de dados e coloca na tabela
                         int i = 0;
-                        while (dr.Read())
+                        while (await dr.ReadAsync())
                         {
                             escuteiros.Add(new InserirEscuteiroViewModel()
                             {
@@ -90,8 +90,8 @@ namespace ScoutGestWeb.Controllers
                         using (MySqlCommand cmd3 = new MySqlCommand("select IDSeccao from seccoes where Nome = @seccao", cmd.Connection))
                         {
                             cmd3.Parameters.AddWithValue("@seccao", insert.Seccao);
-                            cmd3.Prepare();
-                            using (MySqlDataReader dr3 = cmd3.ExecuteReader()) while (dr3.Read()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
+                            await cmd3.PrepareAsync();
+                            using (MySqlDataReader dr3 = cmd3.ExecuteReader()) while (await dr3.ReadAsync()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
                         }
                         //Inserir valores na base de dados
                         cmd.Parameters.AddWithValue("@estado", insert.Estado);
@@ -106,7 +106,7 @@ namespace ScoutGestWeb.Controllers
                         cmd.Parameters.AddWithValue("@medicacao", insert.Medicacao);
                         cmd.Parameters.AddWithValue("@problemas", insert.Problemas);
                         cmd.Parameters.AddWithValue("@observacoes", insert.Observacoes);
-                        cmd.Prepare();
+                        await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
                     }
                     return await Task.Run(() => RedirectToAction("Index"));
@@ -121,7 +121,7 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View("InserirEscuteiro"));
         }
-        public async Task<IActionResult> DetalhesAsync(int id)
+        public async Task<IActionResult> Detalhes(int id)
         {
             if (UserData.UserData.userData.Count != 0)
             {
@@ -129,10 +129,10 @@ namespace ScoutGestWeb.Controllers
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", UserData.UserData.con))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
-                    cmd.Prepare();
+                    await cmd.PrepareAsync();
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        while (dr.Read()) ievm = new InserirEscuteiroViewModel()
+                        while (await dr.ReadAsync()) ievm = new InserirEscuteiroViewModel()
                         {
                             ID = int.Parse(dr["IDEscuteiro"].ToString()),
                             Nome = dr["Nome"].ToString(),

@@ -14,7 +14,5 @@ namespace ScoutGestWeb.Models
         public string IDDocumento { get; set; }
         [Required(ErrorMessage = "Campo de descrição necessário", AllowEmptyStrings = false)]
         public string Descricao { get; set; }
-        [Required(ErrorMessage = "Não foi selecionado um tipo de documento", AllowEmptyStrings = false)]
-        public string TipoDocumento { get; set; }
     }
 }

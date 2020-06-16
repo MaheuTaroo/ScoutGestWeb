@@ -11,17 +11,17 @@ namespace ScoutGestWeb.Controllers
 {
     public class GruposController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<int> seccoes = new List<int>();
-            if (UserData.UserData.userData.Count == 0) return RedirectToAction("Index", "Home");
+            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<GrupoViewModel> gvm = new List<GrupoViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from grupos", UserData.UserData.con))
             {
                 if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
-                    while (dr.Read())
+                    while (await dr.ReadAsync())
                     {
                         gvm.Add(new GrupoViewModel()
                         {
@@ -37,15 +37,15 @@ namespace ScoutGestWeb.Controllers
                 for (int i = 0; i < seccoes.Count; i++)
                 {
                     cmd.Parameters.AddWithValue("@id", seccoes[i]);
-                    cmd.Prepare();
+                    await cmd.PrepareAsync();
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
-                        while (dr.Read()) gvm[i].Seccao = dr["Nome"].ToString();
+                        while (await dr.ReadAsync()) gvm[i].Seccao = dr["Nome"].ToString();
                     }
                     cmd.Parameters.Clear();
                 }
             }
-            return View(gvm);
+            return await Task.Run(() => View(gvm));
         }
     }
 }

@@ -8,10 +8,10 @@ namespace ScoutGestWeb.Controllers
 {
     public class TesourariaController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0) return RedirectToAction("Index", "Login");
-            return View();
+            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Login"));
+            return await Task.Run(() => View());
         }
     }
 }

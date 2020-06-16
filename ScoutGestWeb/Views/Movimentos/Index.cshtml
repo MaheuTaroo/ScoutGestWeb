@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ScoutGestWeb.Models.MovimentoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<!--<div class="dropdown">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Right-aligned menu
+    </button>
+    <div class="dropdown-menu">
+        <a asp-action="Entrada">Entrada de tesouraria</a>
+        <a asp-action="Saida">Saída de tesouraria</a>
+        <a asp-action="Transferencia">Transferência de tesouraria</a>
+    </div>
+</div>-->
+<!--<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown button
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+</!--div>-->
+<div class="dropdown">
+    <button class="dropbtn">Dropdown</button>
+    <div class="dropdown-content">
+        <a asp-for="">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IDMovimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDCaixa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoMovimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataHora)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoPagamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDMovimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDCaixa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoMovimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataHora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoPagamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

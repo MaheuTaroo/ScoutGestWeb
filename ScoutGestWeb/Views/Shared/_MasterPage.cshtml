@@ -3,21 +3,6 @@
 
 }
 
-<!--so
-    web state report
-    divs are okay
-    so precisamos d ver como e q pomos links neles agr-->
-<!--can't we just turn the text into a button or something similar  -->
-<!--well, i think not, o texto faz parte da img-->
-<!--entao a imagem? como link?-->
-<!--well, its background, and i tried that. fucks up the entire structure. go ahead if u wanna try it. imgs tao devidamente labeled-->
-<!--let me just see a thing befoe trying-->
-<!--show me which file the images r por favor-->
-<!--teem os nomes devidos, n e dificil-->
-<!--eu tou a falar se ja meteste o codigo aqui para eu ir ao codigo e ver se da para meter a imagem como link -->
-<!--ta no css-->
-<!--mudar as cores para um verde mais agradavel, ou um azul tb agradavel onde no container com o titulo em vez ser
-    branco poderia ser relva, ou ficava branco(claro com o logo) e o head mudava para uma  cor -->
 <html lang="pt-pt">
 <head>
     <meta name="viewport" content="width=device-width" initial-scale="1" charset="windows-1252" />
@@ -49,17 +34,6 @@
     <!--<option value="o que acontece">texto dessa opção</option>-->
     <!--adicionei aqui cenas-->
     <!--Header-->
-    <!--qunandd-->
-    <!--preciso d ir fzr o jantar
-        mas querias ligar o server?-->
-    <!--nao eu ia dizer em caso precises do cod do side navbar avisa me que tenho aqui e so fazer cp -->
-    <!--ainda n tiveste a fzr isso?-->
-    <!--ia alterar o sitio daqui na master mas dp tu disseste que tratavas disso por isso eu tive a ver as fontes, ver algumas imagens,e tb
-        a ver algumas cenas relacionadas com o side nav-->
-    <!--qd e q disse q ia tratar disso?-->
-    <!--se nao disseste entao peço desculpa, percebi mal.p-->
-    <!--d qq modo eu vou precisar dela, mas n hj. amnh tratamos disso-->
-    <!--tb entao xau ate amanha-->
     <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
         <partial name="Partial/_Header" />
     </div>
@@ -103,31 +77,20 @@
     </div>-->
     @if (ViewData["Title"].ToString() == "Página inicial")
     {
-    <div class="container-fluid animate__animated animate__fadeIn" id="body-dash">
-        @RenderBody()
-    </div>
-}
-else
-{
-    <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="margin:auto">
-        @RenderBody()
-    </div>
-    <!--este e onde ta a ser usado o main. n comentes, e necessario p mostrar a pag bem--><!--mas a cena e que o main que meti no css tava a afetar o main do dashboard-->
-    <!--havia algum main no dashboard?
-    o dashboard sao so as caixas d selecao, e n encontrei nada d mal-->
-    <!--desculpa quis dizer index das atividades-->
-    <!--esse main das atividades tava a funcionar com o main do css foi assim que consegui puxar o texto para o lado
-        do nav-->
-    <!--ok nvm ja consegui tratar da situacao do margin-->
-    <!--ok thats good now wuts next?-->
-    <!--hold up-->
-    <!--holding up-->
-    <!--whatsapp-->
-}
-<!--Footer-->
-<footer class="footer bg-dark text-white text-center">
-    ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
-</footer>
+        <div class="container-fluid animate__animated animate__fadeIn" id="body-dash">
+            @RenderBody()
+        </div>
+    }
+    else
+    {
+        <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="margin:auto">
+            @RenderBody()
+        </div>
+    }
+    <!--Footer-->
+    <footer class="footer bg-dark text-white text-center">
+        ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
+    </footer>
 </body>
 </html>
 <!--im going now when ur mom is finish don't forget to sent it to me the thing -->
@@ -293,3 +256,40 @@ e obviamente o resto do trabalho-->
 <!--se quiseres eu posso mandar pic do codigo-->
 <!--yeah we did it XD-->
 <!--</select>-->
+<!--so
+    web state report
+    divs are okay
+    so precisamos d ver como e q pomos links neles agr-->
+<!--can't we just turn the text into a button or something similar  -->
+<!--well, i think not, o texto faz parte da img-->
+<!--entao a imagem? como link?-->
+<!--well, its background, and i tried that. fucks up the entire structure. go ahead if u wanna try it. imgs tao devidamente labeled-->
+<!--let me just see a thing befoe trying-->
+<!--show me which file the images r por favor-->
+<!--teem os nomes devidos, n e dificil-->
+<!--eu tou a falar se ja meteste o codigo aqui para eu ir ao codigo e ver se da para meter a imagem como link -->
+<!--ta no css-->
+<!--mudar as cores para um verde mais agradavel, ou um azul tb agradavel onde no container com o titulo em vez ser
+    branco poderia ser relva, ou ficava branco(claro com o logo) e o head mudava para uma  cor -->
+<!--este e onde ta a ser usado o main. n comentes, e necessario p mostrar a pag bem--><!--mas a cena e que o main que meti no css tava a afetar o main do dashboard-->
+<!--havia algum main no dashboard?
+o dashboard sao so as caixas d selecao, e n encontrei nada d mal-->
+<!--desculpa quis dizer index das atividades-->
+<!--esse main das atividades tava a funcionar com o main do css foi assim que consegui puxar o texto para o lado
+    do nav-->
+<!--ok nvm ja consegui tratar da situacao do margin-->
+<!--ok thats good now wuts next?-->
+<!--hold up-->
+<!--holding up-->
+<!--whatsapp-->
+<!--qunandd-->
+<!--preciso d ir fzr o jantar
+    mas querias ligar o server?-->
+<!--nao eu ia dizer em caso precises do cod do side navbar avisa me que tenho aqui e so fazer cp -->
+<!--ainda n tiveste a fzr isso?-->
+<!--ia alterar o sitio daqui na master mas dp tu disseste que tratavas disso por isso eu tive a ver as fontes, ver algumas imagens,e tb
+    a ver algumas cenas relacionadas com o side nav-->
+<!--qd e q disse q ia tratar disso?-->
+<!--se nao disseste entao peço desculpa, percebi mal.p-->
+<!--d qq modo eu vou precisar dela, mas n hj. amnh tratamos disso-->
+<!--tb entao xau ate amanha-->

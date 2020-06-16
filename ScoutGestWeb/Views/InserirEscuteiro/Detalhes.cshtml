@@ -2,19 +2,36 @@
 @{
     ViewData["Title"] = "Detalhes";
 }
-
-<div class="table">
-    <div class="row"><h1>Detalhes</h1>
-    </div>
-    <div class="row">
-        <div class="column split right" style="height: auto; position:initial; top: initial;">
+<!--dividiste o ecra a meio?-->
+<!--yeah, esse nao era o teu plano? tavas a tentar fazer isso nao era?-->
+<!--em principio sim-->
+<!--so what do u think? like the image probably could be better but i think the text is fine as in the placement-->
+<!--a img ta fixe-->
+<!--then is everything right with the page?-->
+<!--hold up real quick
+    start now
+    semmingly yes-->
+<!--next page tell me-->
+<!--tenta so centrar o texto 1º-->
+<!--desta pag? oki-->
+<!--posso tirar a classe table daqui?-->
+<!--n consegues por mais p a direita c a tabela p aqui?-->
+<!--i could try moving the table, tbh i wasn't thinking that-->
+<!--eu tinha te dito p centrar?-->
+<!--sim-->
+<!--wasnt meaning that, meant por um bocado p a direita-->
+<!--oh then thats easier meto um padding e there-->
+<div class="tabledeth">
+    <h1>Detalhes</h1>
+    <div class="rowdeth">
+        <div class="columndet">
             <dl class="row">
                 <!--<dt class = "col-sm-2">
-                    @Html.DisplayNameFor(model => model.ID)
-                </dt>
-                <dd class = "col-sm-10">
-                    @Html.DisplayFor(model => model.ID)
-                </dd>-->
+                @Html.DisplayNameFor(model => model.ID)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.ID)
+            </dd>-->
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Nome):
                 </dt>
@@ -37,7 +54,7 @@
                     Estado:
                 </dt>
                 <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Estado)
+                    @Html.DisplayFor(model => model.Estado)
                 </dd>
                 <dt class="col-sm-2">
                     Idade:
@@ -87,13 +104,15 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Observacoes)
                 </dd>
-                </dl>
+            </dl>
         </div>
-        <div class="column split left">
-            <img src="@Html.DisplayFor(model => model.FotoDown)" style="position: absolute; right: 0; width: 100%;" />
+        <div class="columndet">
+            <div class="imagedeth">
+                <img src="@Html.DisplayFor(model => model.FotoDown)"/>
+            </div>
         </div>
     </div>
-
+  
     <div class="row">
         @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
         <a asp-action="Index">Voltar à listagem</a>

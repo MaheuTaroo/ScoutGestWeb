@@ -15,5 +15,7 @@ namespace ScoutGestWeb.Models
         public string Grupo { get; set; }
         [Required(ErrorMessage = "Não foi indicado o responsável da caixa", AllowEmptyStrings = false)]
         public string Responsavel { get; set; }
+        [Required(ErrorMessage = "Não foi definido um saldo inicial para esta caixa")]
+        public decimal Saldo { get; set; }
     }
 }

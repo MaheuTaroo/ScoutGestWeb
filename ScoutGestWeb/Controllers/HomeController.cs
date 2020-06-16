@@ -26,7 +26,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => UserData.UserData.userData.Count == 0 ? View("Login") : View("Dashboard"));
         }
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(LoginViewModel login)
+        public async Task<IActionResult> Index(LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace ScoutGestWeb.Controllers
                     if (cmd.Connection.State == ConnectionState.Closed) if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
                     cmd.Parameters.AddWithValue("@user", login.Username);
                     cmd.Parameters.AddWithValue("@pass", sb.ToString());
-                    cmd.Prepare();
+                    await cmd.PrepareAsync();
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.HasRows)
@@ -53,7 +53,7 @@ namespace ScoutGestWeb.Controllers
                             //sim
                             //n facas qd eu fzr pfv, enquanto n pensar noutro metodo p o fzr
                             //oki sorry
-                            while (dr.Read()) for (int i = 0; i < dr.FieldCount; i++) UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
+                            while (await dr.ReadAsync()) for (int i = 0; i < dr.FieldCount; i++) UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
                         }
                     }
                     return await Task.Run(() => View("Dashboard"));

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ScoutGestWeb.Models.TiposDocsViewModel>
+﻿@model IEnumerable<ScoutGestWeb.Models.TiposPagsViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,13 +7,13 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="NovoDocumento">Novo documento</a>
+    <a asp-action="NovoPagamento">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>ID de documento</th>
-            <th>Descrição</th>
+            <th>ID do pagamento</th>
+            <th>Pagamento</th>
             <th>Opções</th>
         </tr>
     </thead>
@@ -21,10 +21,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.IDDocumento)
+                @Html.DisplayFor(modelItem => item.IDPagamento)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
+                @Html.DisplayFor(modelItem => item.Pagamento)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

@@ -13,18 +13,24 @@ namespace ScoutGestWeb.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IDMovimento { get; set; }
         [ForeignKey("IDCaixa")]
-        [Required]
-        public int IDCaixa { get; set; }
+        [Required(ErrorMessage = "Não foi referida a caixa de entrada ou saída")]
+        public string IDCaixa { get; set; }
         [ForeignKey("IDDocumento")]
         [StringLength(2)]
-        [Required]
+        [Required(ErrorMessage = "Não foi referido o tipo de documento para o movimento", AllowEmptyStrings = false)]
         public string IDDocumento { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Não foi indicado um tipo de movimento", AllowEmptyStrings = false)]
+        [ForeignKey("IDTipoMov")]
+        public string TipoMovimento { get; set; }
+        [Required(ErrorMessage = "Não foi indicada uma data e hora para o movimento")]
         public DateTime DataHora { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Não foi referido um valor para um movimento")]
         public decimal Valor { get; set; }
+        [Required(ErrorMessage = "Não foi indicado um tipo de pagamento", AllowEmptyStrings = false)]
+        [ForeignKey("TipoPag")]
+        public string TipoPagamento { get; set; }
         [StringLength(65535)]
-        [Required]
+        [Required(ErrorMessage = "Não foi indicada uma descrição do movimento", AllowEmptyStrings = false)]
         public string Descricao { get; set; }
     }
 }

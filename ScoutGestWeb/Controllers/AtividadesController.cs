@@ -10,16 +10,16 @@ namespace ScoutGestWeb.Controllers
 {
     public class AtividadesController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0) return RedirectToAction("Index", "Home");
+            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades", UserData.UserData.con))
+            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1;", UserData.UserData.con))
             {
                 if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
-                    while (dr.Read())
+                    while (await dr.ReadAsync())
                     {
                         avm.Add(new AtividadeViewModel()
                         {
@@ -31,12 +31,12 @@ namespace ScoutGestWeb.Controllers
                     }
                 }
             }
-            return View(avm);
+            return await Task.Run(() => View(avm));
         }
         //[Route("Atividades/Detalhes/{id}")]
-        public IActionResult Detalhes(int id)
+        public async Task<IActionResult> Detalhes(int id)
         {
-            if (UserData.UserData.userData.Count == 0) return RedirectToAction("Index", "Home");
+            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
             AtividadeViewModel avm = new AtividadeViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", UserData.UserData.con))
             {
@@ -44,7 +44,7 @@ namespace ScoutGestWeb.Controllers
                 cmd.Parameters.AddWithValue("@id", id);
                 using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
-                    while (dr.Read())
+                    while (await dr.ReadAsync())
                     {
                         avm.IDAtividade = int.Parse(dr["IDAtividade"].ToString());
                         avm.Nome = dr["Nome"].ToString();
@@ -56,18 +56,18 @@ namespace ScoutGestWeb.Controllers
                     }
                 }
             }
-            return View(avm);
+            return await Task.Run(() => View(avm));
         }
-        public IActionResult InserirAtividade()
+        public async Task<IActionResult> InserirAtividade()
         {
-            return View();
+            return await Task.Run(() => View());
         }
         [HttpPost]
         public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
         {
             try
             {
-                using (MySqlCommand cmd = new MySqlCommand("insert into atividades(Nome, Tipo, Seccao, Local, DataInicio, DataFim) values (@nome, @tipo, @seccao, @local, @inicio, @fim);", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("insert into atividades(Nome, Tipo, Seccao, Local, DataInicio, DataFim, Ativa) values (@nome, @tipo, @seccao, @local, @inicio, @fim, @ativa);", UserData.UserData.con))
                 {
                     cmd.Parameters.AddWithValue("@nome", avm.Nome);
                     cmd.Parameters.AddWithValue("@tipo", avm.Tipo);
@@ -75,14 +75,15 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@local", avm.Local);
                     cmd.Parameters.AddWithValue("@inicio", avm.DataInicio);
                     cmd.Parameters.AddWithValue("@fim", avm.DataFim);
-                    cmd.Prepare();
+                    cmd.Parameters.AddWithValue("@ativa", avm.Ativa == true ? 1 : 0);
+                    await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
                 }
             }
             catch (MySqlException mse)
             {
                 ModelState.AddModelError("Erro", "Erro na inserção na base de dados: " + mse.ToString());
-                return View();
+                return await Task.Run(() => View());
             }
             return await Task.Run(() => RedirectToAction("Index"));
         }

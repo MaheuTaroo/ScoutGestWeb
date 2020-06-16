@@ -19,11 +19,10 @@ namespace ScoutGestWeb.Controllers
                 while (await dr.ReadAsync()) tdvm.Add(new TiposDocsViewModel()
                 {
                     IDDocumento = dr["IDDocumento"].ToString(),
-                    Descricao = dr["Descricao"].ToString(),
-                    TipoDocumento = dr["TipoDocumento"].ToString() == "+" ? "Crédito" : "Débito"
+                    Descricao = dr["Descricao"].ToString()
                 });
             }
-            return View(tdvm);
+            return await Task.Run(() => View(tdvm));
         }
         public async Task<IActionResult> NovoDocumento()
         {
@@ -34,17 +33,16 @@ namespace ScoutGestWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (MySqlCommand cmd = new MySqlCommand("insert into tipos_docs values (@id, @descricao, @tipo);", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("insert into tipos_docs values (@id, @descricao);", UserData.UserData.con))
                 {
                     cmd.Parameters.AddWithValue("@id", tdvm.IDDocumento);
                     cmd.Parameters.AddWithValue("@descricao", tdvm.Descricao);
-                    cmd.Parameters.AddWithValue("@tipo", tdvm.TipoDocumento == "Crédito" ? "+" : "-");
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
                 }
                 return await Task.Run(() => RedirectToAction("Index"));
             }
-            return await Task.Run(() => RedirectToAction("Index"));
+            return await Task.Run(() => RedirectToAction("NovoDocumento"));
         }
     }
 }

@@ -24,9 +24,12 @@
                 @Html.DisplayNameFor(model => model.Grupo)
             </th>
             <th style="background-color:lightgreen">
-                @Html.DisplayNameFor(model => model.Responsavel)
+                Responsável
             </th>
-            <th></th>
+            <th style="background-color:lightgreen">
+                Saldo
+            </th>
+            <th>Opções</th>
         </tr>
     </thead>
     <tbody>
@@ -44,6 +47,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Responsavel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Saldo)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
