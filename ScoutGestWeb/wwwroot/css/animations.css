@@ -1,4 +1,6 @@
-﻿@keyframes fadeIn {
+﻿@import url(animate.min.css);
+
+@keyframes fadeIn {
     0% {
         opacity: 0;
     }

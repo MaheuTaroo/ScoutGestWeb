@@ -70,13 +70,16 @@
             <input asp-for="Morada" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada)</div>
             <br />
-            <label asp-for="Morada2">Cidade:</label>
+            <label asp-for="Morada2">Morada (continuação):</label>
             <input asp-for="Morada2" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada2)</div>
             <br />
             <label asp-for="CodPostal">Código-postal:</label>
             <input asp-for="CodPostal" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.CodPostal)</div>
+            <label asp-for="Localidade">Código-postal:</label>
+            <input asp-for="Localidade" />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Localidade)</div>
             <br />
         </div>
         <div class="col-xl-3 text-sm-left">

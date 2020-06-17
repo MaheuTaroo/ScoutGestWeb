@@ -7,39 +7,25 @@
 <head>
     <meta name="viewport" content="width=device-width" initial-scale="1" charset="windows-1252" />
     <title>@ViewData["Title"] - ScoutGest</title>
+    <link rel="icon" href="~/imgs/favicon.ico" />
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <link href="~/css/site.css" rel="stylesheet" />
-    <link href="~/css/animate.min.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
 </head>
-<body class="bg-white text-dark">
-    <!--<label>Aqui o texto antes do dropdown</label>
-    <select label="Tesouraria">
-        <option>Tesouraria</option>
-        <optgroup label="Entradas">
-            <option>Criar</option>
-            <option>Editar</option>
-            <option>Remover</option>
-        </optgroup>
-        <optgroup label="Despesas">
-            <option>Criar</option>
-            <option>Editar</option>
-            <option>Remover</option>
-        </optgroup>
-        <optgroup label="Transf. dinheiro entre caixas">
-            <option>Criar</option>
-            <option>Editar</option>
-            <option>Remover</option>
-        </optgroup>-->
-    <!--<option value="o que acontece">texto dessa opção</option>-->
-    <!--adicionei aqui cenas-->
+<body class="text-dark">
     <!--Header-->
     <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
         <partial name="Partial/_Header" />
     </div>
     @if (ViewData["Title"].ToString() != "Página inicial")
     {
-
+        <style>
+            body {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+        </style>
         <!--<ul class="nav container-fluid text-center">
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
@@ -93,6 +79,27 @@
     </footer>
 </body>
 </html>
+
+<!--<label>Aqui o texto antes do dropdown</label>
+    <select label="Tesouraria">
+        <option>Tesouraria</option>
+        <optgroup label="Entradas">
+            <option>Criar</option>
+            <option>Editar</option>
+            <option>Remover</option>
+        </optgroup>
+        <optgroup label="Despesas">
+            <option>Criar</option>
+            <option>Editar</option>
+            <option>Remover</option>
+        </optgroup>
+        <optgroup label="Transf. dinheiro entre caixas">
+            <option>Criar</option>
+            <option>Editar</option>
+            <option>Remover</option>
+        </optgroup>-->
+<!--<option value="o que acontece">texto dessa opção</option>-->
+<!--adicionei aqui cenas-->
 <!--im going now when ur mom is finish don't forget to sent it to me the thing -->
 <!--este e o container que tem o header right or nah? tou a falar daquele que e um container escuro-->
 <!--pega na ferramenta d inspecao do chrome e ve lmao-->

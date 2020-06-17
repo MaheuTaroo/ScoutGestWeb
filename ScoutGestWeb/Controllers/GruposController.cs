@@ -14,12 +14,12 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             List<int> seccoes = new List<int>();
-            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<GrupoViewModel> gvm = new List<GrupoViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from grupos", UserData.UserData.con))
             {
                 if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
                     {
@@ -38,7 +38,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     cmd.Parameters.AddWithValue("@id", seccoes[i]);
                     await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) gvm[i].Seccao = dr["Nome"].ToString();
                     }

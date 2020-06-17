@@ -49,8 +49,12 @@ namespace ScoutGestWeb.Models
         [StringLength(50)]
         public string Morada2 { get; set; }
         [Required(ErrorMessage = "Por favor, insira o código-postal")]
+        [RegularExpression("\\b[0-9]{4}-[0-9]{3}\\b", ErrorMessage = "Código-postal com formato errado. Por favor, insira o código-postal no formato \"NNNN-NNN\", em que cada \'N\' corresponde a um dígito entre 0 e 9")]
         [StringLength(8)]
         public string CodPostal { get; set; }
+        [Required(ErrorMessage = "Por favor, insira a localidade")]
+        [StringLength(100)]
+        public string Localidade { get; set; }
         [Required(ErrorMessage = "Por favor, insira o grupo sanguíneo")]
         [StringLength(2)]
         public string GrupoSanguineo { get; set; }

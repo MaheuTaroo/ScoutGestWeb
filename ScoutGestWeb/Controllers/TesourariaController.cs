@@ -10,7 +10,7 @@ namespace ScoutGestWeb.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Login"));
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             return await Task.Run(() => View());
         }
     }

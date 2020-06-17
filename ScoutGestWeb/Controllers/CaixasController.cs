@@ -15,11 +15,11 @@ namespace ScoutGestWeb.Controllers
         private readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
         public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from caixas", UserData.UserData.con))
             {
                 if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
-                using (MySqlDataReader dr = cmd.ExecuteReader())
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
                     {
@@ -38,7 +38,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     cmd.Parameters.AddWithValue("@id", grupos[i]);
                     await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) cvm[i].Grupo = dr["Nome"].ToString();
                     }
@@ -49,7 +49,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     cmd.Parameters.AddWithValue("@id", grupos[i]);
                     await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) cvm[i].Responsavel += dr["Nome"].ToString();
                     }
@@ -60,9 +60,9 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> NovaCaixa()
         {
-            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", UserData.UserData.con))
-            using (MySqlDataReader dr = cmd.ExecuteReader())
+            using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
             {
                 List<string> grupos = new List<string>();
                 while (await dr.ReadAsync()) grupos.Add(dr["Nome"].ToString());

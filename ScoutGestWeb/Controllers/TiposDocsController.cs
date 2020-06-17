@@ -14,7 +14,7 @@ namespace ScoutGestWeb.Controllers
         {
             List<TiposDocsViewModel> tdvm = new List<TiposDocsViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where Descricao not like \"Teste\"", UserData.UserData.con))
-            using (MySqlDataReader dr = cmd.ExecuteReader())
+            using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
             {
                 while (await dr.ReadAsync()) tdvm.Add(new TiposDocsViewModel()
                 {

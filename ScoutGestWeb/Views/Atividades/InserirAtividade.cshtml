@@ -58,6 +58,16 @@
                 <label asp-for="DataFim" class="control-label"></label>
                 <input type="date" asp-for="DataFim" class="form-control" />
                 <span asp-validation-for="DataFim" class="text-danger"></span>
+            </div><div class="form-group">
+                <label asp-for="Orcamento" class="control-label"></label>
+                <input type="number" asp-for="Orcamento" step="0.01" class="form-control" />
+                <span asp-validation-for="Orcamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                <input type="checkbox" asp-for="Ativa" class="form-control" /> Ativa para movimentos
+                    </label>
+                <span asp-validation-for="Ativa" class="text-danger"></span>
             </div>
             <input type="submit" value="Inserir" class="btn btn-primary container-fluid" />
         </form>

@@ -13,9 +13,9 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             List<TiposPagsViewModel> tpvm = new List<TiposPagsViewModel>();
-            if (UserData.UserData.userData.Count == 0) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_pags where IDPag not like \"00\";", UserData.UserData.con))
-            using (MySqlDataReader dr = cmd.ExecuteReader())
+            using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
             {
                 while (await dr.ReadAsync())
                 {

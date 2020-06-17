@@ -2,15 +2,46 @@
 @{
     ViewData["Title"] = "InfoLogout";
 }
+<div class="bordlogout">
+    <h1>InfoLogout</h1>
 
-<h1>InfoLogout</h1>
+    <h2>Informação geral</h2>
 
-<form method="get" asp-action="LogOut" asp-controller="Home">
-    <button type="submit">Logout</button>
-</form>
+    <p>Bem vindo a scoutgest. Esta aplicação foi programada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
 
-<div id="info-grid">
+    <p>-Gestão de atividades;</p>
+    <p>-Gestão de escuteiros;</p>
+    <p>-Gestão de grupos;</p>
+    <p>-Muitos mais...</p>
+</div>
+<div class="bordlogout">
+    <h2>Contactos</h2>
+
+    <p>A mesma foi feita pelo JM e JJ, em caso de alguma dúvida, ou a aplicação deixar de funcionar poderá conctatar-nos através das seguintes formas:</p>
+
+    <p>JM</p>
+    <p>Email: emailfalso.com</p>
+    <p>Telemóvel: (+351) 99999999</p>
+
+
+    <p>JJ</p>
+    <p>Email: emailfals2o.com</p>
+    <p>Telemóvel: (+351) 99999991</p>
+</div>
+
+<!--<div id="info-grid">
     <div id="eventos"></div>
     <div id="conta"></div>
     <div id="regulamento"></div>
-</div>
+</div>-->
+
+
+<p>Para voltar à página anterior faça favor carregar aqui</p>
+<form method="get" asp-action="" asp-controller="">
+    <button class="bottaoin" type="submit">Voltar</button>
+</form>
+<p>Em caso queira fazer logout faça favor carreguar aqui</p>
+<form method="get" asp-action="LogOut" asp-controller="Home">
+    <button class="bottaoin" type="submit">Logout</button>
+</form>
+

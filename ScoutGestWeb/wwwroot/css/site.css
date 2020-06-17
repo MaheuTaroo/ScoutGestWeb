@@ -1,7 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 @import url(animations.css);
-@import url(dropdowns.css);
 
 html, body {
     height: 100%;
@@ -359,6 +358,35 @@ footer {
 .tabledeth {
     padding-left: 200px;
 }
+
+.bottaoin {
+    background-color: #4CAF50; /*verde*/
+    border: none;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.bordlogout{
+    border:groove grey 1px;
+}
+.bordtesoura {
+    border: groove grey 1px;
+    background-color: #4CAF50; /*verde*/
+    padding: 16px;
+    text-align: center;
+    text-decoration: none;
+}
+/*ja pds comecar, tirei td o q era relacionado c cookies
+    e o site e principalmente feito so p grupos, atividades e tesouraria
+    also correct your mistypings lmao*/
+/*ja vi o que tinha de ver, eee podes me dizer quais mistypings? im not very good at my own language u know Xp*/
+/*se fores la vais ver, tb n sao mistypes graves*/
+/*essa classe dei mesmo o nome assim para meter aqui no css, mas por alem disso há algum mistype em relação ao tetxo?*/
+/*ve*/
+/*oki*/
 
 /*isto e preciso p q?*/
 /*isso a partida era para alinhar as cenas com o side nav, tava no cod quano o tirei */

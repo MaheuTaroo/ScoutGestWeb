@@ -26,7 +26,7 @@ namespace ScoutGestWeb.Controllers
                     //Abrir a ligação
                     if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
                     await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {  //Vai buscar a seguinte informação à base de dados e coloca na tabela
                         int i = 0;
                         while (await dr.ReadAsync())
@@ -59,7 +59,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> InserirEscuteiro()
         {
             //login problem not yet solved; trying to adapt to identity
-            return await Task.Run(() => UserData.UserData.userData.Count == 0 ? RedirectToAction("Index", "Home") : (IActionResult)View());
+            return await Task.Run(() => UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/ ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
         [HttpPost]
         public async Task<IActionResult> InserirEscuteiro(InserirEscuteiroViewModel insert)
@@ -130,7 +130,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) ievm = new InserirEscuteiroViewModel()
                         {

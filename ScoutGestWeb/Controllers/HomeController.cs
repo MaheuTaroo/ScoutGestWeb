@@ -23,7 +23,7 @@ namespace ScoutGestWeb.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return await Task.Run(() => UserData.UserData.userData.Count == 0 ? View("Login") : View("Dashboard"));
+            return await Task.Run(() => UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/ ? View("Login") : View("Dashboard"));
         }
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel login)
@@ -45,7 +45,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@user", login.Username);
                     cmd.Parameters.AddWithValue("@pass", sb.ToString());
                     await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         if (dr.HasRows)
                         {
@@ -53,7 +53,17 @@ namespace ScoutGestWeb.Controllers
                             //sim
                             //n facas qd eu fzr pfv, enquanto n pensar noutro metodo p o fzr
                             //oki sorry
-                            while (await dr.ReadAsync()) for (int i = 0; i < dr.FieldCount; i++) UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
+                            while (await dr.ReadAsync())
+                            {
+                                /*Response.Cookies.Append("User", dr["User"].ToString(), new Microsoft.AspNetCore.Http.CookieOptions()
+                                {
+                                    Expires = DateTime.MinValue
+                                });*/
+                                for (int i = 0; i < dr.FieldCount; i++)
+                                {
+                                    UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
+                                }
+                            }
                         }
                     }
                     return await Task.Run(() => View("Dashboard"));
@@ -86,6 +96,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> LogOut()
         {
+            if (Request.Cookies["User"] != null) Response.Cookies.Delete("User");
             UserData.UserData.userData.Clear();
             return await Task.Run(() => RedirectToAction("Index"));
         }
