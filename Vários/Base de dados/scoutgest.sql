@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17-Jun-2020 às 20:52
+-- Tempo de geração: 17-Jun-2020 às 21:08
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.5
 
@@ -31,6 +31,7 @@ CREATE TABLE `atividades` (
   `IDAtividade` int(11) NOT NULL,
   `Nome` mediumtext COLLATE utf8mb4_bin NOT NULL,
   `Tipo` set('Teste','Sábado','Acampamentos','Nucleares','Regionais','Nacionais','Internacionais') COLLATE utf8mb4_bin NOT NULL,
+  `Tema` tinytext COLLATE utf8mb4_bin NOT NULL,
   `Seccao` int(1) NOT NULL,
   `Local` longtext COLLATE utf8mb4_bin NOT NULL,
   `DataInicio` datetime NOT NULL,
@@ -43,10 +44,10 @@ CREATE TABLE `atividades` (
 -- Extraindo dados da tabela `atividades`
 --
 
-INSERT INTO `atividades` (`IDAtividade`, `Nome`, `Tipo`, `Seccao`, `Local`, `DataInicio`, `DataFim`, `Orcamento`, `Ativa`) VALUES
-(0, 'Teste', 'Teste', 0, 'Teste', '1000-01-01 00:00:00', '1000-01-01 00:00:00', '0.00', 0),
-(1, 'Atividade de Sábado', 'Sábado', 6, 'Sede', '2020-03-21 00:00:00', '2020-03-21 00:00:00', '0.00', 1),
-(2, 'Acampamento de integração', 'Acampamentos', 3, 'Herdade florestal da Aroeira', '2020-03-21 00:00:00', '2020-03-28 00:00:00', '0.00', 1);
+INSERT INTO `atividades` (`IDAtividade`, `Nome`, `Tipo`, `Tema`, `Seccao`, `Local`, `DataInicio`, `DataFim`, `Orcamento`, `Ativa`) VALUES
+(0, 'Teste', 'Teste', '', 0, 'Teste', '1000-01-01 00:00:00', '1000-01-01 00:00:00', '0.00', 0),
+(1, 'Atividade de Sábado', 'Sábado', '', 6, 'Sede', '2020-03-21 00:00:00', '2020-03-21 00:00:00', '0.00', 1),
+(2, 'Acampamento de integração', 'Acampamentos', '', 3, 'Herdade florestal da Aroeira', '2020-03-21 00:00:00', '2020-03-28 00:00:00', '0.00', 1);
 
 -- --------------------------------------------------------
 
