@@ -174,7 +174,7 @@ namespace ScoutGestWeb.Controllers
 //eu ate diria que talvez seja gluma cena da db mas nao e pois nao?
 //uhmmm u there?
 /*sry, went afk for some time
-managed to get the error?*/
+//managed to get the error?*/
 /*tbh no mas eu tive a limpar uma beca do codigo que copiei e tb alterei so uma cena tua, 
 //em vez de meteres 2020 meti a cena do datetime year now*/
 /*eu n meti isso, mas i guess it alo works xd

@@ -9,42 +9,13 @@ html, body {
     margin: 0px;
     overflow-x: hidden;
 }
+
 body {
-    /*height: 100%;*/
-    overflow: hidden; /*esconder todas as scrollbars, em caso so seja preciso esconder so uma avisar para alterar*/
+   
+    overflow: hidden; /*esconder todas as scrollbars*/
     display: flex;
     flex-direction: column;
 }
-/*acho q tnh uma ideia, pera ai*/
-/*diz la*/
-/*queres que eu continue com o que tava a fazer com o side nav, ou queres que eu continue com o tentar eliminar
-    o branco?
-*/
-/*como assim eliminar o branco? o branco n e p eliminar*/
-/*diminuir o body, quis dizer isso*/
-/*eu tb tou a ver como isso se faz, pq n consigo ver mt bem as mnh alteracoes
-    p isso e q n me tas a ver a fzr nd*/
-/*eu nao tou concentrado no que tas a fazer, eu simplesmente tou a ver coisas relacionadas com isso, eu tb so
-    tou a perguntar pq tu dizeste pera ai, 
-*/
-/*o meu plano falhou*/
-/*oki*/
-/*..................................ooooooooooooooooooooooooooooooorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr..........................................................*/
-/*yes?*/
-/*problem solved. now to fix the font being too big problem*/
-/*thats easy just diminuir font*/
-/*e ja que tamos a fazer da tua maneira mais vale tirar o que eu fiz para nao ficar um indentation estranho*/
-/*nos tamos a fzr da tua maneira, so q uma medida diferente*/
-/*mas disseste no whats para nao fazer da minha maneira*/
-/*em relacao ao resizing do body q tavas a fzr, o q eu fiz foi so tratar da margem e do width*/
-/*eu nao tava a fazer resizing, isso foi a tua ideia*/
-/*mas sbs q p inserir uma cena no mm espaco e preciso mudar a medida q as duas coisas ocupam, n sbs? isso e q e resizing
-    e tu tavas a fzr um resizing q era so praticamente mover txt
-    o q eu fiz foi por o sidebar a ocupar 20% do viewport e por uma margem d esses 20% no div
-    foi por isso q me viste a meter width 20vh no sidebar e margin-left 20vh no body*/
-/*look dude tbh idc o que importa e que temos isto feito, but now if u excuse me vou fazer o almoço*/
-/*piece of shit internet, walks slow
-    also, fair enough*/
 
 .split {
     height: 100%; 
@@ -56,13 +27,15 @@ body {
     z-index: 1;
     top: 0;
 }
+
 .left {
     left: 0;
-   /* direction:rtl*/
+  
 }
+
 .right {
     right: 0;
-    /*direction: ltr;*/
+    
 }
 
 #powell {
@@ -71,9 +44,11 @@ body {
     background-repeat: no-repeat;
     width: calc(inherit / 2);
 }
+
 #login {
     display: table;
 }
+
 #login form {
     display: table-cell;
     vertical-align: middle;
@@ -98,33 +73,25 @@ header {
     padding-top: 20px;
     margin: 11vh 0 auto 0;
 }
+
 .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     font-size: 16px;
     color: #818181;
     display: block;
-    /*font-family: "Lucida Console", Monaco, monospace;*/
-    /*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
-    /*ooh, o que qeures que eu faça com o side nav? */
-    /*tenta fzr c q a caixa principal recupere o tamanho total. eu pus a margem esquerda igual a largura do sidenav,
-    mas n tou a conseguir c q ela recupere essa margem. tenta fzr isso pfv*/
-    /*okiii*/
-    /*tipo assim?*/
-    /*o q e q tentaste fzr?*/
-    /*nao era assim pois nao?*/
-    /*simplesmente comentei o main pq o main é utilizado para meter as cenas de lado do side nav */
-    /*eu vou tirar, ja percebi que nao era isso que querias */
-    /*onde e q comentaste? n encontro*/
 }
+
 .sidenav a:hover {
     color: #f1f1f1;
 }
+
 @media screen and (max-width: 1100px) {
     .sidenav a {
         font-size: 12px;
     }
 }
+
 @media screen and (max-width: 999px) {
     .sidenav {
         width: 0;
@@ -134,9 +101,6 @@ header {
         margin-left: 0vw !important;
     }
 }
-/*.main {
-    margin-left: 10vw;
-}*/
 
 #body-dash {
     background-color: rgba(0,0,0,0.05);
@@ -152,45 +116,52 @@ header {
     padding: 0px 0px 0px 0px;
     width: 100%;
 }
+
 #dash-lob {
     grid-area: dash-lob;
     background: linear-gradient(to bottom right, rgba(255, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
     transition: transform 1s;
 }
+
 #dash-lob:hover {
     transform: translate(10%, 10%);
 }
+
 #dash-explo {
     grid-area: dash-explo;
     background: linear-gradient(to bottom left, rgba(0, 255, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
     transition: transform 1s;
 }
+
 #dash-explo:hover{
     margin-top:0;
     margin-right:0;
     transform: translate(-10%, 10%);
 }
+
 #dash-pio {
     grid-area: dash-pio;
     background-image: linear-gradient(to top left, rgba(0, 0, 255, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
     transition: transform 1s;
 }
+
 #dash-pio:hover {
     transform: translate(-10%, -10%);
 }
+
 #dash-caminh {
     grid-area: dash-caminh;
     background: linear-gradient(to top right, rgba(255, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.05) 100%);
     transition: transform 1s;
 }
+
 #dash-caminh:hover {
     transform: translate(10%, -10%);
 }
+
 .dash-img {
     width: 100%;
     height: 100%;
-    /*border-image: url(../imgs/atividades.png) 0 0 0 0;
-    -webkit-border-image: url(../imgs/atividades.png) 0 0 0 0;*/
 }
 
 #info-grid {
@@ -200,12 +171,15 @@ header {
     grid-gap: 3em 3em;
     grid-template-areas: "regulamento conta" "eventos eventos";
 }
+
 #eventos {
     grid-area: eventos;
 }
+
 #conta {
     grid-area: conta;
 }
+
 #regulamento {
     grid-area: regulamento;
 }
@@ -215,15 +189,10 @@ header {
 }
 
 .container {
-    /*position: absolute;*/
-    right: 0; /*nao alterar se nao da cabo da imagem... somehow -_-*/
-    /*margin: 20px;
-    max-width: 300px;
-    padding: 16px;*/
+    right: 0; /*nao alterar se nao da cabo da imagem*/
     background-color: transparent;
     height: 30%; /*menor vai para cima*/
-    width: 100%; /*can't see the diference*/
-    /*vertical-align: middle;*/
+    width: 100%; 
     animation: fadeIn ease 3s;
     -webkit-animation: fadeIn ease 3s;
 }
@@ -236,38 +205,25 @@ nav * {
     float:left;
     text-align:center;
 }
+
 h1 h2 h3 h4 h5 h6 {
     text-align: center;
 }
+
 table td {
     border: 2px solid black;
 }
+
 table th {
     border: 2px solid black;
 }
+
 .column {
     float: right;
     width: 25%;
     padding: 10px;
 }
 
-
-
-/*@media screen and (width: 600px) {
-    #powell{
-        display: none;
-    }
-    #login {
-        background-image: url(../imgs/baden_powell_transparent_fig.png);
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-    }
-}
-@media screen and (max-width: 600px) {
-    .column {
-        width: 100%;
-    }
-}*/
 .row:after {
     content: "";
     display: table;
@@ -287,8 +243,6 @@ footer {
  
 }
 
-
-
 /* ter cuidado ao mexer aqui */
 .column {
     float: left;
@@ -303,29 +257,24 @@ footer {
     clear: both;
 }
 
-
 /*centrar o texto e o botão com a foto */
 .maine {
     float: left;
     min-height: 180px;
     position: relative;
 }
+
 .cima {
-    /*vertical-align: middle;
-    line-height: 44px;*/
+   
     height: calc(100% / 3);
 }
+
 .centro {
-    /*text-align: left;*/
     height: calc(100% / 3);
-    /*margin-top: calc(100% / 3);*/
 }
+
 .baixo {
-    /*position: absolute;
-    bottom: 0;
-    left: 0;*/
     height: calc(100% / 3);
-    /*margin-top: calc(calc(100% / 3) * 2);*/
 }
 
 .rowdeth {
@@ -360,7 +309,7 @@ footer {
 }
 
 .bottaoin {
-    background-color: #4CAF50; /*verde*/
+    background-color: darkgrey; 
     border: none;
     color: white;
     padding: 16px;
@@ -369,16 +318,63 @@ footer {
     border-radius: 4px;
 }
 
-.bordlogout{
-    border:groove grey 1px;
+.bordlogout {
+    border: groove grey 2px;
 }
+
 .bordtesoura {
-    border: groove grey 1px;
-    background-color: #4CAF50; /*verde*/
+    background-color: darkgrey;
     padding: 16px;
     text-align: center;
     text-decoration: none;
+    border: solid black 1px;
 }
+
+
+
+/*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
+/*ooh, o que qeures que eu faça com o side nav? */
+/*tenta fzr c q a caixa principal recupere o tamanho total. eu pus a margem esquerda igual a largura do sidenav,
+    mas n tou a conseguir c q ela recupere essa margem. tenta fzr isso pfv*/
+/*okiii*/
+/*tipo assim?*/
+/*o q e q tentaste fzr?*/
+/*nao era assim pois nao?*/
+/*simplesmente comentei o main pq o main é utilizado para meter as cenas de lado do side nav */
+/*eu vou tirar, ja percebi que nao era isso que querias */
+/*onde e q comentaste? n encontro*/
+
+/*acho q tnh uma ideia, pera ai*/
+/*diz la*/
+/*queres que eu continue com o que tava a fazer com o side nav, ou queres que eu continue com o tentar eliminar
+    o branco?
+*/
+/*como assim eliminar o branco? o branco n e p eliminar*/
+/*diminuir o body, quis dizer isso*/
+/*eu tb tou a ver como isso se faz, pq n consigo ver mt bem as mnh alteracoes
+    p isso e q n me tas a ver a fzr nd*/
+/*eu nao tou concentrado no que tas a fazer, eu simplesmente tou a ver coisas relacionadas com isso, eu tb so
+    tou a perguntar pq tu dizeste pera ai, 
+*/
+/*o meu plano falhou*/
+/*oki*/
+/*..................................ooooooooooooooooooooooooooooooorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr..........................................................*/
+/*yes?*/
+/*problem solved. now to fix the font being too big problem*/
+/*thats easy just diminuir font*/
+/*e ja que tamos a fazer da tua maneira mais vale tirar o que eu fiz para nao ficar um indentation estranho*/
+/*nos tamos a fzr da tua maneira, so q uma medida diferente*/
+/*mas disseste no whats para nao fazer da minha maneira*/
+/*em relacao ao resizing do body q tavas a fzr, o q eu fiz foi so tratar da margem e do width*/
+/*eu nao tava a fazer resizing, isso foi a tua ideia*/
+/*mas sbs q p inserir uma cena no mm espaco e preciso mudar a medida q as duas coisas ocupam, n sbs? isso e q e resizing
+    e tu tavas a fzr um resizing q era so praticamente mover txt
+    o q eu fiz foi por o sidebar a ocupar 20% do viewport e por uma margem d esses 20% no div
+    foi por isso q me viste a meter width 20vh no sidebar e margin-left 20vh no body*/
+/*look dude tbh idc o que importa e que temos isto feito, but now if u excuse me vou fazer o almoço*/
+/*piece of shit internet, walks slow
+    also, fair enough*/
+
 /*ja pds comecar, tirei td o q era relacionado c cookies
     e o site e principalmente feito so p grupos, atividades e tesouraria
     also correct your mistypings lmao*/

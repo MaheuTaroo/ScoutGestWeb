@@ -116,9 +116,7 @@ namespace ScoutGestWeb.Controllers
                             }
                             else while (await dr2.ReadAsync()) cmd.Parameters.AddWithValue("@responsavel", int.Parse(dr2["IDEscuteiro"].ToString()));
                         }
-                        //aproveita e v se o botao ja ta ao lado da imagem
-                        //n ta
-                        //
+                       
                         ///try
                         ///{
                         ///    cmd.Parameters.AddWithValue("@id", int.Parse(cvm.Responsavel));
@@ -138,8 +136,7 @@ namespace ScoutGestWeb.Controllers
                         ///        return RedirectToAction("NovaCaixa");
                         ///    }
                         ///}
-                        //Martins consegui passar o texto e o titulo, mas da maneira que eu fiz não dá para passar o botão
-                        //Pq form não dá para meter dentro de um p, mas vou tentar mudar para um div para ver se consigo
+                      
                     }
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
@@ -150,3 +147,11 @@ namespace ScoutGestWeb.Controllers
         }
     }
 }
+
+
+
+
+//aproveita e v se o botao ja ta ao lado da imagem
+//n ta
+//Martins consegui passar o texto e o titulo, mas da maneira que eu fiz não dá para passar o botão
+//Pq form não dá para meter dentro de um p, mas vou tentar mudar para um div para ver se consigo

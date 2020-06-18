@@ -10,17 +10,23 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 namespace ScoutGestWeb.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
-
         public async Task<IActionResult> Index()
         {
             return await Task.Run(() => UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/ ? View("Login") : View("Dashboard"));
@@ -36,11 +42,16 @@ namespace ScoutGestWeb.Controllers
                     md5.ComputeHash(Encoding.ASCII.GetBytes(login.Password));
                     for (int i = 0; i < md5.Hash.Length; i++) sb.Append(md5.Hash[i].ToString("x2"));
                 }
+                IdentityUser user = await _userManager.FindByNameAsync(login.Username);
+                /*var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);*/
+                if (user != null)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, sb.ToString(), false, false);
+                    if (result.Succeeded) Console.WriteLine("noice");
+                    else Console.WriteLine("fook");
+                }
                 using (MySqlCommand cmd = new MySqlCommand("select * from users where User = @user and Pass = @pass", UserData.UserData.con))
                 {
-                    //desliguei o server rapidamente pq tive um prob c ele. ja reiniciei
-                    //oki 
-                    //vou ver uma cena
                     if (cmd.Connection.State == ConnectionState.Closed) if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
                     cmd.Parameters.AddWithValue("@user", login.Username);
                     cmd.Parameters.AddWithValue("@pass", sb.ToString());
@@ -49,10 +60,6 @@ namespace ScoutGestWeb.Controllers
                     {
                         if (dr.HasRows)
                         {
-                            //fizeste login alguma vez?
-                            //sim
-                            //n facas qd eu fzr pfv, enquanto n pensar noutro metodo p o fzr
-                            //oki sorry
                             while (await dr.ReadAsync())
                             {
                                 /*Response.Cookies.Append("User", dr["User"].ToString(), new Microsoft.AspNetCore.Http.CookieOptions()
@@ -66,8 +73,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
-                    return await Task.Run(() => View("Dashboard"));
-                    /*if (UserData.UserData.userData.Count > 0)
+                    if (UserData.UserData.userData.Count > 0)
                     {
                         cmd.CommandText = "select Nome from grupos where IDGrupo = @id;";
                         cmd.Parameters.AddWithValue("@id", UserData.UserData.userData["IDGrupo"]);
@@ -77,19 +83,8 @@ namespace ScoutGestWeb.Controllers
                             //my login is broke for now
                             while (dr.Read()) UserData.UserData.userData.Add("Nome", dr["Nome"]);
                         }
-                        //ja conseguiste a imagem?
-                        //q img?
-                        //a imagem para um evento qlq ou referes que seja eu que arranje?
-                        //eu ainda tou na fase d testes, ainda n arranjei nd
-                        //okin entao eu vou arranjar uma so para ver se o cod funciona
-                        //yeah forget it tens de seer yu a meter a imagen. 
-
-                        //n te ias embora?
-                        //so estava a espera da tua resposta, pq eu nao me ia embora se ainda precissases de ajuda
-                        //eu vou tar td o dia a trabalhar nisto, se entretanto quiseres vir vem
-                        //oki then
-
-                    }*/
+                    }
+                    return await Task.Run(() => View("Dashboard"));
                 }
             }
             return await Task.Run(() => View("Login"));
@@ -112,3 +107,22 @@ namespace ScoutGestWeb.Controllers
         }
     }
 }
+
+//desliguei o server rapidamente pq tive um prob c ele. ja reiniciei
+//oki 
+//vou ver uma cena
+//fizeste login alguma vez?
+//sim
+//n facas qd eu fzr pfv, enquanto n pensar noutro metodo p o fzr
+//oki sorry
+//ja conseguiste a imagem?
+//q img?
+//a imagem para um evento qlq ou referes que seja eu que arranje?
+//eu ainda tou na fase d testes, ainda n arranjei nd
+//okin entao eu vou arranjar uma so para ver se o cod funciona
+//yeah forget it tens de seer yu a meter a imagen. 
+
+//n te ias embora?
+//so estava a espera da tua resposta, pq eu nao me ia embora se ainda precissases de ajuda
+//eu vou tar td o dia a trabalhar nisto, se entretanto quiseres vir vem
+//oki then

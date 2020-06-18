@@ -49,6 +49,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Entrada()
         {
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", UserData.UserData.con))
             {
@@ -103,6 +104,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Saida()
         {
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<string> nomesCaixas = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", UserData.UserData.con))
             using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -110,27 +112,54 @@ namespace ScoutGestWeb.Controllers
                 while (await dr.ReadAsync()) nomesCaixas.Add(dr["IDCaixa"].ToString() + " - " + dr["Nome"].ToString());
             }
             ViewBag.caixas = nomesCaixas;
-            return await Task.Run(() => View("NovoMovimento"));
+            return await Task.Run(() => View());
         }
-        /*[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Saida(MovimentoViewModel mvm)
         {
-            List<string> nomesCaixas = new List<string>();
-            using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", UserData.UserData.con))
-            using (MySqlDataReader dr = cmd.ExecuteReader())
+            mvm.TipoMovimento = "Saida";
+            mvm.IDDocumento = mvm.IDDocumento.Substring(0, mvm.IDDocumento.IndexOf(" - "));
+            ModelState.Clear();
+            TryValidateModel(mvm);
+            if (ModelState.IsValid)
             {
-                while (await dr.ReadAsync()) nomesCaixas.Add(dr["IDCaixa"].ToString() + " - " + dr["Nome"].ToString());
+                using (MySqlCommand cmd = new MySqlCommand("select IDTipoMov from tipos_movs where Movimento = @tipo;", UserData.UserData.con))
+                {
+                    cmd.Parameters.AddWithValue("@tipo", mvm.TipoMovimento);
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) mvm.TipoMovimento = dr["IDTipoMov"].ToString();
+                    }
+                }
+                using (MySqlCommand cmd = new MySqlCommand("insert into movimentos(IDCaixa, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao) values (@caixa, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao);", UserData.UserData.con))
+                {
+                    cmd.Parameters.AddWithValue("@caixa", mvm.IDCaixa.Substring(0, mvm.IDCaixa.IndexOf(" - ")));
+                    cmd.Parameters.AddWithValue("@documento", mvm.IDDocumento);
+                    cmd.Parameters.AddWithValue("@tipomov", mvm.TipoMovimento);
+                    cmd.Parameters.AddWithValue("@user", mvm.User);
+                    cmd.Parameters.AddWithValue("@data", mvm.DataHora);
+                    cmd.Parameters.AddWithValue("@valor", mvm.Valor);
+                    cmd.Parameters.AddWithValue("@tipopag", mvm.TipoPagamento);
+                    cmd.Parameters.AddWithValue("@descricao", mvm.Descricao);
+                    await cmd.PrepareAsync();
+                    await cmd.ExecuteNonQueryAsync();
+                }
+                return await Task.Run(() => RedirectToAction("Index"));
             }
-            ViewBag.caixas = nomesCaixas;
-            return await Task.Run(() => View("NovoMovimento"));
-        }*/
+            return await Task.Run(() => Saida());
+        }
         public async Task<IActionResult> Transferencia()
         {
-            return await Task.Run(() => View("NovaTransferencia"));
+            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            return await Task.Run(() => View());
         }
         [HttpPost]
         public async Task<IActionResult> Transferencia(MovimTransfViewModel mtvm)
         {
+            mtvm.TipoMovimento = "Saída";
+            ModelState.Clear();
+            TryValidateModel(mtvm);
             if (ModelState.IsValid)
             {
                 return await Task.Run(() => RedirectToAction("Index"));
