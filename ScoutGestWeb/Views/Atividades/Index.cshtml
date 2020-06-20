@@ -30,10 +30,11 @@
         <!--<p>
         A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
         </p>-->
-        <form method="get" asp-action="Detalhes">
+        <!--<form method="get" asp-action="Detalhes">
             <input type="hidden" value="@Html.DisplayFor(modelItem => item.IDAtividade)" />
             <button class="btn btn-secondary" type="submit">Detalhes</button>
-        </form>
+        </form>-->
+        <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
     </div>
     }
 </div>

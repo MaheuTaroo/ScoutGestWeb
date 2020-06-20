@@ -10,6 +10,8 @@ using System.Data;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace ScoutGestWeb.Controllers
 {
@@ -17,7 +19,7 @@ namespace ScoutGestWeb.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count != 0)
+            if (User.Identity.IsAuthenticated)
             {
                 //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
                 List<InserirEscuteiroViewModel> escuteiros = new List<InserirEscuteiroViewModel>();
@@ -25,9 +27,15 @@ namespace ScoutGestWeb.Controllers
                 {
                     //Abrir a ligação
                     if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                    /*if (User.IsInRole("EqAnim"))
+                    {
+                        cmd.CommandText = cmd.CommandText.Replace(";", " and Seccao = @seccao;");
+                        cmd.Parameters.AddWithValue("@seccao", User.Identity.)
+                    }*/
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                    {  //Vai buscar a seguinte informação à base de dados e coloca na tabela
+                    {
+                        //Vai buscar a seguinte informação à base de dados e coloca na tabela
                         int i = 0;
                         while (await dr.ReadAsync())
                         {
@@ -53,28 +61,52 @@ namespace ScoutGestWeb.Controllers
                 }
                 return await Task.Run(() => View(escuteiros));
             }
-            return await Task.Run(() => View());
+            return await Task.Run(() => RedirectToAction("Index", "Home"));
         }
         [HttpGet]
         public async Task<IActionResult> InserirEscuteiro()
         {
-            //login problem not yet solved; trying to adapt to identity
-            return await Task.Run(() => UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/ ? RedirectToAction("Index", "Home") : (IActionResult)View());
+            if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
+            InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
+            List<string> grupos = new List<string>();
+            using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", UserData.UserData.con))
+            {
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) ievm.ID = Convert.ToInt32(dr["max(IDEscuteiro)"].ToString()) + 1;
+                }
+                cmd.CommandText = "select IDGrupo, Nome from grupos;";
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
+                }
+            }
+            ViewBag.grupos = grupos;
+            return await Task.Run(() => View(ievm));
         }
         [HttpPost]
         public async Task<IActionResult> InserirEscuteiro(InserirEscuteiroViewModel insert)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
-                foreach (Cargos cargo in insert._cargo)
+                List<Cargos> cargos = new List<Cargos>(11), selecionados = new List<Cargos>();
+                cargos.AddRange(new Cargos[11] { insert.Guia, insert.Animador, insert.Cozinheiro, insert.GuardaMaterial, insert.Secretario, insert.Tesoureiro, insert.RelPub, insert.Socorrista, insert.GuiaRegiao, insert.SubGuia, insert.Chefe });
+                foreach (Cargos cargo in cargos)
                 {
-                    if (cargo.Selecionado == true) insert.Cargo.Add(cargo);
+                    if (cargo.Selecionado) selecionados.Add(cargo);
+                }
+                if (selecionados.Count > 1 && selecionados.Contains(insert.Guia))
+                {
+                    ModelState.AddModelError("Demasiados cargos selecionados", "Foi selecionado o cargo de guia, juntamente com outros cargos. Por favor, selecione o cargo de guia individualmente, ou exclua esse cargo das seleções");
+                    return await Task.Run(() => View(insert));
                 }
                 //Tenta inserir os seguintes valores na tabela escuteiros
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(212, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", UserData.UserData.con))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(@id, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", UserData.UserData.con))
                     {
+                        cmd.Parameters.AddWithValue("@id", insert.ID);
                         cmd.Parameters.AddWithValue("@nome", insert.Nome);
                         cmd.Parameters.AddWithValue("@totem", insert.Totem);
                         if (insert.FotoUp == null) cmd.Parameters.AddWithValue("@foto", '\0');
@@ -91,11 +123,13 @@ namespace ScoutGestWeb.Controllers
                         {
                             cmd3.Parameters.AddWithValue("@seccao", insert.Seccao);
                             await cmd3.PrepareAsync();
-                            using (MySqlDataReader dr3 = cmd3.ExecuteReader()) while (await dr3.ReadAsync()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
+                            using (MySqlDataReader dr3 = (MySqlDataReader)await cmd3.ExecuteReaderAsync()) while (await dr3.ReadAsync()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
                         }
                         //Inserir valores na base de dados
                         cmd.Parameters.AddWithValue("@estado", insert.Estado);
-                        cmd.Parameters.AddWithValue("@cargos", insert.Cargo);
+                        string cargosDB = "";
+                        foreach (Cargos c in selecionados) cargosDB += c.Cargo + ',';
+                        cmd.Parameters.AddWithValue("@cargos", cargosDB.Substring(0, cargosDB.LastIndexOf(',')));
                         cmd.Parameters.AddWithValue("@idade", insert.Idade);
                         cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone);
                         cmd.Parameters.AddWithValue("@morada", insert.Morada);
@@ -123,7 +157,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Detalhes(int id)
         {
-            if (UserData.UserData.userData.Count != 0)
+            if (User.Identity.IsAuthenticated)
             {
                 InserirEscuteiroViewModel ievm = null;
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", UserData.UserData.con))

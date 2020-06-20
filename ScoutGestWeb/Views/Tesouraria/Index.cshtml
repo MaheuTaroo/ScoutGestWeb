@@ -2,32 +2,38 @@
     ViewData["Title"] = "Tesouraria";
 }
 
-    <div style="background-image: url('imgs/tesouraria.png')">
-        <h1 style="text-align: center">Tesouraria</h1> <br />
+    
+<h1 style="text-align: center">Tesouraria</h1> <br />
+<div class="toptesoura">
+    <button><a asp-action="Index" asp-controller="Caixas">Caixas</a></button>
+    <button><a asp-action="Index" asp-controller="TiposDocs">Documentos</a></button>
+    <button><a asp-action="Index" asp-controller="TiposPags">Pagamentos</a></button>
+    <button><a asp-action="Index" asp-controller="Movimentos">Movimentos</a></button>
+</div>
+<!--Cód antigo AQUIIII-->
+<!--<form asp-action="Index" asp-controller="Caixas" method="get">
+    <button class="bordtesoura" type="submit">Caixas</button>
+    </form> <br />
+    <form asp-action="Index" asp-controller="TiposDocs" method="get">
+        <button class="bordtesoura" type="submit">Documentos</button>
+    </form><br />
+    <form asp-action="Index" asp-controller="TiposPags" method="get">
+        <button class="bordtesoura" type="submit">Pagamentos</button>
+    </form><br />
+    <form asp-action="Index" asp-controller="Movimentos" method="get">
+        <button class="bordtesoura" type="submit">Movimentos</button>
+</form>-->
 
-        <div style="text-align:center">
-            <form asp-action="Index" asp-controller="Caixas" method="get">
-                <p>Nesta opção poderá ver as caixas</p>
-                <button class="bordtesoura" type="submit">Caixas</button>
-            </form> <br />
-            <form asp-action="Index" asp-controller="TiposDocs" method="get">
-                <p>Poderá visualir vários documentos ao clicar aqui</p>
-                <button class="bordtesoura" type="submit">Documentos</button>
-            </form><br />
-            <form asp-action="Index" asp-controller="TiposPags" method="get">
-                <p>Aqui poderá realizar pagamentos.</p>
-                <button class="bordtesoura" type="submit">Pagamentos</button>
-            </form><br />
-            <form asp-action="Index" asp-controller="Movimentos" method="get">
-                <p>Ao clicar aqui poderá rever os movimentos da conta que ocorreram.</p>
-                <button class="bordtesoura" type="submit">Movimentos</button>
-            </form>
-        </div>
-    </div>
-<!--em caso for necessário acrescentar buttons-->
+
+
+
+
+
+
+<!--em caso for necessário acrescentar buttons
 <!-- <form asp-action="Index" asp-controller="" method="get">
     <button class="bordtesoura" type="submit">Consultas</button>
-</form>
+
 <form asp-action="Index" asp-controller="" method="get">
     <button class="bordtesoura" type="submit">Análises</button>
 </form>-->

@@ -14,18 +14,14 @@
     <link href="~/css/site.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
 </head>
-<body class="text-dark">
+<body class="text-dark" style="background-color: rgba(0, 0, 0, 0.05);">
     <!--Header-->
     <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
         <partial name="Partial/_Header" />
     </div>
     @if (ViewData["Title"].ToString() != "Página inicial")
     {
-        <style>
-            body {
-                background-color: rgba(0, 0, 0, 0.05);
-            }
-        </style>
+
         <!--<ul class="nav container-fluid text-center">
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
@@ -99,9 +95,6 @@
             <option>Remover</option>
         </optgroup>-->
 <!--<option value="o que acontece">texto dessa opção</option>-->
-
-
-
 <!--adicionei aqui cenas-->
 <!--im going now when ur mom is finish don't forget to sent it to me the thing -->
 <!--este e o container que tem o header right or nah? tou a falar daquele que e um container escuro-->

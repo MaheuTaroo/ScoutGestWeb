@@ -13,7 +13,7 @@ namespace ScoutGestWeb.Controllers
         private readonly List<int> caixas = new List<int>();
         public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0;", UserData.UserData.con))
             {
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -49,7 +49,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Entrada()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", UserData.UserData.con))
             {
@@ -70,6 +70,7 @@ namespace ScoutGestWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Entrada(MovimentoViewModel mvm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             mvm.TipoMovimento = "Entrada";
             mvm.IDDocumento = mvm.IDDocumento.Substring(0, mvm.IDDocumento.IndexOf(" - "));
             ModelState.Clear();
@@ -104,7 +105,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Saida()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<string> nomesCaixas = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", UserData.UserData.con))
             using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -117,6 +118,7 @@ namespace ScoutGestWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Saida(MovimentoViewModel mvm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             mvm.TipoMovimento = "Saida";
             mvm.IDDocumento = mvm.IDDocumento.Substring(0, mvm.IDDocumento.IndexOf(" - "));
             ModelState.Clear();
@@ -151,12 +153,13 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Transferencia()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             return await Task.Run(() => View());
         }
         [HttpPost]
         public async Task<IActionResult> Transferencia(MovimTransfViewModel mtvm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             mtvm.TipoMovimento = "Saída";
             ModelState.Clear();
             TryValidateModel(mtvm);

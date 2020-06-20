@@ -12,7 +12,7 @@ namespace ScoutGestWeb.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1;", UserData.UserData.con))
             {
@@ -33,10 +33,10 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View(avm));
         }
-        //[Route("Atividades/Detalhes/{id}")]
+        [Route("Atividades/Detalhes/{id}")]
         public async Task<IActionResult> Detalhes(int id)
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             AtividadeViewModel avm = new AtividadeViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", UserData.UserData.con))
             {
@@ -60,11 +60,12 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> InserirAtividade()
         {
-            return await Task.Run(() => View());
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
         [HttpPost]
         public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
                 try

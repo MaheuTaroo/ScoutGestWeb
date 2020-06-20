@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb.Data
 {
-    public class IdentityContext : IdentityDbContext<IdentityUser>
+    public class IdentityContext : IdentityDbContext<ApplicationUser>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options)
             : base(options)

@@ -15,7 +15,7 @@ namespace ScoutGestWeb.Controllers
         private readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
         public async Task<IActionResult> Index()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from caixas", UserData.UserData.con))
             {
                 if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
@@ -60,7 +60,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> NovaCaixa()
         {
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", UserData.UserData.con))
             using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
             {
@@ -74,6 +74,7 @@ namespace ScoutGestWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> NovaCaixa(CaixaViewModel cvm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
                 using (MySqlCommand cmd = new MySqlCommand("insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);", UserData.UserData.con))

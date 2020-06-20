@@ -12,6 +12,7 @@ using ScoutGestWeb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb
 {
@@ -28,7 +29,17 @@ namespace ScoutGestWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(Configuration.GetConnectionString("MySQLConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 0;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.SignIn.RequireConfirmedAccount = true;
+                options.User.AllowedUserNameCharacters = string.Empty;
+            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

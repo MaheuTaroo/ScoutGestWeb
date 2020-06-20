@@ -1,8 +1,11 @@
-﻿@{
+﻿
+
+@{
     ViewData["Title"] = "Informação e Logout";
 }
 
-<h1>Informações e Logout</h1> <br />
+<h1>Informações e Logout</h1>
+<br />
 
 <h2 style="text-align: center">Informação geral</h2>
 <div class="bordlogout" style="padding-left: 10px;">
@@ -11,7 +14,8 @@
     <p>-Gestão de atividades;</p>
     <p>-Gestão de escuteiros;</p>
     <p>-Gestão de grupos.</p>
-</div> <br />
+</div>
+<br />
 
 <h2 style="text-align: center">Contactos</h2>
 <div class="bordlogout" style="padding-left: 10px;">
@@ -25,16 +29,17 @@
     <p><b>JJ</b></p>
     <p>Email: emailfals2o.com</p>
     <p>Telemóvel: (+351) 99999991</p>
-</div> <br />
+</div>
+<br />
 
 
 <p>Para voltar à página anterior, carregue aqui:</p>
 <form method="get" asp-action="" asp-controller="">
     <button class="bottaoin" type="submit">Voltar</button>
 </form>
+<button class="btn btn-secondary"><a href="@Url.ActionLink("Index", "Home")">Voltar</a></button>
 <p>Em caso queira fazer logout, carregue aqui:</p>
 <form method="get" asp-action="LogOut" asp-controller="Home">
     <button class="bottaoin" type="submit">Logout</button>
 </form>
-
-
+<button class="btn btn-secondary"><a href="@Url.ActionLink("LogOut", "Home")">Logout</a></button>

@@ -13,7 +13,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             List<TiposPagsViewModel> tpvm = new List<TiposPagsViewModel>();
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_pags where IDPag not like \"00\";", UserData.UserData.con))
             using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
             {
@@ -30,11 +30,12 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> NovoPagamento()
         {
-            return await Task.Run(() => View());
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
         [HttpPost]
         public async Task<IActionResult> NovoPagamento(TiposPagsViewModel tpvm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
                 using (MySqlCommand cmd = new MySqlCommand("insert into tipos_pags values(@id, @pagamento);", UserData.UserData.con))

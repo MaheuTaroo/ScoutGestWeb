@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 <!--Aqui esta o código para a página de inserir novos escuteiros -->
-<!--maos unidas num circulo com maybe junte se a nos no meio-->
 <script src="~/js/site.js"></script>
 <h1>Inserir escuteiro</h1>
 
@@ -12,8 +11,11 @@
 <hr />
 <div class="text-center">
     <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger" />
+        <div asp-validation-summary="ModelOnly" class="text-danger">@Html.ValidationSummary(false)</div>
         <div class="form-group col-xl-3 text-sm-left">
+            <label asp-for="ID">Nome:</label>
+            <input asp-for="ID" /><br />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
             <label asp-for="Nome">Nome:</label>
             <input asp-for="Nome" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Nome)</div>
@@ -41,22 +43,42 @@
             <br />
             <label asp-for="FotoUp">Fotografia:</label>
             <input asp-for="FotoUp" type="file" accept=".jpg,.png" />
+            <br />
+            <label asp-for="Grupo">Grupo:</label>
+            <select asp-for="Grupo">
+                @foreach (string s in ViewBag.grupos)
+                {
+                    <option>@s</option>
+                }
+            </select>
         </div>
         <div class="col-xl-3 text-sm-left">
-            @*await Html.PartialAsync("Partial/_CheckBoxList")*@
-            <!--<partial name="Partial/_CheckBoxList" />-->
-            <label asp-for="Cargo">Cargo:</label>
+            @*await Html.PartialAsync("Partial/_CheckBoxList")
+            <partial name="Partial/_CheckBoxList" />
             <div>
-                @{
-                    List<Cargos> _cargo = new List<Cargos>() { new Cargos() { Cargo = "Guia", Selecionado = false }, new Cargos() { Cargo = "Animador", Selecionado = false }, new Cargos() { Cargo = "Cozinheiro", Selecionado = false }, new Cargos() { Cargo = "Guarda-material", Selecionado = false }, new Cargos() { Cargo = "Secretário", Selecionado = false }, new Cargos() { Cargo = "Tesoureiro", Selecionado = false }, new Cargos() { Cargo = "Relações públicas", Selecionado = false }, new Cargos() { Cargo = "Socorrista", Selecionado = false }, new Cargos() { Cargo = "Guia de região", Selecionado = false }, new Cargos() { Cargo = "Sub-guia", Selecionado = false }, new Cargos() { Cargo = "Chefe", Selecionado = false } };
+            @{
+            List<Cargos> _cargo = new List<Cargos>() { new Cargos() { Cargo = "Guia", Selecionado = true }, new Cargos() { Cargo = "Animador", Selecionado = true }, new Cargos() { Cargo = "Cozinheiro", Selecionado = true }, new Cargos() { Cargo = "Guarda-material", Selecionado = true }, new Cargos() { Cargo = "Secretário", Selecionado = true }, new Cargos() { Cargo = "Tesoureiro", Selecionado = true }, new Cargos() { Cargo = "Relações públicas", Selecionado = true }, new Cargos() { Cargo = "Socorrista", Selecionado = true }, new Cargos() { Cargo = "Guia de região", Selecionado = true }, new Cargos() { Cargo = "Sub-guia", Selecionado = true }, new Cargos() { Cargo = "Chefe", Selecionado = true } };
+            }
+            @for (var i = 0; i < 11; i++)
+            {
+                *<input id="@_cargo[i].Cargo" type="checkbox" asp-for="_cargo[i].Selecionado" onclick="return selectiveCheck()" />
+                Html.CheckBoxFor(modelItem => modelItem._cargo[i].Selecionado)
+                <label asp-for="_cargo[i].Cargo">@_cargo[i].Cargo</label>@*<input type="hidden" asp-for="@Model._cargo[i].Cargo" /><br />
                 }
-                @for (var i = 1; i < 12; i++)
-                {
-                <input id="@_cargo[i - 1].Cargo.ToLower()" type="checkbox" asp-for="@Model._cargo[i].Selecionado" onclick="return selectiveCheck()" />
-                <label asp-for="@Model._cargo[i]">@_cargo[i - 1].Cargo</label><input type="hidden" asp -for="Cargo[i].Cargo" /><br />
-                }
-            </div>
-            <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Cargo)</div>
+            </div>*@
+            <label>Cargo:</label><br />
+            @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
+            @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
+            @Html.CheckBoxFor(modelItem => modelItem.Cozinheiro.Selecionado) Cozinheiro<br />
+            @Html.CheckBoxFor(modelItem => modelItem.GuardaMaterial.Selecionado) GuardaMaterial<br />
+            @Html.CheckBoxFor(modelItem => modelItem.Secretario.Selecionado) Secretario<br />
+            @Html.CheckBoxFor(modelItem => modelItem.Tesoureiro.Selecionado) Tesoureiro<br />
+            @Html.CheckBoxFor(modelItem => modelItem.RelPub.Selecionado) Relações públicas<br />
+            @Html.CheckBoxFor(modelItem => modelItem.Socorrista.Selecionado) Socorrista<br />
+            @Html.CheckBoxFor(modelItem => modelItem.GuiaRegiao.Selecionado) Guia de região<br />
+            @Html.CheckBoxFor(modelItem => modelItem.SubGuia.Selecionado) Sub-guia<br />
+            @Html.CheckBoxFor(modelItem => modelItem.Chefe.Selecionado) Chefe<br />
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationSummary(true)</div>
         </div>
         <div class="col-xl-3 text-sm-left">
             <label asp-for="Idade">Idade:</label>

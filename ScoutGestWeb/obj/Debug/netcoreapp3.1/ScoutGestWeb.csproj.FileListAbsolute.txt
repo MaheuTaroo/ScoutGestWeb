@@ -84,7 +84,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Atividad
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Atividades\InserirAtividade.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\Index.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Grupos\Index.cshtml.g.cs
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Partial\_CheckBoxList.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Partial\_Header.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LoginLayout.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_MasterPage.cshtml.g.cs

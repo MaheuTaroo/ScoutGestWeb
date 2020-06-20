@@ -8,10 +8,9 @@ using Microsoft.Extensions.Logging;
 using ScoutGestWeb.Models;
 using MySql.Data.MySqlClient;
 using System.Data;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -19,85 +18,78 @@ namespace ScoutGestWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         public async Task<IActionResult> Index()
         {
-            return await Task.Run(() => UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/ ? View("Login") : View("Dashboard"));
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? View("Login") : View("Dashboard"));
         }
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel login)
         {
             if (ModelState.IsValid)
             {
-                StringBuilder sb = new StringBuilder();
-                using (MD5 md5 = new MD5CryptoServiceProvider())
-                {
-                    md5.ComputeHash(Encoding.ASCII.GetBytes(login.Password));
-                    for (int i = 0; i < md5.Hash.Length; i++) sb.Append(md5.Hash[i].ToString("x2"));
-                }
                 IdentityUser user = await _userManager.FindByNameAsync(login.Username);
-                /*var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);*/
                 if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user, sb.ToString(), false, false);
-                    if (result.Succeeded) Console.WriteLine("noice");
-                    else Console.WriteLine("fook");
+                    var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
+                    if (result.Succeeded) return await Task.Run(() => View("Dashboard"));
                 }
-                using (MySqlCommand cmd = new MySqlCommand("select * from users where User = @user and Pass = @pass", UserData.UserData.con))
-                {
-                    if (cmd.Connection.State == ConnectionState.Closed) if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
-                    cmd.Parameters.AddWithValue("@user", login.Username);
-                    cmd.Parameters.AddWithValue("@pass", sb.ToString());
-                    await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                    {
-                        if (dr.HasRows)
-                        {
-                            while (await dr.ReadAsync())
-                            {
-                                /*Response.Cookies.Append("User", dr["User"].ToString(), new Microsoft.AspNetCore.Http.CookieOptions()
-                                {
-                                    Expires = DateTime.MinValue
-                                });*/
-                                for (int i = 0; i < dr.FieldCount; i++)
-                                {
-                                    UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
-                                }
-                            }
-                        }
-                    }
-                    if (UserData.UserData.userData.Count > 0)
-                    {
-                        cmd.CommandText = "select Nome from grupos where IDGrupo = @id;";
-                        cmd.Parameters.AddWithValue("@id", UserData.UserData.userData["IDGrupo"]);
-                        cmd.Prepare();
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            //my login is broke for now
-                            while (dr.Read()) UserData.UserData.userData.Add("Nome", dr["Nome"]);
-                        }
-                    }
-                    return await Task.Run(() => View("Dashboard"));
-                }
+                //using (MySqlCommand cmd = new MySqlCommand("select * from users where User = @user and Pass = @pass", UserData.UserData.con))
+                //{
+                //    if (cmd.Connection.State == ConnectionState.Closed) if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                //    cmd.Parameters.AddWithValue("@user", login.Username);
+                //    cmd.Parameters.AddWithValue("@pass", sb.ToString());
+                //    await cmd.PrepareAsync();
+                //    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                //    {
+                //        if (dr.HasRows)
+                //        {
+                //            while (await dr.ReadAsync())
+                //            {
+                //                /*Response.Cookies.Append("User", dr["User"].ToString(), new Microsoft.AspNetCore.Http.CookieOptions()
+                //                {
+                //                    Expires = DateTime.MinValue
+                //                });*/
+                //                for (int i = 0; i < dr.FieldCount; i++)
+                //                {
+                //                    UserData.UserData.userData.Add(dr.GetSchemaTable().Rows[i].Field<string>("ColumnName"), dr[i].ToString());
+                //                }
+                //            }
+                //        }
+                //    }
+                //    if (UserData.UserData.userData.Count > 0)
+                //    {
+                //        cmd.CommandText = "select Nome from grupos where IDGrupo = @id;";
+                //        cmd.Parameters.AddWithValue("@id", UserData.UserData.userData["IDGrupo"]);
+                //        cmd.Prepare();
+                //        using (MySqlDataReader dr = cmd.ExecuteReader())
+                //        {
+                //            //my login is broke for now
+                //            while (dr.Read()) UserData.UserData.userData.Add("Nome", dr["Nome"]);
+                //        }
+                //    }
+                    
+                //}
             }
             return await Task.Run(() => View("Login"));
         }
         public async Task<IActionResult> LogOut()
         {
-            if (Request.Cookies["User"] != null) Response.Cookies.Delete("User");
-            UserData.UserData.userData.Clear();
+            await _signInManager.SignOutAsync();
             return await Task.Run(() => RedirectToAction("Index"));
         }
         public async Task<IActionResult> InfoLogout()
         {
-            return await Task.Run(() => View());
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

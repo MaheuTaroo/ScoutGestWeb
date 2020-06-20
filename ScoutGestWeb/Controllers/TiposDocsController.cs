@@ -12,6 +12,7 @@ namespace ScoutGestWeb.Controllers
     {
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<TiposDocsViewModel> tdvm = new List<TiposDocsViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where Descricao not like \"Teste\"", UserData.UserData.con))
             using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -26,11 +27,12 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> NovoDocumento()
         {
-            return await Task.Run(() => View());
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
         [HttpPost]
         public async Task<IActionResult> NovoDocumento(TiposDocsViewModel tdvm)
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
                 using (MySqlCommand cmd = new MySqlCommand("insert into tipos_docs values (@id, @descricao);", UserData.UserData.con))

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScoutGestWeb.Data;
 
 namespace ScoutGestWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200619141601_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,7 +151,7 @@ namespace ScoutGestWeb.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ScoutGestWeb.Models.ApplicationUser", b =>
+            modelBuilder.Entity("ScoutGestWeb.Models.LoginViewModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
@@ -185,6 +187,10 @@ namespace ScoutGestWeb.Migrations
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -206,6 +212,10 @@ namespace ScoutGestWeb.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -230,7 +240,7 @@ namespace ScoutGestWeb.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ScoutGestWeb.Models.ApplicationUser", null)
+                    b.HasOne("ScoutGestWeb.Models.LoginViewModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -239,7 +249,7 @@ namespace ScoutGestWeb.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ScoutGestWeb.Models.ApplicationUser", null)
+                    b.HasOne("ScoutGestWeb.Models.LoginViewModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -254,7 +264,7 @@ namespace ScoutGestWeb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScoutGestWeb.Models.ApplicationUser", null)
+                    b.HasOne("ScoutGestWeb.Models.LoginViewModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -263,7 +273,7 @@ namespace ScoutGestWeb.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ScoutGestWeb.Models.ApplicationUser", null)
+                    b.HasOne("ScoutGestWeb.Models.LoginViewModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

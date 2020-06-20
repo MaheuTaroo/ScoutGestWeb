@@ -15,7 +15,7 @@
                 <input asp-for="IDMovimento" class="form-control" />
                 <span asp-validation-for="IDMovimento" class="text-danger"></span>
             </div>
-            @if (ScoutGestWeb.UserData.UserData.userData["User"].ToString() == "AdminAgr")
+            @if (User.IsInRole("AdminAgr"))
             {
                 <div class="form-group">
                     <label asp-for="IDCaixaOrigem" class="control-label"></label>

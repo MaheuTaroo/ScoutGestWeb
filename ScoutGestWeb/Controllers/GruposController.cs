@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
+using SixLabors.ImageSharp;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -13,8 +15,8 @@ namespace ScoutGestWeb.Controllers
     {
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<int> seccoes = new List<int>();
-            if (UserData.UserData.userData.Count == 0/* || Request.Cookies["User"] == null*/) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<GrupoViewModel> gvm = new List<GrupoViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from grupos", UserData.UserData.con))
             {
@@ -43,6 +45,38 @@ namespace ScoutGestWeb.Controllers
                         while (await dr.ReadAsync()) gvm[i].Seccao = dr["Nome"].ToString();
                     }
                     cmd.Parameters.Clear();
+                }
+            }
+            return await Task.Run(() => View(gvm));
+        }
+        public async Task<IActionResult> NovoGrupo()
+        {
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
+        }
+        [HttpPost]
+        public async Task<IActionResult> NovoGrupo(GrupoViewModel gvm)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (ModelState.IsValid)
+            {
+                using (MySqlCommand cmd = new MySqlCommand("insert into grupos(Nome, Sigla, Foto, Seccao, Pseudonimo) values (@nome, @sigla, @foto, @seccao, @pseudonimo"))
+                {
+                    cmd.Parameters.AddWithValue("@nome", gvm.Nome);
+                    cmd.Parameters.AddWithValue("@sigla", gvm.Sigla);
+                    using (MemoryStream ms = new MemoryStream())
+                    using (Image i = Image.Load(gvm.Foto.OpenReadStream()))
+                    {
+                        i.SaveAsPng(ms);
+                        cmd.Parameters.AddWithValue("@foto", ms.ToArray());
+                    }
+                    using (MySqlCommand cmd2 = new MySqlCommand("select IDSeccao from seccoes where Nome = @seccao", UserData.UserData.con))
+                    {
+                        cmd2.Parameters.AddWithValue("@seccao", gvm.Seccao);
+                        using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                        {
+                            while (await dr.ReadAsync()) cmd.Parameters.AddWithValue("@seccao", dr["IDSeccao"].ToString());
+                        }
+                    }
                 }
             }
             return await Task.Run(() => View(gvm));
