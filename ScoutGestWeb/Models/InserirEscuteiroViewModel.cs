@@ -97,7 +97,7 @@ namespace ScoutGestWeb.Models
         {
             try
             {
-                using (MySqlCommand cmd = new MySqlCommand("insert into Atividades values ()", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("insert into Atividades values ()", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     return (true, "");
                 }

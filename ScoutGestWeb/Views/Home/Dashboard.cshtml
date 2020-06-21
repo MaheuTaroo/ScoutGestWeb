@@ -19,7 +19,7 @@
 </tbody>-->
 <!--@*using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand("select * from movimentos", new MySql.Data.MySqlClient.MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
     {
-        @if (cmd.Connection.State == System.Data.ConnectionState.Closed) if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+        @if (cmd.Connection.State == System.Data.ConnectionState.Closed) if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
         @using (MySql.Data.MySqlClient.MySqlDataAdapter da = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd))
         @using (System.Data.DataSet ds = new System.Data.DataSet())
         {

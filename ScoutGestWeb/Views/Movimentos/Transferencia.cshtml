@@ -1,5 +1,4 @@
 ﻿@model ScoutGestWeb.Models.MovimTransfViewModel
-
 @{
     ViewData["Title"] = "Transferencia";
 }
@@ -10,33 +9,38 @@
     <div class="col-md-4">
         <form asp-action="Transferencia">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IDMovimento" class="control-label"></label>
-                <input asp-for="IDMovimento" class="form-control" />
-                <span asp-validation-for="IDMovimento" class="text-danger"></span>
-            </div>
-            @if (User.IsInRole("AdminAgr"))
+            @if (User.IsInRole("Administração de Agrupamento"))
             {
                 <div class="form-group">
-                    <label asp-for="IDCaixaOrigem" class="control-label"></label>
-                    <input asp-for="IDCaixaOrigem" class="form-control" />
+                    <label asp-for="IDCaixaOrigem" class="control-label">Caixa de origem</label>
+                    <select asp-for="IDCaixaOrigem" class="form-control">
+                        @foreach (string s in ViewBag.caixas)
+                        {
+                            <option>@s</option>
+                        }
+                    </select>
                     <span asp-validation-for="IDCaixaOrigem" class="text-danger"></span>
                 </div>
             }
             <div class="form-group">
-                <label asp-for="IDCaixaDestino" class="control-label"></label>
-                <input asp-for="IDCaixaDestino" class="form-control" />
+                <label asp-for="IDCaixaDestino" class="control-label">Caixa de destino</label>
+                <select asp-for="IDCaixaDestino" class="form-control">
+                    @foreach (string s in ViewBag.caixas)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="IDCaixaDestino" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IDDocumento" class="control-label"></label>
-                <input asp-for="IDDocumento" class="form-control" />
+                <select asp-for="IDDocumento" class="form-control">
+                    @foreach (string s in ViewBag.documentos)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="IDDocumento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoMovimento" class="control-label"></label>
-                <input asp-for="TipoMovimento" class="form-control" />
-                <span asp-validation-for="TipoMovimento" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataHora" class="control-label"></label>
@@ -50,7 +54,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="TipoPagamento" class="control-label"></label>
-                <input asp-for="TipoPagamento" class="form-control" />
+                <select asp-for="TipoPagamento" class="form-control">
+                    @foreach (string s in ViewBag.pagamentos)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="TipoPagamento" class="text-danger"></span>
             </div>
             <div class="form-group">

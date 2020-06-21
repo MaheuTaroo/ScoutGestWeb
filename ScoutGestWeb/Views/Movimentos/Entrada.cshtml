@@ -42,7 +42,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="TipoPagamento" class="control-label"></label>
-                <input asp-for="TipoPagamento" class="form-control" />
+                <select asp-for="TipoPagamento" class="form-control">
+                    @foreach (string s in ViewBag.pagamentos)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="TipoPagamento" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,4 +65,3 @@
 <div>
     <a asp-action="Index">Voltar à página anterior</a>
 </div>
-

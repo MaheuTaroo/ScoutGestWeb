@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,17 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<TiposDocsViewModel> tdvm = new List<TiposDocsViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where Descricao not like \"Teste\"", UserData.UserData.con))
-            using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+            using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where Descricao not like \"Teste\"", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                while (await dr.ReadAsync()) tdvm.Add(new TiposDocsViewModel()
+                if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
-                    IDDocumento = dr["IDDocumento"].ToString(),
-                    Descricao = dr["Descricao"].ToString()
-                });
+                    while (await dr.ReadAsync()) tdvm.Add(new TiposDocsViewModel()
+                    {
+                        IDDocumento = dr["IDDocumento"].ToString(),
+                        Descricao = dr["Descricao"].ToString()
+                    });
+                }
             }
             return await Task.Run(() => View(tdvm));
         }
@@ -35,8 +39,9 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
-                using (MySqlCommand cmd = new MySqlCommand("insert into tipos_docs values (@id, @descricao);", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("insert into tipos_docs values (@id, @descricao);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
+                    if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                     cmd.Parameters.AddWithValue("@id", tdvm.IDDocumento);
                     cmd.Parameters.AddWithValue("@descricao", tdvm.Descricao);
                     await cmd.PrepareAsync();

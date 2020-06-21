@@ -25,7 +25,7 @@ namespace ScoutGestWeb.Models
         [Required(ErrorMessage = "Não foi indicado o utilizador que criou este movimento", AllowEmptyStrings = false)]
         public string User { get; set; } = "AdminAgr";
         [Required(ErrorMessage = "Não foi indicada uma data e hora para o movimento")]
-        [UserData.DateTimeRange("01/01/1900 00:00:00")]
+        [DateTimeRangeAttribute.DateTimeRange("01/01/1900 00:00:00")]
         public DateTime DataHora { get; set; }
         [Required(ErrorMessage = "Não foi referido um valor para um movimento")]
         public decimal Valor { get; set; }

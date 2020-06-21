@@ -11,18 +11,23 @@
         <form asp-action="Saida">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="IDMovimento" class="control-label"></label>
-                <input asp-for="IDMovimento" class="form-control" />
-                <span asp-validation-for="IDMovimento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="IDCaixa" class="control-label"></label>
-                <input asp-for="IDCaixa" class="form-control" />
+                <select asp-for="IDCaixa" class="form-control">
+                    @foreach(string s in ViewBag.caixas)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="IDCaixa" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IDDocumento" class="control-label"></label>
-                <input asp-for="IDDocumento" class="form-control" />
+                <select asp-for="IDDocumento" class="form-control">
+                    @foreach (string s in ViewBag.documentos)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="IDDocumento" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,7 +42,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="TipoPagamento" class="control-label"></label>
-                <input asp-for="TipoPagamento" class="form-control" />
+                <select asp-for="TipoPagamento" class="form-control">
+                    @foreach (string s in ViewBag.pagamentos)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
                 <span asp-validation-for="TipoPagamento" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -1,0 +1,34 @@
+Teste - teste
+
+AdminAgr - adminagr
+EqAnimI - eqanimI
+EqAnimII - eqanimII
+EqAnimIII - eqanimIII
+EqAnimIV - eqanimIV
+
+BandoBranco - bbranco
+BandoCastanho - bcastanho
+BandoCinzento - bcinzento
+BandoPreto - bpreto
+BandoRuivo - bruivo
+
+PatCoati - patcoati
+PatEsquilo - patesquilo
+PatFalcao - patfalcao
+PatMocho - patmocho
+PatPantera - patpantera
+PatRaposa - patraposa
+PatTigre - pattigre
+
+EqASC - aristides
+EqGP - gualdimpais
+EqGZ - goncalveszarco
+EqLK - lutherking
+EqRSI - santaisabel
+EqSB - simonbolivar
+EqSCA - santaclara
+
+TriSFA - francassis
+TriJDA - joanadarc
+TriNAP - nunoalvares
+TriSJD - sjoaodeus

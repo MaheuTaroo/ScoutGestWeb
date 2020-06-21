@@ -14,9 +14,9 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1;", UserData.UserData.con))
+            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
@@ -38,9 +38,9 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             AtividadeViewModel avm = new AtividadeViewModel();
-            using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", UserData.UserData.con))
+            using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@id", id);
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
@@ -70,8 +70,9 @@ namespace ScoutGestWeb.Controllers
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand("insert into atividades(Nome, Tipo, Seccao, Local, DataInicio, DataFim, Ativa) values (@nome, @tipo, @seccao, @local, @inicio, @fim, @ativa);", UserData.UserData.con))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into atividades(Nome, Tipo, Seccao, Local, DataInicio, DataFim, Ativa) values (@nome, @tipo, @seccao, @local, @inicio, @fim, @ativa);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
+                        if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                         cmd.Parameters.AddWithValue("@nome", avm.Nome);
                         cmd.Parameters.AddWithValue("@tipo", avm.Tipo);
                         cmd.Parameters.AddWithValue("@seccao", avm.Seccao);

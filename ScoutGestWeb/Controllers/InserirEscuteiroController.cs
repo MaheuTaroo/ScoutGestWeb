@@ -23,10 +23,10 @@ namespace ScoutGestWeb.Controllers
             {
                 //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
                 List<InserirEscuteiroViewModel> escuteiros = new List<InserirEscuteiroViewModel>();
-                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     //Abrir a ligação
-                    if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                     /*if (User.IsInRole("EqAnim"))
                     {
                         cmd.CommandText = cmd.CommandText.Replace(";", " and Seccao = @seccao;");
@@ -69,8 +69,9 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
             InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
             List<string> grupos = new List<string>();
-            using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", UserData.UserData.con))
+            using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
+                if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) ievm.ID = Convert.ToInt32(dr["max(IDEscuteiro)"].ToString()) + 1;
@@ -81,6 +82,7 @@ namespace ScoutGestWeb.Controllers
                     while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
                 }
             }
+            grupos.Sort();
             ViewBag.grupos = grupos;
             return await Task.Run(() => View(ievm));
         }
@@ -104,8 +106,9 @@ namespace ScoutGestWeb.Controllers
                 //Tenta inserir os seguintes valores na tabela escuteiros
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(@id, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", UserData.UserData.con))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(@id, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
+                        if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                         cmd.Parameters.AddWithValue("@id", insert.ID);
                         cmd.Parameters.AddWithValue("@nome", insert.Nome);
                         cmd.Parameters.AddWithValue("@totem", insert.Totem);
@@ -160,8 +163,9 @@ namespace ScoutGestWeb.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 InserirEscuteiroViewModel ievm = null;
-                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
+                    if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())

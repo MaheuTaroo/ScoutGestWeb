@@ -16,9 +16,9 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            using (MySqlCommand cmd = new MySqlCommand("select * from caixas", UserData.UserData.con))
+            using (MySqlCommand cmd = new MySqlCommand("select * from caixas", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (UserData.UserData.con.State == ConnectionState.Closed) UserData.UserData.con.Open();
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
@@ -61,13 +61,16 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovaCaixa()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", UserData.UserData.con))
-            using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+            using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                List<string> grupos = new List<string>();
-                while (await dr.ReadAsync()) grupos.Add(dr["Nome"].ToString());
-                grupos.Sort();
-                ViewBag.grupos = grupos;
+                if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    List<string> grupos = new List<string>();
+                    while (await dr.ReadAsync()) grupos.Add(dr["Nome"].ToString());
+                    grupos.Sort();
+                    ViewBag.grupos = grupos;
+                }
             }
             return await Task.Run(() => View());
         }
@@ -77,11 +80,13 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
-                using (MySqlCommand cmd = new MySqlCommand("insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);", UserData.UserData.con))
+                using (MySqlCommand cmd = new MySqlCommand("insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
+                    if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                     cmd.Parameters.AddWithValue("@nome", cvm.Nome);
-                    using (MySqlCommand cmd2 = new MySqlCommand("select IDGrupo from grupos where Nome = @nome", UserData.UserData.con))
+                    using (MySqlCommand cmd2 = new MySqlCommand("select IDGrupo from grupos where Nome = @nome", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
+                        if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
                         cmd2.Parameters.AddWithValue("@nome", cvm.Grupo);
                         await cmd2.PrepareAsync();
                         using (MySqlDataReader dr2 = cmd2.ExecuteReader())

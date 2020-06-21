@@ -20,6 +20,7 @@
     <div class="split right" id="login">
         <form asp-action="Index" method="post">
             <h2>Login</h2>
+            <div class="bg-danger rounded-lg text-center">@Html.ValidationSummary(false)</div>
             <label asp-for="Username">Username: </label>
             <input asp-for="Username" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Username)</div>
@@ -27,7 +28,6 @@
             <input asp-for="Password" type="password" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Password)</div><br />
             <button class="btn btn-primary" type="submit">Login</button>
-
         </form>
     </div>
 </body>
