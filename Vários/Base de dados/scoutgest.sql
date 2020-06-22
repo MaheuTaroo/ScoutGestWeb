@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20-Jun-2020 às 21:19
+-- Tempo de geração: 22-Jun-2020 às 22:44
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.5
 
@@ -20,6 +20,25 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `scoutgest`
 --
+
+DELIMITER $$
+--
+-- Procedimentos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Reset_AI` (IN `dbtable` INT, IN `tbindex` INT)  begin
+	
+		SELECT max(tbindex) INTO @AutoInc
+		FROM INFORMATION_SCHEMA.TABLES
+		WHERE TABLE_SCHEMA = 'scoutgest' AND TABLE_NAME = dbtable;
+
+		SET @s:=CONCAT('ALTER TABLE `scoutgest`.`', dbtable, '` AUTO_INCREMENT=', @AutoInc + 1);
+		PREPARE stmt FROM @s;
+		EXECUTE stmt;
+		DEALLOCATE PREPARE stmt;
+		
+    END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -158,6 +177,7 @@ CREATE TABLE `aspnetusers` (
 --
 
 INSERT INTO `aspnetusers` (`Id`, `UserName`, `NormalizedUserName`, `Email`, `NormalizedEmail`, `EmailConfirmed`, `PasswordHash`, `SecurityStamp`, `ConcurrencyStamp`, `PhoneNumber`, `PhoneNumberConfirmed`, `TwoFactorEnabled`, `LockoutEnd`, `LockoutEnabled`, `AccessFailedCount`, `IDGrupo`, `Seccao`) VALUES
+('0', 'Teste', 'Teste', NULL, NULL, 1, 'AQAAAAEAACcQAAAAEPwEh8viPSMi9qKCcNRf1vyb3Kj5sHW/AdkyavctSV7XqbGQmYB2tWg9RVdNCwgHOw==', 'NC5APBV6RX35I4FGV5RGTNR2IANDQWU2', 'NC5APBV6RX35I4FGV5RGTNR2IANDQWU2', NULL, 0, 0, NULL, 1, 0, 0, 0),
 ('1', 'Administração de Agrupamento', 'AdminAgr', NULL, NULL, 1, 'AQAAAAEAACcQAAAAEKVz5NYLr7P8nOL3pC1KGDZ5GoXkH4BcKBYR8b72xMXvL6CbZwM6CiQdwqESBqq4Kw==', 'M4KGXMW2YVEBDZUN2VUR4KPHEEDQDNWS', '0304b591-774a-483b-a81f-948b2fc697ca', NULL, 0, 0, NULL, 0, 0, 28, 6),
 ('10', 'Bando Ruivo', 'BandoRuivo', NULL, NULL, 1, 'AQAAAAEAACcQAAAAEI/wPL+8xEXXR0lBm1+CgZXOpynRn6C0789jEIZV2DTK/G/CGUOjUxDdeQUBFln6Ug==', 'QMW35WMGD2IOORJHVNDZZG7LTINXYUEA', '9bfd8dc2-182e-47e1-88a4-5285ad011a9a', NULL, 0, 0, NULL, 0, 0, 5, 1),
 ('11', 'Patrulha Coati', 'PatCoati', NULL, NULL, 1, 'AQAAAAEAACcQAAAAEE6nKWE/2HHwOpAu3mSwjoRnDtphBg9Sx+yNhDcTSkTyIU1TKY1VJ56/XdOAA47keA==', 'USTKCYZZM3H4246ZPUMHH4DYCQ4CQPKU', '37b03dec-7c2e-4161-b9d7-96e26597945c', NULL, 0, 0, NULL, 0, 0, 6, 2),
@@ -658,44 +678,45 @@ CREATE TABLE `movimentos` (
   `IDMovimento` int(11) NOT NULL,
   `IDCaixa` int(11) NOT NULL,
   `IDDocumento` varchar(2) COLLATE utf8mb4_bin NOT NULL,
-  `TipoMovimento` tinyint(1) NOT NULL,
+  `TipoMovimento` smallint(6) NOT NULL,
   `User` varchar(100) COLLATE utf8mb4_bin NOT NULL,
   `DataHora` datetime NOT NULL,
   `Valor` decimal(65,2) NOT NULL,
   `TipoPag` varchar(2) COLLATE utf8mb4_bin NOT NULL,
-  `Descricao` text COLLATE utf8mb4_bin NOT NULL
+  `Descricao` text COLLATE utf8mb4_bin NOT NULL,
+  `Atividade` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
 -- Extraindo dados da tabela `movimentos`
 --
 
-INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `IDDocumento`, `TipoMovimento`, `User`, `DataHora`, `Valor`, `TipoPag`, `Descricao`) VALUES
-(0, 0, '00', 0, 'Teste', '1000-01-01 00:00:00', '0.00', '00', 'Teste'),
-(1, 1, 'EN', 1, 'AdminAgr', '2019-10-01 00:00:00', '1.00', 'DI', '1111111111'),
-(2, 2, 'EN', 1, 'AdminAgr', '2019-10-08 00:00:00', '2.00', 'DI', '2222222222'),
-(3, 3, 'EN', 1, 'AdminAgr', '2019-10-15 00:00:00', '3.00', 'DI', '3333333333'),
-(4, 4, 'EN', 1, 'AdminAgr', '2019-10-22 00:00:00', '4.00', 'DI', '4444444444'),
-(5, 5, 'EN', 1, 'AdminAgr', '2019-10-29 00:00:00', '5.00', 'DI', '5555555555'),
-(6, 6, 'EN', 1, 'AdminAgr', '2019-11-05 00:00:00', '6.00', 'DI', '6666666666'),
-(7, 7, 'EN', 1, 'AdminAgr', '2019-11-12 00:00:00', '7.00', 'DI', '7777777777'),
-(8, 8, 'EN', 1, 'AdminAgr', '2019-11-19 00:00:00', '8.00', 'DI', '8888888888'),
-(9, 9, 'EN', 1, 'AdminAgr', '2019-11-26 00:00:00', '9.00', 'DI', '9999999999'),
-(10, 10, 'EN', 1, 'AdminAgr', '2019-12-03 00:00:00', '10.00', 'DI', '10101010101010101010'),
-(11, 11, 'EN', 1, 'AdminAgr', '2019-12-10 00:00:00', '11.00', 'DI', '11111111111111111111'),
-(12, 12, 'EN', 1, 'AdminAgr', '2019-12-17 00:00:00', '12.00', 'DI', '12121212121212121212'),
-(13, 13, 'SA', 2, 'AdminAgr', '2019-12-24 00:00:00', '13.00', 'DI', '13131313131313131313'),
-(14, 14, 'SA', 2, 'AdminAgr', '2019-12-31 00:00:00', '14.00', 'DI', '14141414141414141414'),
-(15, 15, 'SA', 2, 'AdminAgr', '2020-01-07 00:00:00', '15.00', 'DI', '15151515151515151515'),
-(16, 16, 'SA', 2, 'AdminAgr', '2020-01-14 00:00:00', '16.00', 'DI', '16161616161616161616'),
-(17, 17, 'SA', 2, 'AdminAgr', '2020-01-21 00:00:00', '17.00', 'DI', '17171717171717171717'),
-(18, 18, 'SA', 2, 'AdminAgr', '2020-01-28 00:00:00', '18.00', 'DI', '18181818181818181818'),
-(19, 19, 'SA', 2, 'AdminAgr', '2020-02-04 00:00:00', '19.00', 'DI', '19191919191919191919'),
-(20, 20, 'SA', 2, 'AdminAgr', '2020-02-11 00:00:00', '20.00', 'DI', '20202020202020202020'),
-(21, 21, 'SA', 2, 'AdminAgr', '2020-02-18 00:00:00', '21.00', 'DI', '21212121212121212121'),
-(22, 22, 'SA', 2, 'AdminAgr', '2020-02-25 00:00:00', '22.00', 'DI', '22222222222222222222'),
-(23, 23, 'SA', 2, 'AdminAgr', '2020-03-03 00:00:00', '23.00', 'DI', '23232323232323232323'),
-(24, 0, 'SA', 2, 'AdminAgr', '2020-06-17 19:47:55', '0.00', 'DI', '24242424242424242424');
+INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `IDDocumento`, `TipoMovimento`, `User`, `DataHora`, `Valor`, `TipoPag`, `Descricao`, `Atividade`) VALUES
+(0, 0, '00', 0, 'Teste', '1000-01-01 00:00:00', '0.00', '00', 'Teste', 0),
+(1, 1, 'EN', 1, 'AdminAgr', '2019-10-01 00:00:00', '1.00', 'DI', '1111111111', 0),
+(2, 2, 'EN', 1, 'AdminAgr', '2019-10-08 00:00:00', '2.00', 'DI', '2222222222', 0),
+(3, 3, 'EN', 1, 'AdminAgr', '2019-10-15 00:00:00', '3.00', 'DI', '3333333333', 0),
+(4, 4, 'EN', 1, 'AdminAgr', '2019-10-22 00:00:00', '4.00', 'DI', '4444444444', 0),
+(5, 5, 'EN', 1, 'AdminAgr', '2019-10-29 00:00:00', '5.00', 'DI', '5555555555', 0),
+(6, 6, 'EN', 1, 'AdminAgr', '2019-11-05 00:00:00', '6.00', 'DI', '6666666666', 0),
+(7, 7, 'EN', 1, 'AdminAgr', '2019-11-12 00:00:00', '7.00', 'DI', '7777777777', 0),
+(8, 8, 'EN', 1, 'AdminAgr', '2019-11-19 00:00:00', '8.00', 'DI', '8888888888', 0),
+(9, 9, 'EN', 1, 'AdminAgr', '2019-11-26 00:00:00', '9.00', 'DI', '9999999999', 0),
+(10, 10, 'EN', 1, 'AdminAgr', '2019-12-03 00:00:00', '10.00', 'DI', '10101010101010101010', 0),
+(11, 11, 'EN', 1, 'AdminAgr', '2019-12-10 00:00:00', '11.00', 'DI', '11111111111111111111', 0),
+(12, 12, 'EN', 1, 'AdminAgr', '2019-12-17 00:00:00', '12.00', 'DI', '12121212121212121212', 0),
+(13, 13, 'SA', 2, 'AdminAgr', '2019-12-24 00:00:00', '13.00', 'DI', '13131313131313131313', 0),
+(14, 14, 'SA', 2, 'AdminAgr', '2019-12-31 00:00:00', '14.00', 'DI', '14141414141414141414', 0),
+(15, 15, 'SA', 2, 'AdminAgr', '2020-01-07 00:00:00', '15.00', 'DI', '15151515151515151515', 0),
+(16, 16, 'SA', 2, 'AdminAgr', '2020-01-14 00:00:00', '16.00', 'DI', '16161616161616161616', 0),
+(17, 17, 'SA', 2, 'AdminAgr', '2020-01-21 00:00:00', '17.00', 'DI', '17171717171717171717', 0),
+(18, 18, 'SA', 2, 'AdminAgr', '2020-01-28 00:00:00', '18.00', 'DI', '18181818181818181818', 0),
+(19, 19, 'SA', 2, 'AdminAgr', '2020-02-04 00:00:00', '19.00', 'DI', '19191919191919191919', 0),
+(20, 20, 'SA', 2, 'AdminAgr', '2020-02-11 00:00:00', '20.00', 'DI', '20202020202020202020', 0),
+(21, 21, 'SA', 2, 'AdminAgr', '2020-02-18 00:00:00', '21.00', 'DI', '21212121212121212121', 0),
+(22, 22, 'SA', 2, 'AdminAgr', '2020-02-25 00:00:00', '22.00', 'DI', '22222222222222222222', 0),
+(23, 23, 'SA', 2, 'AdminAgr', '2020-03-03 00:00:00', '23.00', 'DI', '23232323232323232323', 0),
+(24, 0, 'SA', 2, 'AdminAgr', '2020-06-17 19:47:55', '0.00', 'DI', '24242424242424242424', 0);
 
 -- --------------------------------------------------------
 
@@ -1010,7 +1031,6 @@ CREATE TABLE `tipos_docs` (
 
 INSERT INTO `tipos_docs` (`IDDocumento`, `Descricao`) VALUES
 ('00', 'Teste'),
-('DE', 'Depósitos'),
 ('EN', 'Entradas'),
 ('SA', 'Saídas'),
 ('TC', 'Transferências entre caixas');
@@ -1022,7 +1042,7 @@ INSERT INTO `tipos_docs` (`IDDocumento`, `Descricao`) VALUES
 --
 
 CREATE TABLE `tipos_movs` (
-  `IDTipoMov` tinyint(1) NOT NULL,
+  `IDTipoMov` smallint(6) NOT NULL,
   `Movimento` tinytext COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
@@ -1235,7 +1255,8 @@ ALTER TABLE `movimentos`
   ADD KEY `IDCaixa` (`IDCaixa`),
   ADD KEY `TipoPag` (`TipoPag`),
   ADD KEY `movimentos_ibfk_3` (`TipoMovimento`),
-  ADD KEY `movimentos_ibfk_5` (`User`);
+  ADD KEY `movimentos_ibfk_5` (`User`),
+  ADD KEY `movimentos_ibfk_6` (`Atividade`);
 
 --
 -- Índices para tabela `numtelefones`
@@ -1339,13 +1360,13 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT de tabela `movimentos`
 --
 ALTER TABLE `movimentos`
-  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de tabela `tipos_movs`
 --
 ALTER TABLE `tipos_movs`
-  MODIFY `IDTipoMov` tinyint(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IDTipoMov` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restrições para despejos de tabelas
@@ -1435,7 +1456,8 @@ ALTER TABLE `movimentos`
   ADD CONSTRAINT `movimentos_ibfk_2` FOREIGN KEY (`IDCaixa`) REFERENCES `caixas` (`IDCaixa`),
   ADD CONSTRAINT `movimentos_ibfk_3` FOREIGN KEY (`TipoMovimento`) REFERENCES `tipos_movs` (`IDTipoMov`),
   ADD CONSTRAINT `movimentos_ibfk_4` FOREIGN KEY (`TipoPag`) REFERENCES `tipos_pags` (`IDPag`),
-  ADD CONSTRAINT `movimentos_ibfk_5` FOREIGN KEY (`User`) REFERENCES `users` (`User`);
+  ADD CONSTRAINT `movimentos_ibfk_5` FOREIGN KEY (`User`) REFERENCES `users` (`User`),
+  ADD CONSTRAINT `movimentos_ibfk_6` FOREIGN KEY (`Atividade`) REFERENCES `atividades` (`IDAtividade`);
 
 --
 -- Limitadores para a tabela `numtelefones`

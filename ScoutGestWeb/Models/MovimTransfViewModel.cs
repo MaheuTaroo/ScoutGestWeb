@@ -19,12 +19,12 @@ namespace ScoutGestWeb.Models
         [Required(ErrorMessage = "Não foi referida a caixa de entrada")]
         public string IDCaixaDestino { get; set; }
         [ForeignKey("IDDocumento")]
-        [StringLength(2)]
         [Required(ErrorMessage = "Não foi referido o tipo de documento para o movimento", AllowEmptyStrings = false)]
         public string IDDocumento { get; set; }
         [Required(ErrorMessage = "Não foi indicado um tipo de movimento", AllowEmptyStrings = false)]
         [ForeignKey("IDTipoMov")]
         public string TipoMovimento { get; set; }
+        public ApplicationUser User { get; set; }
         [Required(ErrorMessage = "Não foi indicada uma data e hora para o movimento")]
         public DateTime DataHora { get; set; }
         [Required(ErrorMessage = "Não foi referido um valor para um movimento")]
@@ -35,5 +35,7 @@ namespace ScoutGestWeb.Models
         [StringLength(65535)]
         [Required(ErrorMessage = "Não foi indicada uma descrição do movimento", AllowEmptyStrings = false)]
         public string Descricao { get; set; }
+        [Required(ErrorMessage = "Não foi escolhida uma atividade")]
+        public string Atividade { get; set; }
     }
 }

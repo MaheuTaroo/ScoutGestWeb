@@ -23,7 +23,7 @@ namespace ScoutGestWeb.Models
         [ForeignKey("IDTipoMov")]
         public string TipoMovimento { get; set; }
         [Required(ErrorMessage = "Não foi indicado o utilizador que criou este movimento", AllowEmptyStrings = false)]
-        public string User { get; set; } = "AdminAgr";
+        public ApplicationUser User { get; set; }
         [Required(ErrorMessage = "Não foi indicada uma data e hora para o movimento")]
         [DateTimeRangeAttribute.DateTimeRange("01/01/1900 00:00:00")]
         public DateTime DataHora { get; set; }
@@ -35,5 +35,7 @@ namespace ScoutGestWeb.Models
         [StringLength(65535)]
         [Required(ErrorMessage = "Não foi indicada uma descrição do movimento", AllowEmptyStrings = false)]
         public string Descricao { get; set; }
+        [Required(ErrorMessage = "Não foi escolhida uma atividade")]
+        public string Atividade { get; set; }
     }
 }

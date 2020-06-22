@@ -6,80 +6,87 @@
 
 <h1>Index</h1>
 
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Movimentos de tesouraria
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" asp-action="Entrada" asp-controller="Movimentos">Entradas</a>
-        <a class="dropdown-item" asp-action="Saida" asp-controller="Movimentos">Saídas</a>
-        <a class="dropdown-item" asp-action="Transferencia" asp-controller="Movimentos">Transferências</a>
+<div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Movimentos de tesouraria
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" asp-action="Entrada" asp-controller="Movimentos">Entradas</a>
+            <a class="dropdown-item" asp-action="Saida" asp-controller="Movimentos">Saídas</a>
+            <a class="dropdown-item" asp-action="Transferencia" asp-controller="Movimentos">Transferências</a>
+        </div>
     </div>
+    <a asp-action="Analise" style="display: inline"><button class="btn btn-secondary">Teste</button></a>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IDMovimento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IDCaixa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IDDocumento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoMovimento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataHora)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoPagamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDMovimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDCaixa)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDDocumento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoMovimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataHora)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Valor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoPagamento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+@if (!User.IsInRole("Comum"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IDMovimento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IDCaixa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IDDocumento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TipoMovimento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataHora)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Valor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TipoPagamento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descricao)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDMovimento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDCaixa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDDocumento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoMovimento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataHora)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoPagamento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

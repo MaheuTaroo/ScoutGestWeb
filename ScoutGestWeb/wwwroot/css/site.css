@@ -337,6 +337,13 @@ footer {
         background-color: #ccc;
     }
 
+
+.columnentra{
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
 /*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
 /*ooh, o que qeures que eu faça com o side nav? */
 /*tenta fzr c q a caixa principal recupere o tamanho total. eu pus a margem esquerda igual a largura do sidenav,

@@ -1,63 +1,81 @@
-﻿@model ScoutGestWeb.Models.MovimentoViewModel
-
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@model ScoutGestWeb.Models.MovimentoViewModel
 @{
     ViewData["Title"] = "Nova entrada";
 }
 
 <h1>Criar nova entrada</h1>
 <hr />
-<div class="row">
+<div class="row" >
     <div class="col-md-4">
         <form asp-action="Entrada">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IDCaixa" class="control-label"></label>
-                <select asp-for="IDCaixa" class="form-control">
-                    @foreach (var item in ViewBag.caixas)
-                    {
+            <div class="columnentra">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="IDCaixa" class="control-label"></label>
+                    <select asp-for="IDCaixa" class="form-control">
+                        @foreach (var item in ViewBag.caixas)
+                        {
                         <option>@item</option>
-                    }
-                </select>
-                <span asp-validation-for="IDCaixa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IDDocumento" class="control-label"></label>
-                <select asp-for="IDDocumento" class="form-control">
-                    @foreach (var item in ViewBag.documentos)
-                    {
+                        }
+                    </select>
+                    <span asp-validation-for="IDCaixa" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IDDocumento" class="control-label"></label>
+                    <select asp-for="IDDocumento" class="form-control">
+                        @foreach (var item in ViewBag.documentos)
+                        {
                         <option>@item</option>
-                    }
-                </select>
-                <span asp-validation-for="IDDocumento" class="text-danger"></span>
+                        }
+                    </select>
+                    <span asp-validation-for="IDDocumento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DataHora" class="control-label"></label>
+                    <input asp-for="DataHora" class="form-control" />
+                    <span asp-validation-for="DataHora" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Valor" class="control-label"></label>
+                    <input asp-for="Valor" class="form-control" />
+                    <span asp-validation-for="Valor" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DataHora" class="control-label"></label>
-                <input asp-for="DataHora" class="form-control" />
-                <span asp-validation-for="DataHora" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Valor" class="control-label"></label>
-                <input asp-for="Valor" class="form-control" />
-                <span asp-validation-for="Valor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoPagamento" class="control-label"></label>
-                <select asp-for="TipoPagamento" class="form-control">
-                    @foreach (string s in ViewBag.pagamentos)
-                    {
+         
+            <div class="columnentra" style="margin-left:auto">
+                <div class="form-group">
+                    <label asp-for="TipoPagamento" class="control-label"></label>
+                    <select asp-for="TipoPagamento" class="form-control">
+                        @foreach (string s in ViewBag.pagamentos)
+                        {
                         <option>@s</option>
-                    }
-                </select>
-                <span asp-validation-for="TipoPagamento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descricao" class="control-label"></label>
-                <input asp-for="Descricao" class="form-control" />
-                <span asp-validation-for="Descricao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submeter entrada de tesouraria" class="btn btn-primary" />
-            </div>
+                        }
+                    </select>
+                    <span asp-validation-for="TipoPagamento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <input asp-for="Descricao" class="form-control" />
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Atividade" class="control-label"></label>
+                    <select asp-for="Atividade" class="form-control">
+                        @foreach (string s in ViewBag.atividades)
+                        {
+                        <option>@s</option>
+                        }
+                    </select>
+
+                    <span asp-validation-for="Atividade" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
+                <div class="form-group">
+                    <input type="submit" value="Submeter entrada de tesouraria" class="btn btn-primary" />
+                </div>
+                </div>
         </form>
     </div>
 </div>

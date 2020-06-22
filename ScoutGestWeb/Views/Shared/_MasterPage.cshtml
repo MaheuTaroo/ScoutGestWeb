@@ -1,79 +1,82 @@
 ﻿@{
     Layout = null;
-
 }
 
 <html lang="pt-pt">
-<head>
-    <meta name="viewport" content="width=device-width" initial-scale="1" charset="windows-1252" />
-    <title>@ViewData["Title"] - ScoutGest</title>
-    <link rel="icon" href="~/imgs/favicon.ico" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="~/css/site.css" rel="stylesheet" />
-    <script src="~/js/site.js"></script>
-</head>
-<body class="text-dark" style="background-color: rgba(0, 0, 0, 0.05);">
-    <!--Header-->
-    <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
-        <partial name="Partial/_Header" />
-    </div>
-    @if (ViewData["Title"].ToString() != "Página inicial")
-    {
-
-        <!--<ul class="nav container-fluid text-center">
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Atividades" asp-action="Index"><h6>Atividades</h6></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="" asp-action=""><h6>Tesouraria</h6></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="" asp-action=""><h6>Contactos</h6></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="" asp-action=""><h6>Regulamento</h6></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Home" asp-action="LogOut"><h6>Log out</h6></a>
-            </li>
-        </ul>
-
-
-
-        <aside class="sidenav">
-            <a asp-action="Index" asp-controller="Home">Início</a>
-            <a asp-action="Index" asp-controller="Atividades">Atividades</a>
-            <a asp-action="Index" asp-controller="Tesouraria">Tesouraria</a>
-            <a asp-action="">Contactos</a>
-            <a asp-action="">Regulamentos</a>
-            <a asp-action="LogOut" asp-controller="Home">Logout</a>
-        </aside>-->
-    }
-    <!--<div id="starter" class="animate__animated animate__fadeOut animate__delay-2s" style="position: absolute;">
-        <h1>Benvindo/a ao ScoutGest, <br /> @*ScoutGestWeb.UserData.UserData.userData["User"]*@</h1>
-    </div>-->
-    @if (ViewData["Title"].ToString() == "Página inicial")
-    {
-        <div class="container-fluid animate__animated animate__fadeIn" id="body-dash">
-            @RenderBody()
+    <head>
+        <meta name="viewport" content="width=device-width" initial-scale="1" charset="windows-1252" />
+        <title>@ViewData["Title"] - ScoutGest</title>
+        <link rel="icon" href="~/imgs/favicon.ico" />
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="~/css/site.css" rel="stylesheet" />
+        <script src="~/js/site.js"></script>
+    </head>
+    <body class="text-dark" style="background-color: rgba(0, 0, 0, 0.05);">
+        <!--Header-->
+        <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
+            <partial name="Partial/_Header" />
         </div>
-    }
-    else
-    {
-        <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="margin:auto">
-            @RenderBody()
-        </div>
-    }
-    <!--Footer-->
-    <footer class="footer bg-dark text-white text-center">
-        ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
-    </footer>
-</body>
+        @{
+            string title = "";
+            try
+            {
+                title ??= ViewData["Title"].ToString();
+            }
+            catch (NullReferenceException)
+            {
+                title = "ScoutGest";
+            }
+        }
+        @if (title != "Página inicial")
+        {
+            <!--<ul class="nav container-fluid text-center">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index"><h6>Página Inicial</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Atividades" asp-action="Index"><h6>Atividades</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="" asp-action=""><h6>Tesouraria</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="" asp-action=""><h6>Contactos</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="" asp-action=""><h6>Regulamento</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="LogOut"><h6>Log out</h6></a>
+                </li>
+            </ul>
+    
+    
+    
+            <aside class="sidenav">
+                <a asp-action="Index" asp-controller="Home">Início</a>
+                <a asp-action="Index" asp-controller="Atividades">Atividades</a>
+                <a asp-action="Index" asp-controller="Tesouraria">Tesouraria</a>
+                <a asp-action="">Contactos</a>
+                <a asp-action="">Regulamentos</a>
+                <a asp-action="LogOut" asp-controller="Home">Logout</a>
+            </aside>-->
+            <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="margin:auto">
+                @RenderBody()
+            </div>
+        }
+        else
+        {
+            <div class="container-fluid animate__animated animate__fadeIn" id="body-dash">
+                @RenderBody()
+            </div>
+        }
+        <!--Footer-->
+        <footer class="footer bg-dark text-white text-center">
+            ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
+        </footer>
+    </body>
 </html>
 
 <!--<label>Aqui o texto antes do dropdown</label>
@@ -296,3 +299,6 @@ o dashboard sao so as caixas d selecao, e n encontrei nada d mal-->
 <!--se nao disseste entao peço desculpa, percebi mal.p-->
 <!--d qq modo eu vou precisar dela, mas n hj. amnh tratamos disso-->
 <!--tb entao xau ate amanha-->
+<!--<div id="starter" class="animate__animated animate__fadeOut animate__delay-2s" style="position: absolute;">
+    <h1>Benvindo/a ao ScoutGest, <br /> @*ScoutGestWeb.UserData.UserData.userData["User"]*@</h1>
+</div>-->

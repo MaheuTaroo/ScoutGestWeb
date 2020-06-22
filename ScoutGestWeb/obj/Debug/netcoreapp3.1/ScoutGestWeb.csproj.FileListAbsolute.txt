@@ -182,9 +182,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Moviment
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\MySqlConnector.dll
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Pomelo.EntityFrameworkCore.MySql.dll
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Pomelo.JsonObject.dll
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.csproj.CoreCompileInputs.cache
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cs
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cache
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Login.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Logout.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\_ViewImports.cshtml.g.cs
@@ -195,3 +192,13 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposPag
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Grupos\NovoGrupo.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Grupos\Detalhes.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\DateTimeRangeAttribute.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.Razor.Extensions.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Rotativa.AspNetCore.dll
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.csproj.CoreCompileInputs.cache
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cache
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Analise.cshtml.g.cs
