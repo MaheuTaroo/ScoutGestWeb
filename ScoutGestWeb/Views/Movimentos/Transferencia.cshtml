@@ -83,7 +83,7 @@
                     </select>
                     <span asp-validation-for="Atividade" class="text-danger"></span>
                 </div>
-                <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
+                <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result.NormalizedUserName" />
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </div>

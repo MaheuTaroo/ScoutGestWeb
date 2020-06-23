@@ -17,6 +17,16 @@
             <a class="dropdown-item" asp-action="Transferencia" asp-controller="Movimentos">Transferências</a>
         </div>
     </div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Movimentos de tesouraria
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" asp-action="PDFTransfs">Transferências</a>
+            <a class="dropdown-item" asp-action="PDFMovs">Entradas e saídas</a>
+            <a class="dropdown-item" asp-action="PDFPags">Tipos de pagamento</a>
+        </div>
+    </div>
     <a asp-action="Analise" style="display: inline"><button class="btn btn-secondary">Teste</button></a>
 </div>
 

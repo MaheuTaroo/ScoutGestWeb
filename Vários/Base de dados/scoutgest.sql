@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 22-Jun-2020 às 22:44
+-- Tempo de geração: 23-Jun-2020 às 21:21
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.5
 
@@ -716,7 +716,11 @@ INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `IDDocumento`, `TipoMoviment
 (21, 21, 'SA', 2, 'AdminAgr', '2020-02-18 00:00:00', '21.00', 'DI', '21212121212121212121', 0),
 (22, 22, 'SA', 2, 'AdminAgr', '2020-02-25 00:00:00', '22.00', 'DI', '22222222222222222222', 0),
 (23, 23, 'SA', 2, 'AdminAgr', '2020-03-03 00:00:00', '23.00', 'DI', '23232323232323232323', 0),
-(24, 0, 'SA', 2, 'AdminAgr', '2020-06-17 19:47:55', '0.00', 'DI', '24242424242424242424', 0);
+(24, 0, 'SA', 2, 'AdminAgr', '2020-06-17 19:47:55', '0.00', 'DI', '24242424242424242424', 0),
+(25, 18, 'TC', 2, 'EqSCA', '2020-06-11 22:18:00', '99.50', 'MB', 'Teste', 2),
+(26, 1, 'TC', 1, 'EqSCA', '2020-06-11 22:18:00', '99.50', 'MB', 'Teste', 2),
+(27, 18, 'TC', 2, 'EqSCA', '2020-06-18 01:19:00', '99.50', 'DI', 'Teste', 1),
+(28, 4, 'TC', 1, 'EqSCA', '2020-06-18 01:19:00', '99.50', 'DI', 'Teste', 1);
 
 -- --------------------------------------------------------
 
@@ -1360,7 +1364,7 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT de tabela `movimentos`
 --
 ALTER TABLE `movimentos`
-  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de tabela `tipos_movs`

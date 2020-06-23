@@ -226,16 +226,12 @@ footer {
  
 }
 
-/*ha partida nao faz nada*/
+
 .column {
     float: left;
     width: 50%; 
     padding: 10px;
 }
-/*just a question: why "rowdeth" instead of "rowdet"? why the 'h'?*/
-/*look dude it works ok? i just gave it that name so it wouldn't use the ouhter rows*/
-/*calma, era so curiosidade, n tava a querer mudar nd*/
-/**/
 
 /* Clear floats after the columns */
 .row:after {
@@ -298,18 +294,6 @@ footer {
     text-decoration: none;
     border-radius: 4px;
 }
-/*este botao parece me igual ao botao q aparece no btn-secondary*/
-/*entao apaga e altera aqueles que estao com obottaoin*/
-/*mas deixa so comparar primeiro*/
-/*ok enquanto isso vou ver a view*/
-/*it does look like b4 i asked u to remake it now*/
-/*and ok, maybe o bottaoin e um bocado mais claro do q o btn-secondary. mas still close*/
-/*sim ja vi que e para alterar*/
-/*btw o q e q e o .imagedeth?*/
-/*first off eu suspeito que seja daquele dia que tentei fazer o bc com a imagem mas eu nao me lembro tr posto 300 no width*/
-/*ok then lemme check where it is called
-    its not called anywhere, just in here. maybe let us delete, it aint useful rn*/
-/*okii, there now if u excuse me im going to see if i find a solution to our problem*/
 
 
 .bordlogout {
@@ -338,11 +322,28 @@ footer {
     }
 
 
-.columnentra{
-  float: left;
-  width: 50%;
-  padding: 10px;
+.contain {
+    width: 100%;  
 }
+
+
+
+/*just a question: why "rowdeth" instead of "rowdet"? why the 'h'?*/
+/*look dude it works ok? i just gave it that name so it wouldn't use the ouhter rows*/
+/*calma, era so curiosidade, n tava a querer mudar nd*/
+/**/
+/*este botao parece me igual ao botao q aparece no btn-secondary*/
+/*entao apaga e altera aqueles que estao com obottaoin*/
+/*mas deixa so comparar primeiro*/
+/*ok enquanto isso vou ver a view*/
+/*it does look like b4 i asked u to remake it now*/
+/*and ok, maybe o bottaoin e um bocado mais claro do q o btn-secondary. mas still close*/
+/*sim ja vi que e para alterar*/
+/*btw o q e q e o .imagedeth?*/
+/*first off eu suspeito que seja daquele dia que tentei fazer o bc com a imagem mas eu nao me lembro tr posto 300 no width*/
+/*ok then lemme check where it is called
+    its not called anywhere, just in here. maybe let us delete, it aint useful rn*/
+/*okii, there now if u excuse me im going to see if i find a solution to our problem*/
 
 /*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
 /*ooh, o que qeures que eu faça com o side nav? */

@@ -9,12 +9,17 @@ using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 using Rotativa.AspNetCore;
+using System.IO;
+using iText.Kernel.Pdf;
+
 namespace ScoutGestWeb.Controllers
 {
     public class MovimentosController : Controller
     {
         private readonly List<MovimentoViewModel> mvm = new List<MovimentoViewModel>();
         private readonly List<int> caixas = new List<int>();
+        private UserManager<ApplicationUser> _userManager;
+        public MovimentosController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
@@ -52,12 +57,95 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View(mvm));
         }
-        public async Task<IActionResult> Analise()
+        #region PDFs
+        public async Task<IActionResult> PDFMovs()
         {
-            ViewBag.teste = "<partial name=\"_Header.cshtml\" /><br />" +
-                            "<h1 style=\"color: red; text-align: center; vertical-align: middle; height: 100%;\">Teste</h1>";
-            return await Task.Run(() => new ViewAsPdf(ViewData));
+            List<MovimentoViewModel> listmvm = new List<MovimentoViewModel>();
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) listmvm.Add(new MovimentoViewModel()
+                    {
+                        IDMovimento = int.Parse(dr["IDMovimento"].ToString()),
+                        IDCaixa = dr["IDCaixa"].ToString(),
+                        IDDocumento = dr["IDDocumento"].ToString(),
+                        TipoMovimento = dr["TipoMovimento"].ToString() == "1" ? "Entrada" : dr["TipoMovimento"].ToString() == "2" ? "Saída" : "Teste",
+                        User = await _userManager.FindByNameAsync(dr["User"].ToString()),
+                        DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
+                        Valor = decimal.Parse(dr["Valor"].ToString()),
+                        TipoPagamento = dr["TipoPag"].ToString(),
+                        Descricao = dr["Descricao"].ToString(),
+                        Atividade = dr["Atividade"].ToString()
+                    });
+                }
+            }
+            return await Task.Run(() => new ViewAsPdf("../Analises/Movimentos", listmvm)
+            {
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,
+                PageMargins = new Rotativa.AspNetCore.Options.Margins(5,5,5,5)
+            });
         }
+        public async Task<IActionResult> PDFPags()
+        {
+            List<TiposPagsViewModel> listtpvm = new List<TiposPagsViewModel>();
+            using (MySqlCommand cmd = new MySqlCommand("select * from tipos_pags where IDPag not like \"00\";", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) listtpvm.Add(new TiposPagsViewModel()
+                    {
+                        IDPagamento = dr["IDPag"].ToString(),
+                        Pagamento = dr["Pagamento"].ToString()
+                    });
+                }
+            }
+            return await Task.Run(() => new ViewAsPdf("../Analises/TiposPags", listtpvm)
+            {
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,
+                PageMargins = new Rotativa.AspNetCore.Options.Margins(5, 5, 5, 5)
+            });
+        }
+        public async Task<IActionResult> PDFTransfs()
+        {
+            List<MovimTransfViewModel> listmtvm = new List<MovimTransfViewModel>();
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0 and IDDocumento like (select IDDocumento from tipos_docs where Descricao like \"%ransferência%\") and TipoMovimento = 1;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) listmtvm.Add(new MovimTransfViewModel()
+                    {
+                        IDMovimento = int.Parse(dr["IDMovimento"].ToString()),
+                        IDCaixaDestino = dr["IDCaixa"].ToString(),
+                        IDDocumento = dr["IDDocumento"].ToString(),
+                        User = await _userManager.FindByNameAsync(dr["User"].ToString()),
+                        DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
+                        Valor = decimal.Parse(dr["Valor"].ToString()),
+                        TipoPagamento = dr["TipoPag"].ToString(),
+                        Descricao = dr["Descricao"].ToString(),
+                        Atividade = dr["Atividade"].ToString()
+                    });
+                }
+                cmd.CommandText = cmd.CommandText.Replace("TipoMovimento = 1", "TipoMovimento = 2");
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    foreach (MovimTransfViewModel item in listmtvm)
+                    {
+                        await dr.ReadAsync();
+                        item.IDCaixaOrigem = dr["IDCaixa"].ToString();
+                    }
+                }
+            }
+            return await Task.Run(() => new ViewAsPdf("../Analises/Transferencias", listmtvm)
+            {
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,
+                PageMargins = new Rotativa.AspNetCore.Options.Margins(5, 5, 5, 5)
+            });
+        }
+        #endregion
         [HttpGet]
         public async Task<IActionResult> Entrada()
         {
@@ -344,6 +432,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Transferencia(MovimTransfViewModel mtvm)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            mtvm.User = await _userManager.GetUserAsync(User);
             if (mtvm.DataHora == DateTime.MinValue) mtvm.DataHora = DateTime.Now;
             if (mtvm.IDCaixaOrigem == null)
             {
@@ -351,6 +440,10 @@ namespace ScoutGestWeb.Controllers
                 {
                     if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                     cmd.Parameters.AddWithValue("@grupo", mtvm.User.IDGrupo);
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) mtvm.IDCaixaOrigem = dr["IDCaixa"].ToString();
+                    }
                 }
             }
             mtvm.TipoMovimento = "Saída de tesouraria";
@@ -366,7 +459,7 @@ namespace ScoutGestWeb.Controllers
                 using (MySqlCommand cmd = new MySqlCommand("insert into movimentos(IDCaixa, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
-                    cmd.Parameters.AddWithValue("@caixa", mtvm.IDCaixaOrigem.Substring(0, mtvm.IDCaixaOrigem.IndexOf(" - ")));
+                    cmd.Parameters.AddWithValue("@caixa", mtvm.IDCaixaOrigem.Contains(" - ") ? mtvm.IDCaixaOrigem.Substring(0, mtvm.IDCaixaOrigem.IndexOf(" - ")) : mtvm.IDCaixaOrigem);
                     cmd.Parameters.AddWithValue("@documento", mtvm.IDDocumento.Substring(0, mtvm.IDDocumento.IndexOf(" - ")));
                     using (MySqlCommand cmd2 = new MySqlCommand("select IDTipoMov from tipos_movs where Movimento = @id;", cmd.Connection))
                     {
@@ -408,5 +501,3 @@ namespace ScoutGestWeb.Controllers
         }
     }
 }
-//brb
-//jesus fuckin christ, visual studio just had a stroke with its plugins

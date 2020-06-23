@@ -80,6 +80,10 @@
             "SixLabors.ImageSharp": {
               "target": "Package",
               "version": "[1.0.0-rc0002, )"
+            },
+            "itext7": {
+              "target": "Package",
+              "version": "[7.1.11, )"
             }
           },
           "imports": [

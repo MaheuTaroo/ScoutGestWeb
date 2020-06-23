@@ -15,23 +15,6 @@ namespace ScoutGestWeb.Models
     //model right here
     public class InserirEscuteiroViewModel
     {
-        public List<Cargos> _cargo = new List<Cargos>() { new Cargos("Guia"), new Cargos("Animador"), new Cargos("Cozinheiro"), new Cargos("Guarda-material"), new Cargos("Secretário"), new Cargos("Tesoureiro", false), new Cargos("Relações públicas"), new Cargos("Socorrista"), new Cargos("Guia de região"), new Cargos("Sub-guia"), new Cargos("Chefe") };
-        /*public List<Cargos> Cargo
-        {
-            get
-            {
-                if (_cargo == null)
-                {
-                    _cargo = new List<Cargos>() { new Cargos() { Cargo = "Guia", Selecionado = false }, new Cargos() { Cargo = "Animador", Selecionado = false }, new Cargos() { Cargo = "Cozinheiro", Selecionado = false }, new Cargos() { Cargo = "Guarda-material", Selecionado = false }, new Cargos() { Cargo = "Secretário", Selecionado = false }, new Cargos() { Cargo = "Tesoureiro", Selecionado = false }, new Cargos() { Cargo = "Relações públicas", Selecionado = false }, new Cargos() { Cargo = "Socorrista", Selecionado = false }, new Cargos() { Cargo = "Guia de região", Selecionado = false }, new Cargos() { Cargo = "Sub-guia", Selecionado = false }, new Cargos() { Cargo = "Chefe", Selecionado = false } };
-                }
-                return _cargo;
-            }
-            set
-            {
-                _cargo = value;
-            }
-        }*/
-        //public Cargos[] cargos = new Cargos[11] { new Cargos() { Cargo = "Guia", Selecionado = false }, new Cargos() { Cargo = "Animador", Selecionado = false }, new Cargos() { Cargo = "Cozinheiro", Selecionado = false }, new Cargos() { Cargo = "Guarda-material", Selecionado = false }, new Cargos() { Cargo = "Secretário", Selecionado = false }, new Cargos() { Cargo = "Tesoureiro", Selecionado = false }, new Cargos() { Cargo = "Relações públicas", Selecionado = false }, new Cargos() { Cargo = "Socorrista", Selecionado = false }, new Cargos() { Cargo = "Guia de região", Selecionado = false }, new Cargos() { Cargo = "Sub-guia", Selecionado = false }, new Cargos() { Cargo = "Chefe", Selecionado = false } };
         [Key]
         [Required(ErrorMessage = "Não foi introduzido um número de escuteiro", AllowEmptyStrings = false)]
         public int ID { get; set; }
@@ -39,12 +22,6 @@ namespace ScoutGestWeb.Models
         public string Nome { get; set; }
         [Required(ErrorMessage = "Por favor, insira o totem")]
         public string Totem { get; set; }
-        /*[Required(ErrorMessage = "Por favor, insira o(s) cargo(s)")]
-        [MaxLength(3, ErrorMessage = "O limite está definido para 3 cargos. Por favor, selecione apenas 3 cargos.")]
-        [MinLength(1, ErrorMessage = "Por favor, insira pelo menos um cargo")]
-        public bool[] cargos = new bool[11] { false, false, false, false, false, false, false, false, false, false, false };
-        public List<Cargos> Cargo = new List<Cargos>();
-        public bool Teste { get; set; }*/
         public Cargos Guia { get; set; } = new Cargos("Guia");
         public Cargos Animador { get; set; } = new Cargos("Animador");
         public Cargos Cozinheiro { get; set; } = new Cargos("Cozinheiro");
@@ -93,20 +70,6 @@ namespace ScoutGestWeb.Models
         public int Idade { get; set; }
         public IFormFile FotoUp { get; set; }
         public string FotoDown { get; set; }
-        public (bool, string) Adicionar()
-        {
-            try
-            {
-                using (MySqlCommand cmd = new MySqlCommand("insert into Atividades values ()", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
-                {
-                    return (true, "");
-                }
-            }
-            catch (MySqlException mse)
-            {
-                return (false, string.Format("Error number {0}: {1}", mse.Number, mse.Message));
-            }
-        }
     }
     public class Cargos
     {
