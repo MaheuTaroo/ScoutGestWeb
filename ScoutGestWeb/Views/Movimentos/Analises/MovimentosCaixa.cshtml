@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ScoutGestWeb.Models.MovimentoViewModel>
+@{
+    Layout = "_PdfLayout";
+}
+<table class="table" style="border: 2px solid black; margin: auto 0 auto 0;">
+    <thead>
+        <tr>
+            <th>Caixa</th>
+            <th>Documento</th>
+            <th>Tipo de movimento</th>
+            <th>Username</th>
+            <th>Data/Hora</th>
+            <th>Valor</th>
+            <th>Tipo de pagamento</th>
+            <th>Descrição</th>
+            <th>Atividade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDCaixa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDDocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoMovimento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.NormalizedUserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataHora)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Valor)€
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoPagamento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Atividade)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<div style="position: relative; font-size: 20px; margin: 0 25px 0 25px">
+    <p style="float: right">Despesas: @Model.ToList().Where(x => x.TipoMovimento == "Saída").Sum(x => x.Valor)€</p>
+    <p style="float: left">Receitas: @Model.ToList().Where(x => x.TipoMovimento == "Entrada").Sum(x => x.Valor)€</p>
+</div>

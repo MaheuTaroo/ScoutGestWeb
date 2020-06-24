@@ -9,12 +9,14 @@ html, body {
     margin: 0px;
     overflow-x: hidden;
 }
-
 body {
-   
     overflow: hidden; /*esconder todas as scrollbars*/
     display: flex;
     flex-direction: column;
+}
+body header h1:not([value~="ScoutGest"]) {
+    margin: 0;
+    height: 100%;
 }
 
 .split {

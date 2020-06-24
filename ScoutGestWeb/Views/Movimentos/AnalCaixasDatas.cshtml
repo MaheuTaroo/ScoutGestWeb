@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "Análise entre datas";
+}
+
+<h1>Análise de movimentos entre datas</h1>
+
+@using (Html.BeginForm("PDFMovs", "Movimentos", FormMethod.Post))
+{
+    <div>@Html.ValidationSummary(false)</div>
+    <label>Caixa: 
+    <select name="caixa">
+        @foreach (string s in ViewBag.caixas)
+        {
+            <option>@s</option>
+        }
+    </select>
+    </label>
+    <label>Início: <input type="datetime-local" name="inicio" /></label>
+    <br />
+    <label>Fim: <input type="datetime-local" name="fim" /></label>
+    <br />
+    <button type="submit">Criar análise</button>
+}
+
+@using (Html.BeginForm("PDFCaixas", "Movimentos", FormMethod.Post))
+{
+    <div>@Html.ValidationSummary(false)</div>
+    <label>Caixa de início:
+        <select name="inicio">
+            @foreach (string s in ViewBag.caixas)
+            {
+                <option>@s</option>
+            }
+        </select>    
+    </label>
+    <br />
+    <label>Caixa de fim:
+        <select name="fim">
+            @foreach (string s in ViewBag.caixas)
+            {
+                <option>@s</option>
+            }
+        </select>
+    </label>
+    <br />
+    <button type="submit">Criar análise</button>
+}

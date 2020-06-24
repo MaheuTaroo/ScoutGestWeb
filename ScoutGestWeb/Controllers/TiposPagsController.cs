@@ -17,7 +17,7 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_pags where IDPag not like \"00\";", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
@@ -44,7 +44,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("insert into tipos_pags values(@id, @pagamento);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                     cmd.Parameters.AddWithValue("@id", tpvm.IDPagamento);
                     cmd.Parameters.AddWithValue("@pagamento", tpvm.Pagamento);
                     await cmd.PrepareAsync();

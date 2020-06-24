@@ -17,7 +17,7 @@ namespace ScoutGestWeb.Controllers
             List<TiposDocsViewModel> tdvm = new List<TiposDocsViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where Descricao not like \"Teste\"", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) tdvm.Add(new TiposDocsViewModel()
@@ -41,7 +41,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("insert into tipos_docs values (@id, @descricao);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                     cmd.Parameters.AddWithValue("@id", tdvm.IDDocumento);
                     cmd.Parameters.AddWithValue("@descricao", tdvm.Descricao);
                     await cmd.PrepareAsync();

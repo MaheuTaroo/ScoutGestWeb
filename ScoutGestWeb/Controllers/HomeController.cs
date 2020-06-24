@@ -88,7 +88,7 @@ namespace ScoutGestWeb.Controllers
 //oki then
 /*using (MySqlCommand cmd = new MySqlCommand("select * from users where User = @user and Pass = @pass", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
 {
-    if (cmd.Connection.State == ConnectionState.Closed) if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
     cmd.Parameters.AddWithValue("@user", login.Username);
     cmd.Parameters.AddWithValue("@pass", sb.ToString());
     await cmd.PrepareAsync();

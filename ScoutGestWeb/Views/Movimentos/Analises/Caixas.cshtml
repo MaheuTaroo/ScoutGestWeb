@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ScoutGestWeb.Models.CaixaViewModel>
+
+@{
+    ViewData["Title"] = "Caixas";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Grupo</th>
+            <th>Responsável</th>
+            <th>Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Grupo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Responsavel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Saldo)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

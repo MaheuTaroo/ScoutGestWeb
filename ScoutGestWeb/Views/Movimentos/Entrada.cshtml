@@ -4,89 +4,93 @@
 @{
     ViewData["Title"] = "Nova entrada";
 }
- 
-        <h1 style="z-index:2; padding-bottom:400px">Criar nova entrada</h1>
-        <hr />
+<style>
+    body {
+        width: 100%; 
+        height: 100%;
+        margin: 0 0 0 0;
+    }
+</style>
+<h1 style="z-index:2; margin-bottom:70%">Criar nova entrada</h1>
+<hr />
 
-        <div class="col-md-4">
-            <form asp-action="Entrada">
-                <div class="split">
-                    <div class="split left" style="padding-top:150px;padding-left:250px; width:35%">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="IDCaixa" class="control-label"></label>
-                            <select asp-for="IDCaixa" class="form-control">
-                                @foreach (var item in ViewBag.caixas)
-                                {
+<div class="col-md-4">
+    <form asp-action="Entrada">
+        <div class="split">
+            <div class="split left" style="margin-top:210px;margin-left:5%; width:40%">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @if (User.IsInRole("Administração de Agrupamento"))
+                {
+                    <div class="form-group">
+                        <label asp-for="IDCaixa" class="control-label"></label>
+                        <select asp-for="IDCaixa" class="form-control">
+                            @foreach (var item in ViewBag.caixas)
+                            {
                                 <option>@item</option>
-                                }
-                            </select>
-                            <span asp-validation-for="IDCaixa" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="IDDocumento" class="control-label"></label>
-                            <select asp-for="IDDocumento" class="form-control">
-                                @foreach (var item in ViewBag.documentos)
-                                {
-                                <option>@item</option>
-                                }
-                            </select>
-                            <span asp-validation-for="IDDocumento" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="DataHora" class="control-label"></label>
-                            <input asp-for="DataHora" class="form-control" />
-                            <span asp-validation-for="DataHora" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Valor" class="control-label"></label>
-                            <input asp-for="Valor" class="form-control" />
-                            <span asp-validation-for="Valor" class="text-danger"></span>
-                        </div>
+                            }
+                        </select>
+                        <span asp-validation-for="IDCaixa" class="text-danger"></span>
                     </div>
-                    <!--fechaste o server a meio do meu teste-->
-                    <!--oh sorry-->
-                    <!--exatamente no momento em q a pag tava a carregar tu desligaste o server lmao-->
-                    <!--lol timin-->
-                    <div class="split right" style="padding-top:150px; width:35%; padding-right:250px">
-                        <div class="form-group">
-                            <label asp-for="TipoPagamento" class="control-label"></label>
-                            <select asp-for="TipoPagamento" class="form-control">
-                                @foreach (string s in ViewBag.pagamentos)
-                                {
-                                <option>@s</option>
-                                }
-                            </select>
-                            <span asp-validation-for="TipoPagamento" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Descricao" class="control-label"></label>
-                            <input asp-for="Descricao" class="form-control" />
-                            <span asp-validation-for="Descricao" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Atividade" class="control-label"></label>
-                            <select asp-for="Atividade" class="form-control">
-                                @foreach (string s in ViewBag.atividades)
-                                {
-                                <option>@s</option>
-                                }
-                            </select>
-
-                            <span asp-validation-for="Atividade" class="text-danger"></span>
-                        </div>
-                        <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
-                        <div class="form-group">
-                            <input type="submit" value="Submeter entrada de tesouraria" class="btn btn-primary" />
-                            <div>
-                                <a asp-action="Index">Voltar à página anterior</a>
-                            </div><!--meti aqui, se nao funcionar tirar-->
-                        </div>
-                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="IDDocumento" class="control-label"></label>
+                    <select asp-for="IDDocumento" class="form-control">
+                        @foreach (var item in ViewBag.documentos)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="IDDocumento" class="text-danger"></span>
                 </div>
-            </form>
+                <div class="form-group">
+                    <label asp-for="DataHora" class="control-label"></label>
+                    <input asp-for="DataHora" class="form-control" />
+                    <span asp-validation-for="DataHora" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Valor" class="control-label"></label>
+                    <input asp-for="Valor" class="form-control" />
+                    <span asp-validation-for="Valor" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="split right" style="margin-top:210px; width:40%; margin-right:5%">
+                <div class="form-group">
+                    <label asp-for="TipoPagamento" class="control-label"></label>
+                    <select asp-for="TipoPagamento" class="form-control">
+                        @foreach (string s in ViewBag.pagamentos)
+                        {
+                        <option>@s</option>
+                        }
+                    </select>
+                    <span asp-validation-for="TipoPagamento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <input asp-for="Descricao" class="form-control" />
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Atividade" class="control-label"></label>
+                    <select asp-for="Atividade" class="form-control">
+                        @foreach (string s in ViewBag.atividades)
+                        {
+                        <option>@s</option>
+                        }
+                    </select>
+
+                    <span asp-validation-for="Atividade" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
+                <div class="form-group">
+                    <input type="submit" value="Submeter entrada de tesouraria" class="btn btn-primary" />
+                    <div>
+                        <a asp-action="Index">Voltar à página anterior</a>
+                    </div><!--meti aqui, se nao funcionar tirar-->
+                </div>
+            </div>
         </div>
-   
-            <!--<div>
-            <a asp-action="Index">Voltar à página anterior</a>
-        </div>-->
+    </form>
+</div>
+<!--<div>
+    <a asp-action="Index">Voltar à página anterior</a>
+</div>-->

@@ -4,10 +4,17 @@
     ViewData["Title"] = "Descrição do pagamento";
 }
 
+<!--<style>
+    body div h1:not([value~="ScoutGest"]) {
+        margin: 0;
+        height: 100%;
+    }
+</style>-->
+
 <h1>Index</h1>
 
 <div>
-    <div class="dropdown">
+    <div class="dropdown dropright" style="float: left">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Movimentos de tesouraria
         </button>
@@ -17,19 +24,21 @@
             <a class="dropdown-item" asp-action="Transferencia" asp-controller="Movimentos">Transferências</a>
         </div>
     </div>
-    <div class="dropdown">
+    <div class="dropdown dropleft" style="float: right">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Movimentos de tesouraria
+            Análises
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <!--
             <a class="dropdown-item" asp-action="PDFTransfs">Transferências</a>
-            <a class="dropdown-item" asp-action="PDFMovs">Entradas e saídas</a>
+            <a class="dropdown-item" >Entradas e saídas</a>
             <a class="dropdown-item" asp-action="PDFPags">Tipos de pagamento</a>
+            -->
+            <a class="dropdown-item" asp-action="DiarioCaixa">Diário de caixa</a>
+            <a class="dropdown-item" asp-action="DiarioCaixa">Movimentos entre parâmetros</a>
         </div>
     </div>
-    <a asp-action="Analise" style="display: inline"><button class="btn btn-secondary">Teste</button></a>
 </div>
-
 @if (!User.IsInRole("Comum"))
 {
     <table class="table">

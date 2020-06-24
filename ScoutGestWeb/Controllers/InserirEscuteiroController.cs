@@ -26,7 +26,7 @@ namespace ScoutGestWeb.Controllers
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     //Abrir a ligação
-                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
                     /*if (User.IsInRole("EqAnim"))
                     {
                         cmd.CommandText = cmd.CommandText.Replace(";", " and Seccao = @seccao;");
@@ -71,7 +71,7 @@ namespace ScoutGestWeb.Controllers
             List<string> grupos = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) ievm.ID = Convert.ToInt32(dr["max(IDEscuteiro)"].ToString()) + 1;
@@ -108,7 +108,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(@id, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                         cmd.Parameters.AddWithValue("@id", insert.ID);
                         cmd.Parameters.AddWithValue("@nome", insert.Nome);
                         cmd.Parameters.AddWithValue("@totem", insert.Totem);
@@ -165,7 +165,7 @@ namespace ScoutGestWeb.Controllers
                 InserirEscuteiroViewModel ievm = null;
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State != ConnectionState.Open) cmd.Connection.Open();
+                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())

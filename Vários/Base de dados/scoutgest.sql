@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 23-Jun-2020 às 21:21
+-- Tempo de geração: 24-Jun-2020 às 21:08
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.5
 
@@ -290,7 +290,11 @@ INSERT INTO `caixas` (`IDCaixa`, `Nome`, `Grupo`, `Responsavel`, `Saldo`) VALUES
 (20, 'Tribo São Francisco de Assis', 20, 177, '0.00'),
 (21, 'Tribo Joana D\'Arc', 21, 161, '0.00'),
 (22, 'Tribo Nuno Álvares Pereira', 22, 169, '0.00'),
-(23, 'Tribo São João de Deus', 23, 153, '0.00');
+(23, 'Tribo São João de Deus', 23, 153, '0.00'),
+(24, 'Alcateia', 29, 185, '0.00'),
+(25, 'Expedição', 30, 191, '0.00'),
+(26, 'Comunidade', 31, 197, '0.00'),
+(27, 'Clã', 32, 203, '0.00');
 
 -- --------------------------------------------------------
 
@@ -722,6 +726,24 @@ INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `IDDocumento`, `TipoMoviment
 (27, 18, 'TC', 2, 'EqSCA', '2020-06-18 01:19:00', '99.50', 'DI', 'Teste', 1),
 (28, 4, 'TC', 1, 'EqSCA', '2020-06-18 01:19:00', '99.50', 'DI', 'Teste', 1);
 
+--
+-- Acionadores `movimentos`
+--
+DELIMITER $$
+CREATE TRIGGER `Mov_Update_Saldo_On_Delete` BEFORE DELETE ON `movimentos` FOR EACH ROW if old.TipoMovimento = 1 THEN update caixas set saldo = saldo - old.Valor where IDCaixa = old.IDCaixa;
+elseif old.TipoMovimento = 2 THEN update caixas set saldo = saldo + old.Valor where IDCaixa = old.IDCaixa;
+end if
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `Mov_Update_Saldo_On_Insert` BEFORE INSERT ON `movimentos` FOR EACH ROW if new.TipoMovimento = 1 THEN update caixas set saldo = saldo + new.Valor where caixas.IDCaixa = new.IDCaixa; 
+ELSEIF new.TipoMovimento = 2 THEN 
+update caixas set saldo = saldo - new.Valor 
+where caixas.IDCaixa = new.IDCaixa;
+end if
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -1037,7 +1059,8 @@ INSERT INTO `tipos_docs` (`IDDocumento`, `Descricao`) VALUES
 ('00', 'Teste'),
 ('EN', 'Entradas'),
 ('SA', 'Saídas'),
-('TC', 'Transferências entre caixas');
+('TC', 'Transferências entre caixas'),
+('TT', 'Transferência 2');
 
 -- --------------------------------------------------------
 
@@ -1346,7 +1369,7 @@ ALTER TABLE `atividades`
 -- AUTO_INCREMENT de tabela `caixas`
 --
 ALTER TABLE `caixas`
-  MODIFY `IDCaixa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `IDCaixa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de tabela `eventos`
