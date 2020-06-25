@@ -1,15 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Tesouraria";
 }
+<!--<style>
+    body {
+        background-image: url("back_tesouraria.png");
+    }
+    </style>
+    .imgbc {
+        background-image: url("back_tesouraria.png");
+        height: 100%;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 
+-->
+    <body style="width:100%">
+        <img src="~/imgs/back_tesouraria.png" style="width:100%" />
+        <h1 style="text-align: center">Tesouraria</h1>
+        <br />
+        <div class="toptesoura">
+            <button><a style="width: 100%" asp-action="Index" asp-controller="Caixas">Caixas</a></button>
+            <button><a style="width: 100%" asp-action="Index" asp-controller="TiposDocs">Documentos</a></button>
+            <button><a style="width: 100%" asp-action="Index" asp-controller="TiposPags">Pagamentos</a></button>
+            <button><a style="width: 100%" asp-action="Index" asp-controller="Movimentos">Movimentos</a></button>
+        </div>
+    </body>
     
-<h1 style="text-align: center">Tesouraria</h1> <br />
-<div class="toptesoura">
-    <button><a style="width: 100%" asp-action="Index" asp-controller="Caixas">Caixas</a></button>
-    <button><a style="width: 100%" asp-action="Index" asp-controller="TiposDocs">Documentos</a></button>
-    <button><a style="width: 100%" asp-action="Index" asp-controller="TiposPags">Pagamentos</a></button>
-    <button><a style="width: 100%" asp-action="Index" asp-controller="Movimentos">Movimentos</a></button>
-</div>
+
 <!--Cód antigo AQUIIII-->
 <!--<form asp-action="Index" asp-controller="Caixas" method="get">
     <button class="bordtesoura" type="submit">Caixas</button>
@@ -23,13 +42,6 @@
     <form asp-action="Index" asp-controller="Movimentos" method="get">
         <button class="bordtesoura" type="submit">Movimentos</button>
 </form>-->
-
-
-
-
-
-
-
 <!--em caso for necessário acrescentar buttons
 <!-- <form asp-action="Index" asp-controller="" method="get">
     <button class="bordtesoura" type="submit">Consultas</button>

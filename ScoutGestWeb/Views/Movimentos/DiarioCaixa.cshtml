@@ -5,16 +5,18 @@
 
 <h1>Análise de movimentos entre datas</h1>
 
-@using (Html.BeginForm("PDFMovs", "Movimentos", FormMethod.Post))
+<div class="bg-danger rounded-0">@Html.ValidationSummary(false)</div>
+
+@using (Html.BeginForm("DiarioCaixa", "Movimentos", FormMethod.Post))
 {
-    <div>@Html.ValidationSummary(false)</div>
-    <label>Caixa: 
-    <select name="caixa">
-        @foreach (string s in ViewBag.caixas)
-        {
-            <option>@s</option>
-        }
-    </select>
+    <label>
+        Caixa:
+        <select name="caixa">
+            @foreach (string s in ViewBag.caixas)
+            {
+                <option>@s</option>
+            }
+        </select>
     </label>
     <label>Início: <input type="datetime-local" name="inicio" /></label>
     <br />
@@ -25,17 +27,18 @@
 
 @using (Html.BeginForm("PDFCaixas", "Movimentos", FormMethod.Post))
 {
-    <div>@Html.ValidationSummary(false)</div>
-    <label>Caixa de início:
+    <label>
+        Caixa de início:
         <select name="inicio">
             @foreach (string s in ViewBag.caixas)
             {
                 <option>@s</option>
             }
-        </select>    
+        </select>
     </label>
     <br />
-    <label>Caixa de fim:
+    <label>
+        Caixa de fim:
         <select name="fim">
             @foreach (string s in ViewBag.caixas)
             {
