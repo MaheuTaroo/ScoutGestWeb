@@ -1,34 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Tesouraria";
 }
-<!--<style>
-    body {
-        background-image: url("back_tesouraria.png");
-    }
-    </style>
-    .imgbc {
-        background-image: url("back_tesouraria.png");
-        height: 100%;
-        width: 100%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
 
--->
-    <body style="width:100%">
-        <img src="~/imgs/back_tesouraria.png" style="width:100%" />
-        <h1 style="text-align: center">Tesouraria</h1>
-        <br />
-        <div class="toptesoura">
-            <button><a style="width: 100%" asp-action="Index" asp-controller="Caixas">Caixas</a></button>
-            <button><a style="width: 100%" asp-action="Index" asp-controller="TiposDocs">Documentos</a></button>
-            <button><a style="width: 100%" asp-action="Index" asp-controller="TiposPags">Pagamentos</a></button>
-            <button><a style="width: 100%" asp-action="Index" asp-controller="Movimentos">Movimentos</a></button>
-        </div>
-    </body>
-    
+<h1 style="text-align: center; z-index:2">Tesouraria</h1>
+<br />
+<div class="toptesoura" style="z-index:2">
+    <button><a style="width: inherit" asp-action="Index" asp-controller="Caixas">Caixas</a></button>
+    <button><a style="width: inherit" asp-action="Index" asp-controller="TiposDocs">Documentos</a></button>
+    <button><a style="width: inherit" asp-action="Index" asp-controller="TiposPags">Pagamentos</a></button>
+    <button><a style="width: inherit" asp-action="Index" asp-controller="Movimentos">Movimentos</a></button>
+</div>
 
+
+<!--<div style="height:100%">
+    <h1 style="text-align: center; z-index:2; position:absolute; margin-left:50%">Tesouraria</h1>
+    <br />
+    <div class="toptesoura" style="z-index:2; position:absolute; margin:10%">
+        <button><a style="width: inherit" asp-action="Index" asp-controller="Caixas">Caixas</a></button>
+        <button><a style="width: inherit" asp-action="Index" asp-controller="TiposDocs">Documentos</a></button>
+        <button><a style="width: inherit" asp-action="Index" asp-controller="TiposPags">Pagamentos</a></button>
+        <button><a style="width: inherit" asp-action="Index" asp-controller="Movimentos">Movimentos</a></button>
+    </div>
+</div>-->
 <!--Cód antigo AQUIIII-->
 <!--<form asp-action="Index" asp-controller="Caixas" method="get">
     <button class="bordtesoura" type="submit">Caixas</button>
@@ -52,3 +45,29 @@
 <!--<form asp-action="Index" asp-controller="Caixas" method="get">
     <button type="submit">Caixas</button>
 </form>-->
+<!--<style>
+    body {
+           background-image: url("back_tesouraria.png");
+           background-repeat: no-repeat;
+           background-attachment: fixed;
+           background-size: cover;
+    }
+    </style>
+    .imgbc {
+        background-image: url("~/imgs/back_tesouraria.png");
+        height: 100%;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+
+     <style>
+        body {
+            background-image: url("back_tesouraria.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+-->

@@ -14,5 +14,7 @@
     <WebStackScaffolding_DbContextTypeFullName>ScoutGestWeb.Data.ApplicationDbContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_LayoutPageFile>
     </WebStackScaffolding_LayoutPageFile>
+    <View_SelectedScaffolderID>RazorViewScaffolder</View_SelectedScaffolderID>
+    <View_SelectedScaffolderCategoryPath>root/Common</View_SelectedScaffolderCategoryPath>
   </PropertyGroup>
 </Project>

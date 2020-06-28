@@ -53,19 +53,6 @@
             </select>
         </div>
         <div class="col-xl-3 text-sm-left">
-            @*await Html.PartialAsync("Partial/_CheckBoxList")
-            <partial name="Partial/_CheckBoxList" />
-            <div>
-            @{
-            List<Cargos> _cargo = new List<Cargos>() { new Cargos() { Cargo = "Guia", Selecionado = true }, new Cargos() { Cargo = "Animador", Selecionado = true }, new Cargos() { Cargo = "Cozinheiro", Selecionado = true }, new Cargos() { Cargo = "Guarda-material", Selecionado = true }, new Cargos() { Cargo = "Secretário", Selecionado = true }, new Cargos() { Cargo = "Tesoureiro", Selecionado = true }, new Cargos() { Cargo = "Relações públicas", Selecionado = true }, new Cargos() { Cargo = "Socorrista", Selecionado = true }, new Cargos() { Cargo = "Guia de região", Selecionado = true }, new Cargos() { Cargo = "Sub-guia", Selecionado = true }, new Cargos() { Cargo = "Chefe", Selecionado = true } };
-            }
-            @for (var i = 0; i < 11; i++)
-            {
-                *<input id="@_cargo[i].Cargo" type="checkbox" asp-for="_cargo[i].Selecionado" onclick="return selectiveCheck()" />
-                Html.CheckBoxFor(modelItem => modelItem._cargo[i].Selecionado)
-                <label asp-for="_cargo[i].Cargo">@_cargo[i].Cargo</label>@*<input type="hidden" asp-for="@Model._cargo[i].Cargo" /><br />
-                }
-            </div>*@
             <label>Cargo:</label><br />
             @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
             @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />

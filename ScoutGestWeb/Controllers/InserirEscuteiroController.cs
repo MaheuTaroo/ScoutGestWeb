@@ -106,12 +106,13 @@ namespace ScoutGestWeb.Controllers
                 //Tenta inserir os seguintes valores na tabela escuteiros
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(@id, @nome, @totem, @foto, 0, @seccao, @estado, @cargos, @idade, @telefone, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into escuteiros values(@id, @nome, @totem, @foto, @grupo, @seccao, @estado, @cargos, @idade, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                         cmd.Parameters.AddWithValue("@id", insert.ID);
                         cmd.Parameters.AddWithValue("@nome", insert.Nome);
                         cmd.Parameters.AddWithValue("@totem", insert.Totem);
+                        cmd.Parameters.AddWithValue("@grupo", insert.Grupo.Substring(0, insert.Grupo.IndexOf(" - ")));
                         if (insert.FotoUp == null) cmd.Parameters.AddWithValue("@foto", '\0');
                         else
                         {
@@ -134,7 +135,7 @@ namespace ScoutGestWeb.Controllers
                         foreach (Cargos c in selecionados) cargosDB += c.Cargo + ',';
                         cmd.Parameters.AddWithValue("@cargos", cargosDB.Substring(0, cargosDB.LastIndexOf(',')));
                         cmd.Parameters.AddWithValue("@idade", insert.Idade);
-                        cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone);
+                        //cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone);
                         cmd.Parameters.AddWithValue("@morada", insert.Morada);
                         cmd.Parameters.AddWithValue("@morada2", insert.Morada2);
                         cmd.Parameters.AddWithValue("@codpostal", insert.CodPostal);
@@ -145,6 +146,10 @@ namespace ScoutGestWeb.Controllers
                         cmd.Parameters.AddWithValue("@observacoes", insert.Observacoes);
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
+                        cmd.CommandText = "insert into numtelefones values(@id, @telefone)";
+                        cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone.Replace(" ", ""));
+                        await cmd.PrepareAsync();
+                        await cmd.ExecuteNonQueryAsync();
                     }
                     return await Task.Run(() => RedirectToAction("Index"));
                 }
@@ -152,8 +157,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     //Em caso haja erros na inserção de dados 
                     ModelState.AddModelError("Erro de inserção na base de dados", mse.Message);
-                    Console.WriteLine(ModelState.ErrorCount);
-                    return await Task.Run(() => View("InserirEscuteiro"));
+                    return await Task.Run(() => View("InserirEscuteiro", insert));
                 }
             }
             return await Task.Run(() => View("InserirEscuteiro"));
@@ -193,6 +197,10 @@ namespace ScoutGestWeb.Controllers
                 }
             }
             return await Task.Run(() => RedirectToAction("Index", "Home"));
+        }
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            return await Task.Run(() => Index());
         }
     }
 }

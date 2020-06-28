@@ -14,9 +14,14 @@ body {
     display: flex;
     flex-direction: column;
 }
-body header h1:not([value~="ScoutGest"]) {
+/*body header h1:not([value~="ScoutGest"]) {
     margin: 0;
     height: 100%;
+}*/
+
+#regular-body {
+    background-image: url(../imgs/back_tesouraria.png);
+    background-size: 100%;
 }
 
 .split {
@@ -59,8 +64,9 @@ body header h1:not([value~="ScoutGest"]) {
     margin: 0;
 }
 
-header {
+.header {
     height: 10vh;
+    --header-height: 10vh;
 }
 
 .sidenav {
@@ -220,12 +226,13 @@ table th {
 
 footer {
     text-align: center;
-    padding: 3px;
+    /*padding: 3px;*/
     color: black;
     left: 0;
     bottom: 0;
     width: 100%;
- 
+    height: 24px;
+    margin: auto 0 auto 0;
 }
 
 

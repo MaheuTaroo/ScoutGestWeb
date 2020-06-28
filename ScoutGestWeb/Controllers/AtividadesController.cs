@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
@@ -10,13 +11,19 @@ namespace ScoutGestWeb.Controllers
 {
     public class AtividadesController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AtividadesController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? "and (Seccao = @seccao or Seccao = 6);" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
+                if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
+                {
+                    cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
+                }
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
