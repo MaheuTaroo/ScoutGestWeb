@@ -33,6 +33,7 @@ namespace ScoutGestWeb.Models
         public Cargos GuiaRegiao { get; set; } = new Cargos("Guia de região");
         public Cargos SubGuia { get; set; } = new Cargos("Sub-guia");
         public Cargos Chefe { get; set; } = new Cargos("Chefe");
+        public string Cargos { get; set; }
         [Required(ErrorMessage = "Por favor, insira o telemóvel")]
         [StringLength(9, ErrorMessage = "Telemóvel incompleto; por favor, insira 9 dígitos")]
         public string NumTelefone { get; set; }
