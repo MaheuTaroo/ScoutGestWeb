@@ -18,6 +18,8 @@ namespace ScoutGestWeb.Controllers
 {
     public class InserirEscuteiroController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        public InserirEscuteiroController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
@@ -28,11 +30,11 @@ namespace ScoutGestWeb.Controllers
                 {
                     //Abrir a ligação
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
-                    /*if (User.IsInRole("EqAnim"))
+                    if (User.IsInRole("EqAnim"))
                     {
                         cmd.CommandText = cmd.CommandText.Replace(";", " and Seccao = @seccao;");
-                        cmd.Parameters.AddWithValue("@seccao", User.Identity.)
-                    }*/
+                        cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
+                    }
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
@@ -124,12 +126,7 @@ namespace ScoutGestWeb.Controllers
                                 cmd.Parameters.AddWithValue("@foto", ms.ToArray());
                             }
                         }
-                        using (MySqlCommand cmd3 = new MySqlCommand("select IDSeccao from seccoes where Nome = @seccao", cmd.Connection))
-                        {
-                            cmd3.Parameters.AddWithValue("@seccao", insert.Seccao);
-                            await cmd3.PrepareAsync();
-                            using (MySqlDataReader dr3 = (MySqlDataReader)await cmd3.ExecuteReaderAsync()) while (await dr3.ReadAsync()) cmd.Parameters.AddWithValue("@seccao", dr3["IDSeccao"]);
-                        }
+                        cmd.Parameters.AddWithValue("@seccao", insert.Seccao);
                         //Inserir valores na base de dados
                         cmd.Parameters.AddWithValue("@estado", insert.Estado);
                         string cargosDB = "";

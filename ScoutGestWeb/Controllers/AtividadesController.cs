@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 namespace ScoutGestWeb.Controllers
@@ -17,7 +18,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? "and (Seccao = @seccao or Seccao = 6);" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? "and Seccao = @seccao or Seccao = \"Agrupamento\"" + (User.IsInRole("Comum") ? "and DataInicio between now() - interval 3 day and now() + interval 3 day" : ";") : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
                 if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
@@ -56,7 +57,7 @@ namespace ScoutGestWeb.Controllers
                         avm.IDAtividade = int.Parse(dr["IDAtividade"].ToString());
                         avm.Nome = dr["Nome"].ToString();
                         avm.Tipo = dr["Tipo"].ToString();
-                        avm.Seccao = int.Parse(dr["Seccao"].ToString());
+                        avm.Seccao = dr["Seccao"].ToString();
                         avm.Local = dr["Local"].ToString();
                         avm.DataInicio = DateTime.Parse(dr["DataInicio"].ToString());
                         avm.DataFim = DateTime.Parse(dr["DataInicio"].ToString());

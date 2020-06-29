@@ -144,6 +144,7 @@ namespace ScoutGestWeb.Controllers
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where " + (User.IsInRole("Administração de Agrupamento") ? "IDCaixa > 0;" : "Grupo = " + (await _userManager.GetUserAsync(User)).IDGrupo + (User.IsInRole("Equipa de Animação") ? " and Grupo in (select IDGrupo from grupos where Seccao = @seccao);" : ";")), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                if (cmd.CommandText.Contains("@seccao")) cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) caixas.Add(dr["IDCaixa"].ToString() + " - " + dr["Nome"].ToString());
@@ -215,16 +216,11 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) listativs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
-                cmd.CommandText = "select Nome from seccoes where IDSeccao > 0;";
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) listseccoes.Add(dr["Nome"].ToString());
-                }
+                listseccoes.AddRange(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
             }
             listcaixas.Sort();
             listpags.Sort();
             listativs.Sort();
-            listseccoes.Sort();
             ViewBag.caixas = listcaixas;
             ViewBag.pags = listpags;
             ViewBag.ativs = listativs;
@@ -259,7 +255,7 @@ namespace ScoutGestWeb.Controllers
             string datas = string.Format("DataHora between {0} and {1}", dataInicio == null ? DateTime.MinValue.ToString() : dataInicio.ToString(), dataFim == null ? DateTime.MaxValue.ToString() : dataFim.ToString());
             string pags = string.Format("TipoPagamento between {0} and {1}", tipoPagInicio == null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
             string ativs = string.Format("Atividade between {0} and {1}", ativInicio == null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim == null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : this.listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
-            string seccoes = string.Format("Seccao between {0} and {1}", seccaoInicio == "Lobitos" || seccaoInicio == null ? 1 : seccaoInicio == "Exploradores" ? 2 : seccaoInicio == "Pioneiros" ? 3 : seccaoInicio == "Caminheiros" ? 4 : seccaoInicio == "Dirigentes" ? 5 : 6, seccaoFim == null || seccaoFim == "Agrupamento" ? 6 : seccaoFim == "Lobitos" ? 1 : seccaoFim == "Exploradores" ? 2 : seccaoFim == "Pioneiros" ? 3 : seccaoFim == "Caminheiros" ? 4 : 5);
+            string seccoes = string.Format("Seccao between {0} and {1}", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
             using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 cmd.Parameters.AddWithValue("@datas", datas);

@@ -43,13 +43,15 @@ namespace ScoutGestWeb.Controllers
                     if (user.LockoutEnabled)
                     {
                         ModelState.AddModelError("", "Não é possível iniciar sessão, pois esta conta está trancada");
-                        return await Task.Run(() => Index(login));
+                        return await Task.Run(() => Index());
                     }
                     var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
                     if (result.Succeeded) return await Task.Run(() => View("Dashboard"));
                 }
+                ModelState.AddModelError("", "Esta conta não foi encontrada");
+                return await Task.Run(() => Index());
             }
-            return await Task.Run(() => View("Login"));
+            return await Task.Run(() => View("Login", login));
         }
         public async Task<IActionResult> LogOut()
         {

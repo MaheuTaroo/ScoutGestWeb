@@ -1,5 +1,4 @@
 ﻿
-
 @{
     ViewData["Title"] = "Informação e Logout";
 }
@@ -7,39 +6,36 @@
 <h1>Informações e Logout</h1>
 <br />
 
-<h2 style="text-align: center">Informação geral</h2>
 <div class="bordlogout" style="padding-left: 10px;">
+    <h2 style="text-align: center">Informação geral</h2><hr />
     <p>Bem vindo a scoutgest. Esta aplicação foi criada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
 
     <p>-Gestão de atividades;</p>
     <p>-Gestão de escuteiros;</p>
-    <p>-Gestão de grupos.</p>
+    <p>-Gestão de grupos</p>
 </div>
 <br />
 
-<h2 style="text-align: center">Contactos</h2>
 <div class="bordlogout" style="padding-left: 10px;">
+    <h2 style="text-align: center">Contactos</h2><hr />
     <p>A mesma foi feita pelo JM e JJ, em caso de alguma dúvida, sugestão, ou a aplicação deixar de funcionar poderá contactar-nos através das seguintes formas:</p>
 
     <p><b>JM</b></p>
     <p>Email: emailfalso.com</p>
-    <p>Telemóvel: (+351) 99999999</p><br />
-
+    <p>Telemóvel: (+351) 961234578</p><br />
 
     <p><b>JJ</b></p>
-    <p>Email: emailfals2o.com</p>
-    <p>Telemóvel: (+351) 99999991</p>
+    <p>Email: emailfalso2.com</p>
+    <p>Telemóvel: (+351) 912345678</p>
 </div>
 <br />
-
-
-<p>Para voltar à página anterior, carregue aqui:</p>
-<form method="get" asp-action="" asp-controller="">
-    <button class="bottaoin" type="submit">Voltar</button>
-</form>
-<button class="btn btn-secondary"><a href="@Url.ActionLink("Index", "Home")">Voltar</a></button>
-<p>Em caso queira fazer logout, carregue aqui:</p>
-<form method="get" asp-action="LogOut" asp-controller="Home">
-    <button class="bottaoin" type="submit">Logout</button>
-</form>
-<button class="btn btn-secondary"><a href="@Url.ActionLink("LogOut", "Home")">Logout</a></button>
+<div>
+    <div style="position: relative; float: left; margin-right: 40vw">
+        <p>Para voltar à página anterior, carregue aqui:</p>
+        <a href="@Url.ActionLink("Index", "Home")"><button class="btn btn-secondary">Voltar</button></a>
+    </div>
+    <div style="position: relative; float: right; margin-right: 40vw">
+        <p>Em caso queira fazer logout, carregue aqui:</p>
+        <a href="@Url.ActionLink("LogOut", "Home")"><button class="btn btn-secondary">Logout</button></a>
+    </div>
+</div>

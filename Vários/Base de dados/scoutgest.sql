@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 29-Jun-2020 às 01:42
+-- Tempo de geração: 30-Jun-2020 às 01:29
 -- Versão do servidor: 10.4.11-MariaDB
 -- versão do PHP: 7.4.5
 
@@ -20,25 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `scoutgest`
 --
-
-DELIMITER $$
---
--- Procedimentos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `Reset_AI` (IN `dbtable` INT, IN `tbindex` INT)  begin
-	
-		SELECT max(tbindex) INTO @AutoInc
-		FROM INFORMATION_SCHEMA.TABLES
-		WHERE TABLE_SCHEMA = 'scoutgest' AND TABLE_NAME = dbtable;
-
-		SET @s:=CONCAT('ALTER TABLE `scoutgest`.`', dbtable, '` AUTO_INCREMENT=', @AutoInc + 1);
-		PREPARE stmt FROM @s;
-		EXECUTE stmt;
-		DEALLOCATE PREPARE stmt;
-		
-    END$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -169,7 +150,7 @@ CREATE TABLE `aspnetusers` (
   `LockoutEnabled` tinyint(1) NOT NULL,
   `AccessFailedCount` int(11) NOT NULL,
   `IDGrupo` int(11) NOT NULL,
-  `Seccao` set('Teste','Lobitos','Exploradores','Pioneiros','Caminheiros','Dirigentes','Agrupamento') COLLATE utf8mb4_bin NOT NULL
+  `Seccao` longtext CHARACTER SET utf8mb4 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
@@ -246,7 +227,17 @@ CREATE TABLE `atividades` (
 INSERT INTO `atividades` (`IDAtividade`, `Nome`, `Tipo`, `Tema`, `Seccao`, `Local`, `DataInicio`, `DataFim`, `Orcamento`, `Ativa`) VALUES
 (0, 'Teste', 'Teste', '', 'Teste', 'Teste', '1000-01-01 00:00:00', '1000-01-01 00:00:00', '0.00', 0),
 (1, 'Atividade de Sábado', 'Sábado', '', 'Agrupamento', 'Sede', '2020-03-21 00:00:00', '2020-03-21 00:00:00', '0.00', 1),
-(2, 'Acampamento de integração', 'Acampamentos', '', 'Pioneiros', 'Herdade florestal da Aroeira', '2020-03-21 00:00:00', '2020-03-28 00:00:00', '0.00', 1);
+(2, 'Acampamento de integração', 'Acampamentos', '', 'Pioneiros', 'Herdade florestal da Aroeira', '2020-03-21 00:00:00', '2020-03-28 00:00:00', '0.00', 1),
+(3, 'a', 'Sábado', 'a', 'Agrupamento', 'a', '2020-06-30 00:04:24', '2020-07-01 00:00:00', '0.00', 1);
+
+--
+-- Acionadores `atividades`
+--
+DELIMITER $$
+CREATE TRIGGER `Prevent_DataFim_Bigger_Than_DataInicio` BEFORE INSERT ON `atividades` FOR EACH ROW if new.DataInicio > new.DataFim then signal sqlstate '45000' set MESSAGE_TEXT = "Data final de atividade menor que data inicial";
+end if
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -1068,7 +1059,8 @@ CREATE TABLE `__efmigrationshistory` (
 
 INSERT INTO `__efmigrationshistory` (`MigrationId`, `ProductVersion`) VALUES
 ('20200619141601_InitialCreate', '3.1.4'),
-('20200620164256_2062020', '3.1.4');
+('20200620164256_2062020', '3.1.4'),
+('20200629231333_Seccao', '3.1.4');
 
 --
 -- Índices para tabelas despejadas
@@ -1117,7 +1109,7 @@ ALTER TABLE `aspnetusers`
   ADD UNIQUE KEY `UserNameIndex` (`NormalizedUserName`),
   ADD KEY `EmailIndex` (`NormalizedEmail`),
   ADD KEY `IDGrupo` (`IDGrupo`),
-  ADD KEY `Seccao` (`Seccao`);
+  ADD KEY `Seccao` (`Seccao`(768));
 
 --
 -- Índices para tabela `aspnetusertokens`
@@ -1237,7 +1229,7 @@ ALTER TABLE `aspnetuserclaims`
 -- AUTO_INCREMENT de tabela `atividades`
 --
 ALTER TABLE `atividades`
-  MODIFY `IDAtividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `IDAtividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `caixas`

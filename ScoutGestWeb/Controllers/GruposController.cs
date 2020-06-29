@@ -16,7 +16,6 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            List<int> seccoes = new List<int>();
             List<GrupoViewModel> gvm = new List<GrupoViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from grupos", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -30,21 +29,10 @@ namespace ScoutGestWeb.Controllers
                             ID = int.Parse(dr["IDGrupo"].ToString()),
                             Nome = dr["Nome"].ToString(),
                             Sigla = dr["Sigla"].ToString(),
+                            Seccao = dr["Seccao"].ToString(),
                             Pseudonimo = dr["Pseudonimo"].ToString()
                         });
-                        seccoes.Add(int.Parse(dr["Seccao"].ToString()));
                     }
-                }
-                cmd.CommandText = "select Nome from seccoes where IDSeccao = @id";
-                for (int i = 0; i < seccoes.Count; i++)
-                {
-                    cmd.Parameters.AddWithValue("@id", seccoes[i]);
-                    await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                    {
-                        while (await dr.ReadAsync()) gvm[i].Seccao = dr["Nome"].ToString();
-                    }
-                    cmd.Parameters.Clear();
                 }
             }
             return await Task.Run(() => View(gvm));
@@ -52,16 +40,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovoGrupo()
         {
             if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
-            List<string> seccoes = new List<string>();
-            using (MySqlCommand cmd = new MySqlCommand("select Nome from seccoes where IDSeccao > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
-            {
-                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) seccoes.Add(dr["Nome"].ToString());
-                }
-            }
-            ViewBag.seccoes = seccoes;
+            ViewBag.seccoes = new List<string>(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
             return await Task.Run(() => (IActionResult)View());
         }
         [HttpPost]
@@ -75,20 +54,12 @@ namespace ScoutGestWeb.Controllers
                     if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
                     cmd.Parameters.AddWithValue("@nome", gvm.Nome);
                     cmd.Parameters.AddWithValue("@sigla", gvm.Sigla);
+                    cmd.Parameters.AddWithValue("@seccao", gvm.Seccao);
                     using (MemoryStream ms = new MemoryStream())
                     using (Image i = Image.Load(gvm.FotoUp.OpenReadStream()))
                     {
                         i.SaveAsPng(ms);
                         cmd.Parameters.AddWithValue("@foto", ms.ToArray());
-                    }
-                    using (MySqlCommand cmd2 = new MySqlCommand("select IDSeccao from seccoes where Nome = @seccao", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
-                    {
-                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
-                        cmd2.Parameters.AddWithValue("@seccao", gvm.Seccao);
-                        using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                        {
-                            while (await dr.ReadAsync()) cmd.Parameters.AddWithValue("@seccao", dr["IDSeccao"].ToString());
-                        }
                     }
                 }
             }
@@ -111,7 +82,7 @@ namespace ScoutGestWeb.Controllers
                         Nome = dr["Nome"].ToString(),
                         Sigla = dr["Sigla"].ToString(),
                         FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]),
-                        Seccao = dr["Seccao"].ToString() == "0" ? "Teste" : dr["Seccao"].ToString() == "1" ? "Lobitos" : dr["Seccao"].ToString() == "2" ? "Exploradores" : dr["Seccao"].ToString() == "3" ? "Pioneiros" : dr["Seccao"].ToString() == "4" ? "Caminheiros" : dr["Seccao"].ToString() == "5" ? "Dirigentes" : "Agrupamento",
+                        Seccao = dr["Seccao"].ToString(),
                         Pseudonimo = dr["Pseudonimo"].ToString()
                     };
                 }
