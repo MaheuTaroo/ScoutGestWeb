@@ -34,7 +34,7 @@ namespace ScoutGestWeb.Controllers
                             IDAtividade = int.Parse(dr["IDAtividade"].ToString()),
                             Nome = dr["Nome"].ToString(),
                             DataInicio = DateTime.Parse(dr["DataInicio"].ToString()),
-                            DataFim = DateTime.Parse(dr["DataInicio"].ToString())
+                            DataFim = DateTime.Parse(dr["DataFim"].ToString())
                         });
                     }
                 }
