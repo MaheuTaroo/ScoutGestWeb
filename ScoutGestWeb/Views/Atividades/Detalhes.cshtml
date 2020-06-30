@@ -1,14 +1,12 @@
 ﻿@model ScoutGestWeb.Models.AtividadeViewModel
 
 @{
-    ViewData["Title"] = "Detalhes";
+    ViewData["Title"] = "Detalhes - Atividades";
 }
 
 <h1>Detalhes</h1>
-
+<hr />
 <div>
-    <h4>AtividadeViewModel</h4>
-    <hr />
     <dl class="row">
         <!--<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IDAtividade)
@@ -16,37 +14,37 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IDAtividade)
         </dd>-->
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nome):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nome)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Tipo):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Tipo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Seccao):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Seccao)
             @*switch (Model.Seccao)
                 {
-                    case "0": 
+                    case "0":
                     Lobitos
                         break;
                 }*@
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Local):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Local)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Duração:
         </dt>
         <dd class="col-sm-10">

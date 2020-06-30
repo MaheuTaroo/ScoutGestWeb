@@ -35,7 +35,7 @@ namespace ScoutGestWeb.Models
         public Cargos Chefe { get; set; } = new Cargos("Chefe");
         public string Cargos { get; set; }
         [Required(ErrorMessage = "Por favor, insira o telemóvel")]
-        [StringLength(9, ErrorMessage = "Telemóvel incompleto; por favor, insira 9 dígitos")]
+        [StringLength(int.MaxValue, MinimumLength = 9, ErrorMessage = "Telemóvel incompleto; por favor, insira 9 dígitos")]
         public string NumTelefone { get; set; }
         [Required(ErrorMessage = "Não foi introduzido um grupo para o escuteiro", AllowEmptyStrings = false)]
         public string Grupo { get; set; }

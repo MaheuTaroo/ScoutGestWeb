@@ -1,10 +1,13 @@
 ﻿@model ScoutGestWeb.Models.InserirEscuteiroViewModel
 @{
-    ViewData["Title"] = "Inserir escuteiro - Escuteiros";
+    ViewData["Title"] = "Editar escuteiro - Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 <!--Aqui esta o código para a página de inserir novos escuteiros -->
+<script src="~/js/site.js"></script>
 <h1>Inserir escuteiro</h1>
+
+<h4>Editar dados</h4>
 <hr />
 <div class="text-center">
     <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">

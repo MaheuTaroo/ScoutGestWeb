@@ -264,6 +264,68 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View());
         }
+        public async Task<IActionResult> EditarEscuteiro(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
+            int grupo = 0;
+            List<string> grupos = new List<string>();
+            using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                cmd.Parameters.AddWithValue("@id", id);
+                await cmd.PrepareAsync();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        ievm.Nome = dr["Nome"].ToString();
+                        ievm.Totem = dr["Totem"].ToString();
+                        grupo = int.Parse(dr["Grupo"].ToString());
+                        ievm.Morada = dr["Morada"].ToString();
+                        ievm.Morada2 = dr["Morada2"].ToString();
+                        ievm.CodPostal = dr["CodPostal"].ToString();
+                        ievm.Localidade = dr["Localidade"].ToString();
+                        ievm.GrupoSanguineo = dr["GrupoSand"].ToString();
+                        ievm.Alergias = dr["Alergias"].ToString();
+                        ievm.Medicacao = dr["Medicacao"].ToString();
+                        ievm.Problemas = dr["Problemas"].ToString();
+                        ievm.Observacoes = dr["Observacoes"].ToString();
+                        ievm.Seccao = dr["Seccao"].ToString();
+                        ievm.Estado = dr["Estado"].ToString();
+                        ievm.Idade = int.Parse(dr["Idade"].ToString());
+                        ievm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
+                        if (dr["Cargos"].ToString().Contains(ievm.Guia.Cargo)) ievm.Guia.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.Animador.Cargo)) ievm.Animador.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.Cozinheiro.Cargo)) ievm.Cozinheiro.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.GuardaMaterial.Cargo)) ievm.GuardaMaterial.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.Secretario.Cargo)) ievm.Secretario.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.Tesoureiro.Cargo)) ievm.Tesoureiro.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.RelPub.Cargo)) ievm.RelPub.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.Socorrista.Cargo)) ievm.Socorrista.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.GuiaRegiao.Cargo)) ievm.GuiaRegiao.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.SubGuia.Cargo)) ievm.SubGuia.Selecionado = true;
+                        if (dr["Cargos"].ToString().Contains(ievm.Chefe.Cargo)) ievm.Chefe.Selecionado = true;
+                    }
+                }
+                cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
+                cmd.Parameters["@id"].Value = grupo;
+                await cmd.PrepareAsync();
+                using (MySqlDataReader dr = (MySqlDataReader) await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) ievm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
+                }
+                ievm.NumTelefone = ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
+                cmd.CommandText = "select IDGrupo, Nome from grupos where IDGrupo > 0";
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
+                }
+                grupos.Sort();
+                ViewBag.grupos = grupos;
+                return View(ievm);
+            }
+        }
     }
 }
 
