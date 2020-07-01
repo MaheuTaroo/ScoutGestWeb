@@ -48,7 +48,7 @@ namespace ScoutGestWeb.Controllers
                     var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
                     if (result.Succeeded) return await Task.Run(() => View("Dashboard"));
                 }
-                ModelState.AddModelError("", "Esta conta não foi encontrada");
+                ModelState.AddModelError("", "Credenciais incorretas");
                 return await Task.Run(() => Index());
             }
             return await Task.Run(() => View("Login", login));

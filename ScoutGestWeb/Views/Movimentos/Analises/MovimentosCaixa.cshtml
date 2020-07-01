@@ -2,6 +2,7 @@
 @{
     Layout = "_PdfLayout";
 }
+
 <table class="table" style="border: 2px solid black; margin: auto 0 auto 0;">
     <thead>
         <tr>
@@ -54,6 +55,6 @@
 <br />
 <br />
 <div style="position: relative; font-size: 20px; margin: 0 25px 0 25px">
-    <p style="float: right">Despesas: @Model.ToList().Where(x => x.TipoMovimento == "Saída").Sum(x => x.Valor)€</p>
-    <p style="float: left">Receitas: @Model.ToList().Where(x => x.TipoMovimento == "Entrada").Sum(x => x.Valor)€</p>
+    <p style="float: right">Despesas: @Model.ToList().Where(x => x.TipoMovimento == "Saída de tesouraria").Sum(x => x.Valor)€</p>
+    <p style="float: left">Receitas: @Model.ToList().Where(x => x.TipoMovimento == "Entrada de tesouraria").Sum(x => x.Valor)€</p>
 </div>

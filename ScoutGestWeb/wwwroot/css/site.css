@@ -14,10 +14,9 @@ body {
     display: flex;
     flex-direction: column;
 }
-/*body header h1:not([value~="ScoutGest"]) {
-    margin: 0;
-    height: 100%;
-}*/
+body > div > h1 {
+    text-align: center;
+}
 
 #regular-body {
     background-image: url(../imgs/back_tesouraria.png);

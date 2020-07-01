@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
@@ -11,14 +13,26 @@ namespace ScoutGestWeb.Controllers
 {
     public class CaixasController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly List<CaixaViewModel> cvm = new List<CaixaViewModel>();
         private readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
+        public CaixasController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select * from caixas", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
+                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                if (User.IsInRole("Comum"))
+                {
+                    cmd.CommandText += " where Grupo = @id";
+                    cmd.Parameters.AddWithValue("@id", (await _userManager.GetUserAsync(User)).IDGrupo);
+                }
+                else if (User.IsInRole("Comum"))
+                {
+                    cmd.CommandText += " where Grupo in (select IDGrupo from grupos where Seccao = @seccao)";
+                    cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
+                }
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
@@ -36,24 +50,22 @@ namespace ScoutGestWeb.Controllers
                 cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
                 for (int i = 0; i < grupos.Count; i++)
                 {
-                    cmd.Parameters.AddWithValue("@id", grupos[i]);
+                    cmd.Parameters["@id"].Value = grupos[i];
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) cvm[i].Grupo = dr["Nome"].ToString();
                     }
-                    cmd.Parameters.Clear();
                 }
-                cmd.CommandText = "select Nome from escuteiros where IDEscuteiro = @id";
+                cmd.CommandText = "select Nome, Totem from escuteiros where IDEscuteiro = @id";
                 for (int i = 0; i < responsaveis.Count; i++)
                 {
-                    cmd.Parameters.AddWithValue("@id", grupos[i]);
+                    cmd.Parameters["@id"].Value = responsaveis[i];
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) cvm[i].Responsavel += dr["Nome"].ToString();
+                        while (await dr.ReadAsync()) cvm[i].Responsavel = dr["Totem"].ToString() + " - " +  dr["Nome"].ToString();
                     }
-                    cmd.Parameters.Clear();
                 }
             }
             return await Task.Run(() => View(cvm));
@@ -150,6 +162,41 @@ namespace ScoutGestWeb.Controllers
                 return await Task.Run(() => RedirectToAction("Index"));
             }
             return await Task.Run(() => RedirectToAction("NovaCaixa"));
+        }
+        public async Task<IActionResult> Editar(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            CaixaViewModel cvm = new CaixaViewModel();
+            using (MySqlCommand cmd = new MySqlCommand("select * from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Prepare();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        cvm.ID = id;
+                        cvm.Nome = dr["Nome"].ToString();
+                        cvm.Saldo = decimal.Parse(dr["Saldo"].ToString());
+                        cvm.Grupo = dr["Grupo"].ToString();
+                        cvm.Responsavel = dr["Responsavel"].ToString();
+                    }
+                }
+                cmd.CommandText = "select Nome from escuteiros where IDEscuteiro = @id";
+                cmd.Parameters["@id"].Value = cvm.Responsavel;
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) cvm.Responsavel = dr["Nome"].ToString();
+                }
+                cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
+                cmd.Parameters["@id"].Value = cvm.Grupo;
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) cvm.Grupo = dr["Nome"].ToString();
+                }
+            }
+            return await Task.Run(() => View("Index", cvm));
         }
     }
 }

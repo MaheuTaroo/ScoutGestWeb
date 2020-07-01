@@ -6,12 +6,29 @@
 <h1>Informação geral sobre os grupos</h1>
 <!--Informação dos grupos-->
 
-@if (User.IsInRole("Administração de Agrupamento"))
-{
-    <p>
-        <a asp-action="NovoGrupo">Novo grupo</a>
-    </p>
-}
+<div class="text-center">
+    @if (User.IsInRole("Administração de Agrupamento"))
+    {
+        <a asp-action="NovoGrupo"><button class="btn btn-secondary">Novo grupo</button></a>
+        <br />
+    }
+    @using (Html.BeginForm("Index", "Atividades", FormMethod.Get))
+    {
+        <select name="coluna">
+            <option>Nome</option>
+            <option>Tipo</option>
+            <option>Tema</option>
+            <option>Secção</option>
+            <option>Local</option>
+            <option>Data inicial</option>
+            <option>Data final</option>
+            <option>Orçamento</option>
+            <option>Aberta a movimentos</option>
+        </select>
+        <input name="procura" />
+        <input type="submit" value="Procurar" class="btn btn-success" />
+    }
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +36,6 @@
             <th style="background-color:lightgreen">@Html.DisplayNameFor(model => model.Nome)</th>
             <th style="background-color:lightgreen">@Html.DisplayNameFor(model => model.Sigla)</th>
             <th style="background-color:lightgreen">Secção</th>
-            <th style="background-color:lightgreen">Pseudónimo</th>
             <th>Opções</th>
         </tr>
     </thead>
@@ -40,10 +56,11 @@
                     @Html.DisplayFor(modelItem => item.Seccao)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Pseudonimo)
-                </td>
-                <td>
-                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
+                    @if (User.IsInRole("Administração de Agrupamento"))
+                    {
+                        @Html.ActionLink("Editar", "Editar", new { id = item.ID })
+                        <b>|</b>
+                    }
                     @Html.ActionLink("Detalhes", "Detalhes", new { id = item.ID })
                     @*| @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
                 </td>

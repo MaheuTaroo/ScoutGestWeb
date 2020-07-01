@@ -20,7 +20,7 @@ namespace ScoutGestWeb.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         public InserirEscuteiroController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string coluna, string procura)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -29,11 +29,57 @@ namespace ScoutGestWeb.Controllers
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     //Abrir a ligação
-                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
-                    if (User.IsInRole("EqAnim"))
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync(); ;
+                    if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
                     {
                         cmd.CommandText = cmd.CommandText.Replace(";", " and Seccao = @seccao;");
                         cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
+                    }
+                    if (!(string.IsNullOrEmpty(coluna) && string.IsNullOrEmpty(procura)))
+                    {
+                        if (coluna == "Idade" && !int.TryParse(procura, out int idade)) ModelState.AddModelError("", "Idade com formato errado. Por favor, insira um valor numérico");
+                        else
+                        {
+                            cmd.CommandText = cmd.CommandText.Replace(";", " and pesquisa;");
+                            switch (coluna)
+                            {
+                                case "Nome":
+                                case "Totem":
+                                case "Cargo":
+                                case "Localidade":
+                                case "Alergias":
+                                case "Problemas":
+                                case "Estado":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", coluna + " like '%" + procura + "%'");
+                                    break;
+                                case "Código-postal":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "CodPostal like '%" + procura + "%'");
+                                    break;
+                                case "Morada":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Morada like '%" + procura + "%' or Morada like '%" + procura + "%'");
+                                    break;
+                                case "Secção":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Seccao like '%" + procura + "%'");
+                                    break;
+                                case "Grupo sanguíneo":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "GrupoSang like '%" + procura + "%'");
+                                    break;
+                                case "Medicação":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Medicacao like '%" + procura + "%'");
+                                    break;
+                                case "Observações":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Observacoes like '%" + procura + "%'");
+                                    break;
+                                case "Idade":
+                                    cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Idade = " + int.Parse(procura));
+                                    break;
+                                case "Número de telefone":
+                                    cmd.CommandText = cmd.CommandText.Replace("> 0 and @pesq", "in (select IDEscuteiro from numtelefones where NumTelefone like \'%@tel\'%");
+                                    cmd.Parameters.AddWithValue("@tel", procura);
+                                    break;
+                            }
+                        }
+                        await cmd.PrepareAsync();
                     }
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -206,7 +252,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
-            using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id" + (!User.IsInRole("Administração de Agrupamento") ? " and Seccao = @seccao;" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@id", id);
@@ -286,7 +332,7 @@ namespace ScoutGestWeb.Controllers
                         ievm.Morada2 = dr["Morada2"].ToString();
                         ievm.CodPostal = dr["CodPostal"].ToString();
                         ievm.Localidade = dr["Localidade"].ToString();
-                        ievm.GrupoSanguineo = dr["GrupoSand"].ToString();
+                        ievm.GrupoSanguineo = dr["GrupoSang"].ToString();
                         ievm.Alergias = dr["Alergias"].ToString();
                         ievm.Medicacao = dr["Medicacao"].ToString();
                         ievm.Problemas = dr["Problemas"].ToString();
@@ -295,17 +341,17 @@ namespace ScoutGestWeb.Controllers
                         ievm.Estado = dr["Estado"].ToString();
                         ievm.Idade = int.Parse(dr["Idade"].ToString());
                         ievm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
-                        if (dr["Cargos"].ToString().Contains(ievm.Guia.Cargo)) ievm.Guia.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.Animador.Cargo)) ievm.Animador.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.Cozinheiro.Cargo)) ievm.Cozinheiro.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.GuardaMaterial.Cargo)) ievm.GuardaMaterial.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.Secretario.Cargo)) ievm.Secretario.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.Tesoureiro.Cargo)) ievm.Tesoureiro.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.RelPub.Cargo)) ievm.RelPub.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.Socorrista.Cargo)) ievm.Socorrista.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.GuiaRegiao.Cargo)) ievm.GuiaRegiao.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.SubGuia.Cargo)) ievm.SubGuia.Selecionado = true;
-                        if (dr["Cargos"].ToString().Contains(ievm.Chefe.Cargo)) ievm.Chefe.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Guia.Cargo)) ievm.Guia.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Animador.Cargo)) ievm.Animador.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Cozinheiro.Cargo)) ievm.Cozinheiro.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.GuardaMaterial.Cargo)) ievm.GuardaMaterial.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Secretario.Cargo)) ievm.Secretario.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Tesoureiro.Cargo)) ievm.Tesoureiro.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.RelPub.Cargo)) ievm.RelPub.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Socorrista.Cargo)) ievm.Socorrista.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.GuiaRegiao.Cargo)) ievm.GuiaRegiao.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.SubGuia.Cargo)) ievm.SubGuia.Selecionado = true;
+                        if (dr["Cargo"].ToString().Contains(ievm.Chefe.Cargo)) ievm.Chefe.Selecionado = true;
                     }
                 }
                 cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";

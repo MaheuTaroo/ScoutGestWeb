@@ -12,7 +12,6 @@ using System.Collections;
 
 namespace ScoutGestWeb.Models
 {
-    //model right here
     public class InserirEscuteiroViewModel
     {
         [Key]

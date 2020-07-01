@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    bool ativ = ViewData["Title"].ToString().Contains("Atividades");
 }
 
 <html translate="no">
@@ -58,14 +59,42 @@
             </div>
             if (ViewData["Title"].ToString() != "Página inicial")
             {
-                <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="min-height: calc(100% - 10vh - 30px)">
-                    @if (ViewData["Title"].ToString() == "Tesouraria")
+                <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="min-height: calc(100% - 10vh - 30px)"> 
+                    @if (ViewData["Title"].ToString().Contains("Tesouraria"))
                     {
                         <style>
                             body {
-                                background-image: url(../imgs/back_tesouraria.png);
+                                background-image: url(../../wwwroot/imgs/back_tesouraria.png);
                                 background-size: calc(auto - 10vh - 30px);
-                                
+                            }
+                        </style>
+                    }
+                    else if (ativ)
+                    {
+                        <style>
+                            body {
+                                background-image: url(../../wwwroot/imgs/back_atividades.png);
+                                background-size: calc(auto - 10vh - 30px);
+                            }
+                        </style>
+                    }
+                    
+                    else if (ViewData["Title"].ToString().Contains("Escuteiros"))
+                    {
+                        <style>
+                            body {
+                                background-image: url(../../wwwroot/imgs/back_escuteiros.png);
+                                background-size: calc(auto - 10vh - 30px);
+                            }
+                        </style>
+                    }
+                    
+                    else if (ViewData["Title"].ToString().Contains("Informações e logout"))
+                    {
+                        <style>
+                            body {
+                                background-image: url(../../wwwroot/imgs/back_info_logout.png);
+                                background-size: calc(auto - 10vh - 30px);
                             }
                         </style>
                     }

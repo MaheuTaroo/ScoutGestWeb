@@ -6,7 +6,7 @@
 
 <h1>Planeamento das atividades</h1>
 
-<p>
+<p style="text-align: center">
     Aqui poderá ver as atividades que estão planeadas, ou que estão a ser realizadas
     <br /><a asp-action="InserirAtividade">Criar nova atividade</a>
 </p>
@@ -14,10 +14,24 @@
 <!--<div class="main">-->
 
 @if (User.IsInRole("Administração de Agrupamento") || User.IsInRole("Equipa de Animação"))
-{<div style="overflow-y: scroll">
-        <p>Aqui estão representadas as últimas atividades realizadas:</p>
-
-
+{
+    <div style="overflow-y: scroll; text-align: center">
+        @using (Html.BeginForm("Index", "Atividades", FormMethod.Get))
+        {
+            <select name="coluna">
+                <option>Nome</option>
+                <option>Tipo</option>
+                <option>Tema</option>
+                <option>Secção</option>
+                <option>Local</option>
+                <option>Data inicial</option>
+                <option>Data final</option>
+                <option>Orçamento</option>
+                <option>Aberta a movimentos</option>
+            </select>
+            <input name="procura" />
+            <input type="submit" value="Procurar" class="btn btn-success" />
+        }
         @foreach (var item in Model)
         {
             <div class="container-fluid" style="padding: 0 0 0 0">
@@ -33,10 +47,9 @@
                     </h5>
                 </p>
                 <!--botao dos detalhes-->
-                <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
+                <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
             </div>
         }
-
     </div>
 }
 else
@@ -51,7 +64,7 @@ else
     {
         if (item.DataInicio >= DateTime.Today.AddMonths(-1) && item.DataInicio <= DateTime.Today.AddSeconds(-1))
         {
-            <div class="container-fluid">
+            <div class="container-fluid" style="text-align: center">
                 <h3 class="text-center">Atividade(s) do último mês</h3>
                 <hr />
                 <div style="padding: 0; width: 100%;">
@@ -67,7 +80,7 @@ else
                         </h5>
                     </p>
                     <!--botao dos detalhes-->
-                    <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
+                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                 </div>
             </div>
         }
@@ -76,7 +89,7 @@ else
             <div class="container-fluid">
                 <h3 class="text-center">Atividade(s) de hoje</h3>
                 <hr />
-                <div style="padding: 0; width: 100%;">
+                <div style="padding: 0; width: 100%; text-align: center">
                     <p>
                         <h2>
                             @Html.DisplayFor(modelItem => item.Nome)
@@ -89,7 +102,7 @@ else
                         </h5>
                     </p>
                     <!--botao dos detalhes-->
-                    <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
+                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                 </div>
             </div>
         }
@@ -98,7 +111,7 @@ else
             <div class="container-fluid">
                 <h3 class="text-center">Atividade(s) do próximo mês</h3>
                 <hr />
-                <div style="padding: 0; width: 100%;">
+                <div style="padding: 0; width: 100%; text-align: center">
                     <p>
                         <h2>
                             @Html.DisplayFor(modelItem => item.Nome)
@@ -111,7 +124,7 @@ else
                         </h5>
                     </p>
                     <!--botao dos detalhes-->
-                    <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
+                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                 </div>
             </div>
         }

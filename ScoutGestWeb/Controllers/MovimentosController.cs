@@ -10,6 +10,7 @@ using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 using Rotativa.AspNetCore;
 using Rotativa.AspNetCore.Options;
+using Microsoft.Extensions.Primitives;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -21,7 +22,32 @@ namespace ScoutGestWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly List<string> listcaixas = new List<string>(), listpags = new List<string>(), listativs = new List<string>(), listseccoes = new List<string>();
         #endregion
-        public MovimentosController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
+        public MovimentosController(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+            using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read()) listcaixas.Add(dr["IDCaixa"].ToString() + " - " + dr["Nome"].ToString());
+                }
+                cmd.CommandText = "select * from tipos_pags where IDPag not like \"00\";";
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read()) listpags.Add(dr["IDPag"].ToString() + " - " + dr["Pagamento"].ToString());
+                }
+                cmd.CommandText = "select IDAtividade, Nome from atividades where IDAtividade > 0;";
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read()) listativs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
+                }
+                listseccoes.AddRange(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
+            }
+            listcaixas.Sort();
+            listpags.Sort();
+            listativs.Sort();
+        }
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
@@ -158,8 +184,8 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<MovimentoViewModel> listmvm = new List<MovimentoViewModel>();
-            string _inicio = string.Format("{0}-{1}-{2} {3}:{4}:{5}", inicio != null ? new string[] { inicio.Value.Year.ToString(), inicio.Value.Month.ToString(), inicio.Value.Day.ToString(), inicio.Value.Hour.ToString(), inicio.Value.Minute.ToString(), inicio.Value.Second.ToString() } : new string[] { DateTime.MinValue.Year.ToString(), DateTime.MinValue.Month.ToString(), DateTime.MinValue.Day.ToString(), DateTime.MinValue.Hour.ToString(), DateTime.MinValue.Minute.ToString(), DateTime.MinValue.Second.ToString() }), _fim = string.Format("{0}-{1}-{2} {3}:{4}:{5}", fim != null ? new string[] { fim.Value.Year.ToString(), fim.Value.Month.ToString(), fim.Value.Day.ToString(), fim.Value.Hour.ToString(), fim.Value.Minute.ToString(), fim.Value.Second.ToString() } : new string[] { DateTime.MaxValue.Year.ToString(), DateTime.MaxValue.Month.ToString(), DateTime.MaxValue.Day.ToString(), DateTime.MaxValue.Hour.ToString(), DateTime.MaxValue.Minute.ToString(), DateTime.MaxValue.Second.ToString() });
-            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0 and IDDocumento not in (select IDDocumento from tipos_docs where Descricao like \"%ransferência%\") and IDCaixa = @caixa and DataHora between @inicio and @fim;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            string _inicio = string.Format("{0}-{1}-{2} {3}:{4}:{5}", inicio != null ? new string[] { inicio.Value.Year.ToString(), inicio.Value.Month.ToString(), inicio.Value.Day.ToString(), inicio.Value.Hour.ToString(), inicio.Value.Minute.ToString(), inicio.Value.Second.ToString() } : new string[] { DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString(), "00", "00", "00" }), _fim = string.Format("{0}-{1}-{2} {3}:{4}:{5}", fim != null ? new string[] { fim.Value.Year.ToString(), fim.Value.Month.ToString(), fim.Value.Day.ToString(), fim.Value.Hour.ToString(), fim.Value.Minute.ToString(), fim.Value.Second.ToString() } : new string[] { DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), DateTime.Now.Day.ToString(), "23", "59", "59" });
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0 and IDCaixa = @caixa and DataHora between @inicio and @fim;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 cmd.Parameters.AddWithValue("@caixa", caixa.Substring(0, caixa.IndexOf(" - ")));
@@ -178,7 +204,7 @@ namespace ScoutGestWeb.Controllers
                         IDMovimento = int.Parse(dr["IDMovimento"].ToString()),
                         IDCaixa = dr["IDCaixa"].ToString(),
                         IDDocumento = dr["IDDocumento"].ToString(),
-                        TipoMovimento = dr["TipoMovimento"].ToString() == "1" ? "Entrada" : dr["TipoMovimento"].ToString() == "2" ? "Saída" : "Teste",
+                        TipoMovimento = dr["TipoMovimento"].ToString(),
                         User = await _userManager.FindByNameAsync(dr["User"].ToString()),
                         DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
                         Valor = decimal.Parse(dr["Valor"].ToString()),
@@ -191,7 +217,8 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => new ViewAsPdf("Analises/MovimentosCaixa", listmvm)
             {
                 PageOrientation = Orientation.Landscape,
-                PageMargins = new Margins(5, 5, 5, 5)
+                PageMargins = new Margins(5, 5, 5, 5),
+                PageSize = Size.A4
             });
         }
         #endregion
@@ -199,32 +226,10 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> MovParam()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
-            {
-                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
-                using (MySqlDataReader dr= (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) listcaixas.Add(dr["IDCaixa"].ToString() + " - " + dr["Nome"].ToString());
-                }
-                cmd.CommandText = "select * from tipos_pags where IDPag not like \"00\";";
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) listpags.Add(dr["IDPag"].ToString() + " - " + dr["Pagamento"].ToString());
-                }
-                cmd.CommandText = "select IDAtividade, Nome from atividades where IDAtividade > 0;";
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) listativs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
-                }
-                listseccoes.AddRange(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
-            }
-            listcaixas.Sort();
-            listpags.Sort();
-            listativs.Sort();
-            ViewBag.caixas = listcaixas;
+            ViewBag.caixas = listcaixas.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length);
             ViewBag.pags = listpags;
-            ViewBag.ativs = listativs;
-            ViewBag.seccoes = listseccoes;
+            ViewBag.ativs = listativs.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length);
+            ViewBag.seccoes = listseccoes.GetRange(0, 5);
             return await Task.Run(() => View());
         }
         [HttpPost]
@@ -252,12 +257,19 @@ namespace ScoutGestWeb.Controllers
                 ModelState.AddModelError("", "Há uma seccão em falta.");
                 return await Task.Run(() => View());
             }
+            if (tipoPagInicio[0] > tipoPagFim[0])
+            {
+                string temp = tipoPagFim;
+                tipoPagFim = tipoPagInicio;
+                tipoPagInicio = temp;
+            }
             string datas = string.Format("DataHora between {0} and {1}", dataInicio == null ? DateTime.MinValue.ToString() : dataInicio.ToString(), dataFim == null ? DateTime.MaxValue.ToString() : dataFim.ToString());
             string pags = string.Format("TipoPagamento between {0} and {1}", tipoPagInicio == null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
             string ativs = string.Format("Atividade between {0} and {1}", ativInicio == null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim == null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : this.listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
             string seccoes = string.Format("Seccao between {0} and {1}", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
-            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes;"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                 cmd.Parameters.AddWithValue("@datas", datas);
                 cmd.Parameters.AddWithValue("@ativs", ativs);
                 cmd.Parameters.AddWithValue("@pags", pags);
@@ -269,7 +281,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         IDCaixa = dr["IDCaixa"].ToString(),
                         IDDocumento = dr["IDDocumento"].ToString(),
-                        TipoMovimento = dr["TipoMovimento"].ToString() == "1" ? "Entrada" : dr["TipoMovimento"].ToString() == "2" ? "Saída" : "Teste",
+                        TipoMovimento = dr["TipoMovimento"].ToString(),
                         User = await _userManager.FindByNameAsync(dr["User"].ToString()),
                         DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
                         Valor = decimal.Parse(dr["Valor"].ToString()),
@@ -279,10 +291,33 @@ namespace ScoutGestWeb.Controllers
                     });
                 }
             }
-            return await Task.Run(() => new ViewAsPdf("Analises/Movimentos", mvm)
+            string parametros = "";
+            if (dataInicio != null) parametros += "desde " + dataInicio.ToString();
+            else parametros += "do mais antigo";
+            if (dataFim != null) parametros += " até " + dataFim.ToString() + ", ";
+            else parametros += " ao mais recente, ";
+            if (caixaInicio != null) parametros += "entre a caixa " + caixaInicio;
+            else parametros += "todas as caixas";
+            if (caixaFim != null) parametros += " até à caixa " + caixaFim + ", ";
+            else parametros += ", ";
+            if (tipoPagInicio != null) parametros += "entre o pagamento " + tipoPagInicio;
+            else parametros += "todos os pagamentos";
+            if (tipoPagFim != null) parametros += " até ao pagamento " + tipoPagFim + ", ";
+            else parametros += ", ";
+            if (ativInicio != null) parametros += "entre a atividade " + ativInicio;
+            else parametros += "todas as atividades";
+            if (ativFim != null) parametros += " e a atividade " + ativFim + ", ";
+            else parametros += ", ";
+            if (seccaoInicio != null || seccaoInicio != seccaoFim) parametros += "entre os " + seccaoInicio;
+            else parametros += "todo o agrupamento";
+            if (seccaoFim != null) parametros += " e os " + seccaoFim;
+
+            ViewData["parametros"] = parametros;
+            return await Task.Run(() => new ViewAsPdf("Analises/MovimentosCaixa", mvm, viewData: ViewData)
             {
                 PageOrientation = Orientation.Landscape,
-                PageMargins = new Margins(5, 5, 5, 5)
+                PageMargins = new Margins(5, 5, 5, 5),
+                PageSize = Size.A4
             });
         }
         #endregion
@@ -347,7 +382,8 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => new ViewAsPdf("Analises/TiposPags", listtpvm)
             {
                 PageOrientation = Orientation.Landscape,
-                PageMargins = new Margins(5, 5, 5, 5)
+                PageMargins = new Margins(5, 5, 5, 5),
+                PageSize = Size.A4
             });
         }
         public async Task<IActionResult> PDFTransfs()

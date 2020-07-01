@@ -5,7 +5,18 @@
 
 <h1>Informações e Logout</h1>
 <br />
-
+<div style="text-align: center; position: relative; margin: auto">
+    <div style="float: left; margin-left: 40vh">
+        <!--<p>Para voltar à página anterior, carregue aqui:</p>-->
+        <a href="@Url.ActionLink("Index", "Home")"><button class="btn btn-secondary">Voltar ao dashboard</button></a>
+    </div>
+    <div style="float: right; margin-right: 40vh" ">
+        <!--<p>Em caso queira fazer logout, carregue aqui:</p>-->
+        <a href="@Url.ActionLink("LogOut", "Home")"><button class="btn btn-secondary">Logout</button></a>
+    </div>
+</div>
+<br />
+<br />
 <div class="bordlogout" style="padding-left: 10px;">
     <h2 style="text-align: center">Informação geral</h2><hr />
     <p>Bem vindo a scoutgest. Esta aplicação foi criada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
@@ -29,13 +40,3 @@
     <p>Telemóvel: (+351) 912345678</p>
 </div>
 <br />
-<div>
-    <div style="position: relative; float: left; margin-right: 40vw">
-        <p>Para voltar à página anterior, carregue aqui:</p>
-        <a href="@Url.ActionLink("Index", "Home")"><button class="btn btn-secondary">Voltar</button></a>
-    </div>
-    <div style="position: relative; float: right; margin-right: 40vw">
-        <p>Em caso queira fazer logout, carregue aqui:</p>
-        <a href="@Url.ActionLink("LogOut", "Home")"><button class="btn btn-secondary">Logout</button></a>
-    </div>
-</div>

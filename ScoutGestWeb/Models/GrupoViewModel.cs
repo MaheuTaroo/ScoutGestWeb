@@ -19,7 +19,6 @@ namespace ScoutGestWeb.Models
         public string FotoDown { get; set; }
         [Required(ErrorMessage = "Secção do grupo em falta")]
         public string Seccao { get; set; }
-        [Required(ErrorMessage = "Pseudónimo do grupo em falta\r\nExemplo de um pseudónimo: Eq. Santa Clara de Assis (nome) => Santa Clara (pseudónimo)")]
-        public string Pseudonimo { get; set; }
+        public string Partips { get; set; }
     }
 }

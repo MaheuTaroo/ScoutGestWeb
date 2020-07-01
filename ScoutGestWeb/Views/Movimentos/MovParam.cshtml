@@ -5,7 +5,7 @@
 
 <h1>Movimentos entre parâmetros</h1>
 
-@using (Html.BeginForm("MovParam", "Movimentos"))
+@using (Html.BeginForm("MovParam", "Movimentos", FormMethod.Post))
 {
     <div>
         <h3>Data</h3><br />
@@ -96,4 +96,5 @@
             </select>
         </label>
     </div>
+    <input type="submit" value="Gerar consulta" />
 }

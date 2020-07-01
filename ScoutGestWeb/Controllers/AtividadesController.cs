@@ -14,28 +14,31 @@ namespace ScoutGestWeb.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         public AtividadesController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string coluna, string procura)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? " and Seccao = @seccao or Seccao = \"Agrupamento\"" + (User.IsInRole("Comum") ? " and DataInicio between now() - interval 3 day and now() + interval 3 day" : ";") : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            if (string.IsNullOrEmpty(coluna) && string.IsNullOrEmpty(procura))
             {
-                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
-                if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
+                using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? " and Seccao = @seccao or Seccao = \"Agrupamento\"" + (User.IsInRole("Comum") ? " and DataInicio between now() - interval 3 day and now() + interval 3 day" : "") : "") + (User.IsInRole("Comum") ? ";" : " order by DataInicio desc limit 25;"), new MySqlConnection("server =localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
-                }
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync())
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync(); ;
+                    if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
                     {
-                        avm.Add(new AtividadeViewModel()
+                        cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
+                    }
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync())
                         {
-                            IDAtividade = int.Parse(dr["IDAtividade"].ToString()),
-                            Nome = dr["Nome"].ToString(),
-                            DataInicio = DateTime.Parse(dr["DataInicio"].ToString()),
-                            DataFim = DateTime.Parse(dr["DataFim"].ToString())
-                        });
+                            avm.Add(new AtividadeViewModel()
+                            {
+                                IDAtividade = int.Parse(dr["IDAtividade"].ToString()),
+                                Nome = dr["Nome"].ToString(),
+                                DataInicio = DateTime.Parse(dr["DataInicio"].ToString()),
+                                DataFim = DateTime.Parse(dr["DataFim"].ToString())
+                            });
+                        }
                     }
                 }
             }

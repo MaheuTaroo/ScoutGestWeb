@@ -7,8 +7,24 @@
 <h4>Novo grupo</h4>
 <hr />
 <div class="row">
-    <div class="column col-xl-3 container-fluid" style="margin: 0 0 0 0; min-width: 100%; width: 100%">
+    <div class="column col-xl-3 container-fluid" style="text-align: center; min-width: 50%; width: 50%">
         <form asp-action="NovoGrupo" style="min-width: 100%; width: 100%;">
+            <!-- Modal -->
+            <!--<div class="modal fade" id="exampleModalCenter" tabindex="-2" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Aviso</h5>
+                        </div>
+                        <div class="modal-body">
+                            A criação de um grupo cria uma caixa automaticamente ligada a esse grupo. Porém, como o novo grupo ainda não tem participantes associados, a responsabilidade da caixa foi atribuída ao utilizador "Administração de Agrupamento". Recomendamos que crie ou altere as fichas de escuteiro necessárias para satisfazer as necessidades do grupo, e definir como responsável um dos participantes recentemente atribuídos.
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="OK" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </div>-->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
@@ -21,7 +37,7 @@
                 <span asp-validation-for="Sigla" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seccao" class="control-label"></label>
+                <label asp-for="Seccao" class="control-label">Secção</label>
                 <select asp-for="Seccao" class="form-control">
                     @foreach (string s in ViewBag.seccoes)
                     {
@@ -31,12 +47,15 @@
                 <span asp-validation-for="Seccao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pseudonimo" class="control-label">Pseudónimo</label>
-                <input asp-for="Pseudonimo" class="form-control" />
-                <span asp-validation-for="Pseudonimo" class="text-danger"></span>
+                <label asp-for="FotoUp" class="control-label">Fotografia</label>
+                <input asp-for="FotoUp" type="file" />
+                <span asp-validation-for="FotoUp" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary container-fluid" />
+                <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Criar caixa
+                </button>-->
+                <input type="submit" value="Criar caixa" class="btn btn-primary container-fluid" />-
             </div>
         </form>
     </div>

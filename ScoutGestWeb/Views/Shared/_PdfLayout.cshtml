@@ -26,6 +26,10 @@
         </div>
         <br />
         <div>
+            @if (ViewData["parametros"] != null)
+            {
+                <p><b>Parâmetros</b>: @ViewData["parametros"]</p>
+            }
             @RenderBody()
         </div>
     </body>

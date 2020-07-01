@@ -7,25 +7,27 @@
 
 <div class="bg-danger rounded-0">@Html.ValidationSummary(false)</div>
 
-@using (Html.BeginForm("DiarioCaixa", "Movimentos", FormMethod.Post))
-{
-    <label>
-        Caixa:
-        <select name="caixa">
-            @foreach (string s in ViewBag.caixas)
-            {
-                <option>@s</option>
-            }
-        </select>
-    </label>
-    <label>Início: <input type="datetime-local" name="inicio" /></label>
-    <br />
-    <label>Fim: <input type="datetime-local" name="fim" /></label>
-    <br />
-    <button type="submit">Criar análise</button>
-}
+<div style="margin: auto; text-align: center">
+    @using (Html.BeginForm("DiarioCaixa", "Movimentos", FormMethod.Post, new { @class = "text-center" }))
+    {
+        <label>
+            Caixa:
+            <select name="caixa">
+                @foreach (string s in ViewBag.caixas)
+                {
+                    <option>@s</option>
+                }
+            </select>
+        </label><br />
+        <label>Início: <input type="datetime-local" name="inicio" /></label>
+        <br />
+        <label>Fim: <input type="datetime-local" name="fim" /></label>
+        <br />
+        <button type="submit">Criar análise</button>
+    }
+</div>
 
-@using (Html.BeginForm("PDFCaixas", "Movimentos", FormMethod.Post))
+@*@using (Html.BeginForm("PDFCaixas", "Movimentos", FormMethod.Post))
 {
     <label>
         Caixa de início:
@@ -48,4 +50,4 @@
     </label>
     <br />
     <button type="submit">Criar análise</button>
-}
+}*@
