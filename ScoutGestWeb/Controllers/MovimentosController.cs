@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
+using Rotativa.AspNetCore;
+using Rotativa.AspNetCore.Options;
+using ScoutGestWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using ScoutGestWeb.Models;
-using Rotativa.AspNetCore;
-using Rotativa.AspNetCore.Options;
-using Microsoft.Extensions.Primitives;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -229,7 +227,7 @@ namespace ScoutGestWeb.Controllers
             ViewBag.caixas = listcaixas.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length);
             ViewBag.pags = listpags;
             ViewBag.ativs = listativs.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length);
-            ViewBag.seccoes = listseccoes.GetRange(0, 5);
+            ViewBag.seccoes = listseccoes;
             return await Task.Run(() => View());
         }
         [HttpPost]
@@ -263,10 +261,18 @@ namespace ScoutGestWeb.Controllers
                 tipoPagFim = tipoPagInicio;
                 tipoPagInicio = temp;
             }
-            string datas = string.Format("DataHora between {0} and {1}", dataInicio == null ? DateTime.MinValue.ToString() : dataInicio.ToString(), dataFim == null ? DateTime.MaxValue.ToString() : dataFim.ToString());
-            string pags = string.Format("TipoPagamento between {0} and {1}", tipoPagInicio == null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
-            string ativs = string.Format("Atividade between {0} and {1}", ativInicio == null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim == null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : this.listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
-            string seccoes = string.Format("Seccao between {0} and {1}", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
+            string datas = "";
+            if (dataInicio == dataFim) datas = string.Format("TipoPagamento between '%{0}%' and '%{1}%'", dataInicio == null ? DateTime.MinValue.ToString() : (Convert.ToDateTime(dataInicio).Date + new TimeSpan(0, 0, 0)).ToString(), dataInicio == null ? DateTime.MaxValue.ToString() : (Convert.ToDateTime(dataInicio).Date + new TimeSpan(23, 59, 59)).ToString());
+            else datas = string.Format("DataHora between '%{0}%' and '%{1}%'", dataInicio == null ? DateTime.MinValue.ToString() : dataInicio.ToString(), dataFim == null ? DateTime.MaxValue.ToString() : dataFim.ToString());
+            string pags = "";
+            if (tipoPagInicio == tipoPagFim) pags = string.Format("TipoPagamento like '%{0}%'", tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")));
+            else pags = string.Format("TipoPagamento between {0} and {1}", tipoPagInicio != null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
+            string ativs = "";
+            if (ativInicio == ativFim) ativs = string.Format("Atividade = {0}", ativInicio.Substring(0, ativFim.IndexOf(" - ")));
+            else ativs = string.Format("Atividade between {0} and {1}", ativInicio != null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim == null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : this.listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
+            string seccoes = "";
+            if (seccaoInicio == seccaoFim || seccaoInicio == "Agrupamento" || seccaoFim == "Agrupamento") seccoes = string.Format("Seccao like '%{0}%'", seccaoInicio ?? "Agrupamento");
+            else seccoes = string.Format("Seccao between '%{0}%' and '%{1}%'", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
             using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes;"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
@@ -292,26 +298,52 @@ namespace ScoutGestWeb.Controllers
                 }
             }
             string parametros = "";
-            if (dataInicio != null) parametros += "desde " + dataInicio.ToString();
+            if (dataInicio != null)
+            {
+                if (dataInicio == dataFim) parametros += "só em " + dataInicio;
+                else parametros += "entre " + dataInicio;
+            }
             else parametros += "do mais antigo";
-            if (dataFim != null) parametros += " até " + dataFim.ToString() + ", ";
+            if (dataFim != null && dataInicio != dataFim) parametros += " até " + dataFim.ToString() + ", ";
             else parametros += " ao mais recente, ";
-            if (caixaInicio != null) parametros += "entre a caixa " + caixaInicio;
+            if (caixaInicio != null)
+            {
+                if (caixaInicio == caixaFim) parametros += "só a caixa " + caixaInicio;
+                else parametros += "da caixa " + caixaInicio;
+            }
             else parametros += "todas as caixas";
-            if (caixaFim != null) parametros += " até à caixa " + caixaFim + ", ";
+            if (caixaFim != null && caixaInicio != caixaFim) parametros += " até à caixa " + caixaFim + ", ";
             else parametros += ", ";
-            if (tipoPagInicio != null) parametros += "entre o pagamento " + tipoPagInicio;
+            if (tipoPagInicio != null)
+            {
+                if (tipoPagInicio == listpags[0] && tipoPagFim == listpags[^1]) parametros += "todos os tipos de pagamento";
+                else
+                {
+                    if (tipoPagInicio != tipoPagFim) parametros += "entre o tipo de pagamento " + tipoPagInicio;
+                    else if (tipoPagInicio == tipoPagFim) parametros += "só o tipo de pagamento " + tipoPagInicio;
+                }
+            }
             else parametros += "todos os pagamentos";
-            if (tipoPagFim != null) parametros += " até ao pagamento " + tipoPagFim + ", ";
+            if (tipoPagFim != null && tipoPagInicio != tipoPagFim && (tipoPagInicio == listpags[0] && tipoPagFim == listpags[^1])) parametros += " e o pagamento " + tipoPagFim + ", ";
             else parametros += ", ";
-            if (ativInicio != null) parametros += "entre a atividade " + ativInicio;
+            if (ativInicio != null)
+            {
+                if (ativInicio == listativs[0] && ativFim == listativs[^1]) parametros += "todas as atividades";
+                else if (ativInicio == ativFim) parametros += "só a atividade " + ativInicio;
+                else parametros += "da atividade " + ativInicio;
+            }
             else parametros += "todas as atividades";
-            if (ativFim != null) parametros += " e a atividade " + ativFim + ", ";
+            if (ativFim != null && ativInicio != ativFim && (ativInicio != listativs[0] && ativFim != listativs[^1])) parametros += " até a atividade " + ativFim + ", ";
             else parametros += ", ";
-            if (seccaoInicio != null || seccaoInicio != seccaoFim) parametros += "entre os " + seccaoInicio;
+            if (seccaoInicio != null)
+            {
+                if ((seccaoInicio == "Agrupamento" || seccaoFim == "Agrupamento") || (seccaoInicio == "Lobitos" && seccaoFim == "Agrupamento")) parametros += "todo o agrupamento";
+                else if (seccaoInicio != seccaoFim) parametros += "entre os " + seccaoInicio;
+                else if (seccaoInicio == seccaoFim) parametros += "só os " + seccaoInicio;
+            }
             else parametros += "todo o agrupamento";
-            if (seccaoFim != null) parametros += " e os " + seccaoFim;
-
+            if (seccaoFim != null && seccaoInicio != seccaoFim) parametros += " e os " + seccaoFim;
+            
             ViewData["parametros"] = parametros;
             return await Task.Run(() => new ViewAsPdf("Analises/MovimentosCaixa", mvm, viewData: ViewData)
             {
