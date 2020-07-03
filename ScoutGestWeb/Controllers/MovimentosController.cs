@@ -42,9 +42,9 @@ namespace ScoutGestWeb.Controllers
                 }
                 listseccoes.AddRange(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
             }
-            listcaixas.Sort();
-            listpags.Sort();
-            listativs.Sort();
+            listcaixas = listcaixas.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length).ToList();
+            listpags = listpags.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length).ToList();
+            listativs = listativs.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length).ToList();
         }
         public async Task<IActionResult> Index()
         {
@@ -136,6 +136,7 @@ namespace ScoutGestWeb.Controllers
                         {
                             IDMovimento = int.Parse(dr["IDMovimento"].ToString()),
                             IDDocumento = dr["IDDocumento"].ToString(),
+                            Seccao = dr["Seccao"].ToString(),
                             TipoMovimento = dr["TipoMovimento"].ToString() == "1" ? "Entrada de Tesouraria" : "Saída de Tesouraria",
                             DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
                             Valor = decimal.Parse(dr["Valor"].ToString()),
@@ -224,9 +225,9 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> MovParam()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            ViewBag.caixas = listcaixas.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length);
+            ViewBag.caixas = listcaixas;
             ViewBag.pags = listpags;
-            ViewBag.ativs = listativs.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length);
+            ViewBag.ativs = listativs;
             ViewBag.seccoes = listseccoes;
             return await Task.Run(() => View());
         }
@@ -235,9 +236,9 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<MovimentoViewModel> mvm = new List<MovimentoViewModel>();
-            if ((tipoPagInicio == null && tipoPagFim != null) || (tipoPagInicio != null && tipoPagFim == null))
+            if (tipoPagInicio == null || tipoPagFim == null)
             {
-                ModelState.AddModelError("", "Há um tipo de pagamento em falta.");
+                ModelState.AddModelError("", "Há pelo menos um tipo de pagamento em falta.");
                 return await Task.Run(() => View());
             }
             else if ((caixaInicio == null && caixaFim != null) || (caixaInicio != null && caixaFim == null))
@@ -261,25 +262,51 @@ namespace ScoutGestWeb.Controllers
                 tipoPagFim = tipoPagInicio;
                 tipoPagInicio = temp;
             }
+            if (seccaoInicio[0] > seccaoFim[0])
+            {
+                string temp = seccaoFim;
+                seccaoFim = seccaoInicio;
+                seccaoInicio = temp;
+            }
+            if (int.Parse(ativInicio.Substring(0, ativInicio.IndexOf(" - "))) > int.Parse(ativFim.Substring(0, ativFim.IndexOf(" - "))))
+            {
+                string temp = ativFim;
+                ativFim = ativInicio;
+                ativInicio = temp;
+            }
+            if (dataInicio > dataFim)
+            {
+                DateTime temp = (DateTime)dataFim;
+                dataFim = dataInicio;
+                dataInicio = temp;
+            }
+            if (int.Parse(caixaInicio.Substring(0, caixaInicio.IndexOf(" - "))) > int.Parse(caixaFim.Substring(0, caixaFim.IndexOf(" - "))))
+            {
+                string temp = caixaFim;
+                caixaFim = caixaInicio;
+                caixaInicio = temp;
+            }
             string datas = "";
-            if (dataInicio == dataFim) datas = string.Format("TipoPagamento between '%{0}%' and '%{1}%'", dataInicio == null ? DateTime.MinValue.ToString() : (Convert.ToDateTime(dataInicio).Date + new TimeSpan(0, 0, 0)).ToString(), dataInicio == null ? DateTime.MaxValue.ToString() : (Convert.ToDateTime(dataInicio).Date + new TimeSpan(23, 59, 59)).ToString());
-            else datas = string.Format("DataHora between '%{0}%' and '%{1}%'", dataInicio == null ? DateTime.MinValue.ToString() : dataInicio.ToString(), dataFim == null ? DateTime.MaxValue.ToString() : dataFim.ToString());
+            if (dataInicio == dataFim) datas = string.Format("(cast(DataHora as date) between '{0}' and '{1}')", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataInicio == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}");
+            else datas = string.Format("cast(DataHora as date) between '{0}' and '{1}'", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataFim == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : $"{Convert.ToDateTime(dataFim).Year}-{Convert.ToDateTime(dataFim).Month}-{Convert.ToDateTime(dataFim).Day}");
             string pags = "";
-            if (tipoPagInicio == tipoPagFim) pags = string.Format("TipoPagamento like '%{0}%'", tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")));
-            else pags = string.Format("TipoPagamento between {0} and {1}", tipoPagInicio != null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
+            if (tipoPagInicio == tipoPagFim) pags = string.Format("TipoPag like '{0}'", tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")));
+            else pags = string.Format("TipoPag between '{0}' and '{1}'", tipoPagInicio != null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
             string ativs = "";
             if (ativInicio == ativFim) ativs = string.Format("Atividade = {0}", ativInicio.Substring(0, ativFim.IndexOf(" - ")));
-            else ativs = string.Format("Atividade between {0} and {1}", ativInicio != null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim == null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : this.listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
+            else ativs = string.Format("Atividade between {0} and {1}", ativInicio != null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim != null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
             string seccoes = "";
-            if (seccaoInicio == seccaoFim || seccaoInicio == "Agrupamento" || seccaoFim == "Agrupamento") seccoes = string.Format("Seccao like '%{0}%'", seccaoInicio ?? "Agrupamento");
-            else seccoes = string.Format("Seccao between '%{0}%' and '%{1}%'", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
-            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes;"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            if (seccaoInicio == seccaoFim) seccoes = string.Format("Seccao like '{0}'", seccaoInicio ?? "Agrupamento");
+            //else if (seccaoInicio == "Agrupamento" || seccaoFim == "Agrupamento") seccoes = string.Format("Seccao like '{0}'", seccaoInicio ?? "Agrupamento");
+            else seccoes = string.Format("Seccao between '{0}' and '{1}'", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
+            string caixas = "";
+            if (caixaInicio == caixaFim) caixas = string.Format("IDCaixa = {0}", caixaInicio.Substring(0, ativFim.IndexOf(" - ")));
+            else caixas = string.Format("IDCaixa between {0} and {1}", caixaInicio == null ? listcaixas[0] : caixaInicio.Substring(0, caixaInicio.IndexOf(" - ")), caixaFim == null ? listcaixas[^1] : caixaFim.Substring(0, caixaFim.IndexOf(" - ")));
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes and @caixas;"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
-                cmd.Parameters.AddWithValue("@datas", datas);
-                cmd.Parameters.AddWithValue("@ativs", ativs);
-                cmd.Parameters.AddWithValue("@pags", pags);
-                cmd.Parameters.AddWithValue("@seccoes", seccoes);
+                await cmd.PrepareAsync();
+                cmd.CommandText = cmd.CommandText.Replace("@datas", datas).Replace("@ativs", ativs).Replace("@pags", pags).Replace("@seccoes", seccoes).Replace("@caixas", caixas);
                 await cmd.PrepareAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
@@ -287,6 +314,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         IDCaixa = dr["IDCaixa"].ToString(),
                         IDDocumento = dr["IDDocumento"].ToString(),
+                        Seccao = dr["Seccao"].ToString(),
                         TipoMovimento = dr["TipoMovimento"].ToString(),
                         User = await _userManager.FindByNameAsync(dr["User"].ToString()),
                         DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
@@ -301,18 +329,20 @@ namespace ScoutGestWeb.Controllers
             if (dataInicio != null)
             {
                 if (dataInicio == dataFim) parametros += "só em " + dataInicio;
-                else parametros += "entre " + dataInicio;
+                else parametros += "entre " + Convert.ToDateTime(dataInicio).Date;
             }
             else parametros += "do mais antigo";
-            if (dataFim != null && dataInicio != dataFim) parametros += " até " + dataFim.ToString() + ", ";
-            else parametros += " ao mais recente, ";
+            if (dataFim != null && dataInicio != dataFim) parametros += " e " + Convert.ToDateTime(dataFim).Date + ", ";
+            else if (dataFim == null) parametros += " ao mais recente, ";
+            else parametros += ", ";
             if (caixaInicio != null)
             {
-                if (caixaInicio == caixaFim) parametros += "só a caixa " + caixaInicio;
+                if (caixaInicio == listcaixas[0] && caixaFim == listcaixas[^1]) parametros += "todas as caixas";
+                else if (caixaInicio == caixaFim) parametros += "só a caixa " + caixaInicio;
                 else parametros += "da caixa " + caixaInicio;
             }
             else parametros += "todas as caixas";
-            if (caixaFim != null && caixaInicio != caixaFim) parametros += " até à caixa " + caixaFim + ", ";
+            if (caixaFim != null && caixaInicio != caixaFim && !(caixaInicio == listcaixas[0] && caixaFim == listcaixas[^1])) parametros += " até à caixa " + caixaFim + ", ";
             else parametros += ", ";
             if (tipoPagInicio != null)
             {
@@ -324,7 +354,7 @@ namespace ScoutGestWeb.Controllers
                 }
             }
             else parametros += "todos os pagamentos";
-            if (tipoPagFim != null && tipoPagInicio != tipoPagFim && (tipoPagInicio == listpags[0] && tipoPagFim == listpags[^1])) parametros += " e o pagamento " + tipoPagFim + ", ";
+            if (tipoPagFim != null && tipoPagInicio != tipoPagFim && !(tipoPagInicio == listpags[0] && tipoPagFim == listpags[^1])) parametros += " e o pagamento " + tipoPagFim + ", ";
             else parametros += ", ";
             if (ativInicio != null)
             {
@@ -342,8 +372,7 @@ namespace ScoutGestWeb.Controllers
                 else if (seccaoInicio == seccaoFim) parametros += "só os " + seccaoInicio;
             }
             else parametros += "todo o agrupamento";
-            if (seccaoFim != null && seccaoInicio != seccaoFim) parametros += " e os " + seccaoFim;
-            
+            if (seccaoFim != null && seccaoInicio != seccaoFim && !(seccaoInicio == "Lobitos" && seccaoFim == "Agrupamento")) parametros += " e os " + seccaoFim;
             ViewData["parametros"] = parametros;
             return await Task.Run(() => new ViewAsPdf("Analises/MovimentosCaixa", mvm, viewData: ViewData)
             {
@@ -390,7 +419,7 @@ namespace ScoutGestWeb.Controllers
                         if (cvm.Contains(new CaixaViewModel()
                         {
                             Grupo = dr["IDGrupo"].ToString()
-                        })) escuteiros.Add(dr["Nome"].ToString());
+                        })) grupos.Add(dr["Nome"].ToString());
                     }
                 }
             }
@@ -451,8 +480,8 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => new ViewAsPdf("Analises/Transferencias", listmtvm)
             {
-                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,
-                PageMargins = new Rotativa.AspNetCore.Options.Margins(5, 5, 5, 5)
+                PageOrientation = Orientation.Landscape,
+                PageMargins = new Margins(5, 5, 5, 5)
             });
         }
         #endregion
