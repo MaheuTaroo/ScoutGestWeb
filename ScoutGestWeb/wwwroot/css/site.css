@@ -349,6 +349,16 @@ footer {
     width: 100%;  
 }
 
+/* Clear floats (clearfix hack) */
+.tesoura-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.tesoura-group button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
 
 
 /*just a question: why "rowdeth" instead of "rowdet"? why the 'h'?*/

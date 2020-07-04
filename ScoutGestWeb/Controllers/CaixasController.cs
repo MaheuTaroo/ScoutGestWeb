@@ -28,7 +28,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.CommandText += " where Grupo = @id";
                     cmd.Parameters.AddWithValue("@id", (await _userManager.GetUserAsync(User)).IDGrupo);
                 }
-                else if (User.IsInRole("Comum"))
+                else if (User.IsInRole("Equipa de Animação"))
                 {
                     cmd.CommandText += " where Grupo in (select IDGrupo from grupos where Seccao = @seccao)";
                     cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
@@ -41,7 +41,8 @@ namespace ScoutGestWeb.Controllers
                         {
                             ID = int.Parse(dr["IDCaixa"].ToString()),
                             Nome = dr["Nome"].ToString(),
-                            Responsavel = dr["Responsavel"].ToString() + " - "
+                            Responsavel = dr["Responsavel"].ToString() + " - ",
+                            Saldo = decimal.Parse(dr["Saldo"].ToString())
                         });
                         grupos.Add(int.Parse(dr["Grupo"].ToString()));
                         responsaveis.Add(int.Parse(dr["Responsavel"].ToString()));
@@ -50,7 +51,8 @@ namespace ScoutGestWeb.Controllers
                 cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
                 for (int i = 0; i < grupos.Count; i++)
                 {
-                    cmd.Parameters["@id"].Value = grupos[i];
+                    if (!cmd.Parameters.Contains("@id")) cmd.Parameters.AddWithValue("@id", grupos[i]);
+                    else cmd.Parameters["@id"].Value = grupos[i];
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {

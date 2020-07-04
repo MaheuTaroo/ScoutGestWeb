@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 03-Jul-2020 às 21:51
+-- Tempo de geração: 04-Jul-2020 às 22:53
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -286,7 +286,7 @@ INSERT INTO `caixas` (`IDCaixa`, `Nome`, `Grupo`, `Responsavel`, `Saldo`) VALUES
 (25, 'Expedição', 25, 191, '0.00'),
 (26, 'Comunidade', 26, 197, '0.00'),
 (27, 'Clã', 27, 203, '0.00'),
-(28, 'Administração de Agrupamento', 28, 210, '123.00');
+(28, 'Administração de Agrupamento', 28, 210, '0.00');
 
 -- --------------------------------------------------------
 
@@ -701,12 +701,7 @@ INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `Seccao`, `IDDocumento`, `Ti
 (21, 21, 'Caminheiros', 'SA', 'Saída de tesouraria', 'AdminAgr', '2020-02-18', '21.00', 'DI', '21212121212121212121', 2),
 (22, 22, 'Caminheiros', 'SA', 'Saída de tesouraria', 'AdminAgr', '2020-02-25', '22.00', 'DI', '22222222222222222222', 2),
 (23, 23, 'Caminheiros', 'SA', 'Saída de tesouraria', 'AdminAgr', '2020-03-03', '23.00', 'DI', '23232323232323232323', 2),
-(24, 0, 'Teste', 'SA', 'Saída de tesouraria', 'AdminAgr', '2020-06-17', '0.00', 'DI', '24242424242424242424', 2),
-(25, 19, 'Pioneiros', 'TC', 'Saída de tesouraria', 'EqSCA', '2020-06-11', '99.50', 'MB', 'Teste', 2),
-(26, 1, 'Lobitos', 'TC', 'Entrada de tesouraria', 'EqSCA', '2020-06-11', '99.50', 'MB', 'Teste', 2),
-(27, 19, 'Pioneiros', 'TC', 'Saída de tesouraria', 'EqSCA', '2020-06-18', '99.50', 'DI', 'Teste', 1),
-(28, 4, 'Lobitos', 'TC', 'Entrada de tesouraria', 'EqSCA', '2020-06-18', '99.50', 'DI', 'Teste', 1),
-(29, 28, 'Agrupamento', 'EN', 'Entrada de tesouraria', 'AdminAgr', '2020-07-01', '123.00', 'DI', 'Doação', 1);
+(24, 0, 'Teste', 'SA', 'Saída de tesouraria', 'AdminAgr', '2020-06-17', '0.00', 'DI', '24242424242424242424', 2);
 
 --
 -- Acionadores `movimentos`
@@ -1253,7 +1248,7 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT de tabela `movimentos`
 --
 ALTER TABLE `movimentos`
-  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Restrições para despejos de tabelas

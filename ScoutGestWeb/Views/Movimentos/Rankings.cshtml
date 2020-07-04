@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "Rankings";
+}
+
+<h1>Rankings</h1>
+
+@using (Html.BeginForm("RankingsAtivs", "Movimentos", FormMethod.Post))
+{
+    <label>Atividade inicial: <select name="ativInicio">
+        @foreach (string s in ViewBag.ativs)
+        {
+            <option>@s</option>
+        }
+    </select></label><br />
+    <label>Atividade final:<select name="ativFim">
+        @foreach (string s in ViewBag.ativs)
+        {
+            <option>@s</option>
+        }
+    </select></label><br />
+    <label>Ordem: <select name="ordem">
+        <option>Ascendente</option>
+        <option>Descendente</option>
+    </select></label><br />
+    <input type="submit" value="Criar relatório" />
+}

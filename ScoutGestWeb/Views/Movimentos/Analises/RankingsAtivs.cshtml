@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ScoutGestWeb.Models.MovimentoViewModel>
+
+@{
+    ViewData["Title"] = "RankingsAtivs";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Atividade</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Atividade)</td>
+            <td>@Html.DisplayFor(modelItem => item.Valor)</td>
+        </tr>
+}
+    </tbody>
+</table>

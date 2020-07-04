@@ -2,16 +2,21 @@
     ViewData["Title"] = "Tesouraria";
 }
 
-<h1 style="text-align: center; z-index:2">Tesouraria</h1>
+<h1 style="text-align: center; z-index:2; margin-top:10%">Tesouraria</h1>
 <br />
+
 <div class="toptesoura" style="z-index:2">
-    <a style="width: inherit" asp-action="Index" asp-controller="Caixas"><button>Caixas</button></a>
-    <a style="width: inherit" asp-action="Index" asp-controller="TiposDocs"><button>Documentos</button></a>
-    @if (User.IsInRole("Administração de Agrupamento"))
-    {
-        <a style="width: inherit" asp-action="Index" asp-controller="TiposPags"><button>Pagamentos</button></a>
-    }
-    <a style="width: inherit" asp-action="Index" asp-controller="Movimentos"><button>Movimentos</button></a>
+    <div class="tesoura-group">
+        <a style="width: inherit" asp-action="Index" asp-controller="Caixas"><button>Caixas</button></a>
+        <a style="width: inherit; margin-left:5px" asp-action="Index" asp-controller="TiposDocs"><button>Documentos</button></a>
+        <div class="tesoura-group" style="margin-top:9px">
+            @if (User.IsInRole("Administração de Agrupamento"))
+            {
+              <a style="width: inherit" asp-action="Index" asp-controller="TiposPags"><button>Pagamentos</button></a>
+            }
+            <a style="width: inherit; margin-left:5px;" asp-action="Index" asp-controller="Movimentos"><button>Movimentos</button></a>
+        </div>
+    </div>
 </div>
 
 

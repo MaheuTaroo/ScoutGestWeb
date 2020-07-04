@@ -232,7 +232,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View());
         }
         [HttpPost]
-        public async Task<IActionResult> MovParam(DateTime? dataInicio = null, DateTime? dataFim = null, string caixaInicio = null, string caixaFim = null, string tipoPagInicio = null, string tipoPagFim = null, string ativInicio = null, string ativFim = null, string seccaoInicio = null, string seccaoFim = null)
+        public async Task<IActionResult> MovParam(DateTime? dataInicio = null, DateTime? dataFim = null, string caixaInicio = null, string caixaFim = null, string tipoPagInicio = null, string tipoPagFim = null, string ativInicio = null, string ativFim = null, string seccaoInicio = null, string seccaoFim = null, bool detalhado = false)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<MovimentoViewModel> mvm = new List<MovimentoViewModel>();
@@ -373,8 +373,74 @@ namespace ScoutGestWeb.Controllers
             }
             else parametros += "todo o agrupamento";
             if (seccaoFim != null && seccaoInicio != seccaoFim && !(seccaoInicio == "Lobitos" && seccaoFim == "Agrupamento")) parametros += " e os " + seccaoFim;
-            ViewData["parametros"] = parametros;
+            ViewData["parametro"] = parametros;
+            ViewData["detalhado"] = detalhado;
             return await Task.Run(() => new ViewAsPdf("Analises/MovimentosCaixa", mvm, viewData: ViewData)
+            {
+                PageOrientation = Orientation.Landscape,
+                PageMargins = new Margins(5, 5, 5, 5),
+                PageSize = Size.A4
+            });
+        }
+        #endregion
+        #region Rankings
+        public async Task<IActionResult> Rankings()
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            ViewBag.ativs = listativs;
+            return await Task.Run(() => View());
+        }
+        [HttpPost]
+        public async Task<IActionResult> RankingsAtivs(string ativInicio = null, string ativFim = null, string ordem = null)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            List<MovimentoViewModel> mvm = new List<MovimentoViewModel>();
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                if (ativInicio != null || ativFim != null) 
+                {
+                    if (int.Parse(ativInicio.Substring(0, ativInicio.IndexOf(" - "))) < int.Parse(ativInicio.Substring(0, ativInicio.IndexOf(" - "))))
+                    {
+                        string temp = ativFim;
+                        ativFim = ativInicio;
+                        ativInicio = temp;
+                    }
+                    cmd.CommandText += (ativInicio == ativFim ? " and where Atividade = @inicio" : " and where Atividade between @inicio and @fim");
+                    if (ativInicio == null) cmd.CommandText = cmd.CommandText.Replace("@inicio", "(select (min(IDAtividade) from atividades)");
+                    else cmd.Parameters.AddWithValue("@inicio", ativInicio);
+                    if (ativFim != ativInicio)
+                    {
+                        if (ativFim == null) cmd.CommandText = cmd.CommandText.Replace("@fim", "(select (max(IDAtividade) from atividades)");
+                        else cmd.Parameters.AddWithValue("@fim", ativFim);
+                    }
+                }
+                if (ordem != null) cmd.CommandText += " order by Valor" + (ordem == "Ascendente" ? " asc" : " desc");
+                if (cmd.CommandText.Contains("@inicio")) await cmd.PrepareAsync();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    //dr.Read();
+                    while (await dr.ReadAsync())
+                    {
+                        mvm.Add(new MovimentoViewModel()
+                        {
+                            IDCaixa = dr["IDCaixa"].ToString(),
+                            IDDocumento = dr["IDDocumento"].ToString(),
+                            Seccao = dr["Seccao"].ToString(),
+                            TipoMovimento = dr["TipoMovimento"].ToString(),
+                            User = await _userManager.FindByNameAsync(dr["User"].ToString()),
+                            DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
+                            Valor = decimal.Parse(dr["Valor"].ToString()),
+                            TipoPagamento = dr["TipoPag"].ToString(),
+                            Descricao = dr["Descricao"].ToString(),
+                            Atividade = dr["Atividade"].ToString()
+                        });
+                    }
+                }
+            }
+            string parametros = "";
+            ViewData["parametros"] = parametros;
+            return await Task.Run(() => new ViewAsPdf("Analises/RankingsAtivs", mvm, viewData: ViewData)
             {
                 PageOrientation = Orientation.Landscape,
                 PageMargins = new Margins(5, 5, 5, 5),
@@ -407,9 +473,15 @@ namespace ScoutGestWeb.Controllers
                     }
                 }
                 cmd.CommandText = "select IDEscuteiro, Totem from escuteiros";
-                for (int i = 0; i < mvm.Count; i++)
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
-
+                    while (await dr.ReadAsync())
+                    {
+                        if (cvm.Contains(new CaixaViewModel()
+                        {
+                            Responsavel = dr["IDEscuteiro"].ToString()
+                        })) escuteiros.Add(dr["Nome"].ToString());
+                    }
                 }
                 cmd.CommandText = "select IDGrupo, Nome from grupos";
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())

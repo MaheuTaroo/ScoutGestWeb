@@ -206,3 +206,5 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Rotativa.AspNetCore.
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.csproj.CoreCompileInputs.cache
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cache
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Rankings.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Analises\RankingsAtivs.cshtml.g.cs

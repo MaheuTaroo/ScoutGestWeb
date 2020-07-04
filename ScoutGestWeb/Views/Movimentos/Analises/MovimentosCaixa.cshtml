@@ -6,33 +6,59 @@
 <table class="table" style="border: 2px solid black; margin: auto 0 auto 0;">
     <thead>
         <tr>
-            <th>Caixa</th>
-            <th>Documento</th>
-            <th>Secção</th>
-            <th>Tipo de movimento</th>
-            <th>Username</th>
-            <th>Data/Hora</th>
-            <th>Valor</th>
-            <th>Tipo de pagamento</th>
-            <th>Descrição</th>
-            <th>Atividade</th>
+            @if ((bool)ViewData["detalhado"])
+            {
+                <th>Caixa</th>
+                <th>Documento</th>
+                <th>Secção</th>
+                <th>Tipo de movimento</th>
+                <th>Username</th>
+                <th>Data/Hora</th>
+                <th>Valor</th>
+                <th>Tipo de pagamento</th>
+                <th>Descrição</th>
+                <th>Atividade</th>
+            }
+            else
+            {
+                <th>Caixa</th>
+                <th>Documento</th>
+                <th>Tipo de movimento</th>
+                <th>Data/Hora</th>
+                <th>Valor</th>
+                <th>Descrição</th>
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.IDCaixa)</td>
-                <td>@Html.DisplayFor(modelItem => item.IDDocumento)</td>
-                <td>@Html.DisplayFor(modelItem => item.Seccao)</td>
-                <td>@Html.DisplayFor(modelItem => item.TipoMovimento)</td>
-                <td>@Html.DisplayFor(modelItem => item.User.NormalizedUserName)</td>
-                <td>@Html.DisplayFor(modelItem => item.DataHora)</td>
-                <td>@Html.DisplayFor(modelItem => item.Valor)€</td>
-                <td>@Html.DisplayFor(modelItem => item.TipoPagamento)</td>
-                <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
-                <td>@Html.DisplayFor(modelItem => item.Atividade)</td>
-            </tr>
+            if ((bool)ViewData["detalhado"])
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.IDCaixa)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IDDocumento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Seccao)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TipoMovimento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.User.NormalizedUserName)</td>
+                    <td>@item.DataHora.Date.ToString().Substring(0, item.DataHora.Date.ToString().IndexOf(" 00:00:00"))</td>
+                    <td>@Html.DisplayFor(modelItem => item.Valor)€</td>
+                    <td>@Html.DisplayFor(modelItem => item.TipoPagamento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Atividade)</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.IDCaixa)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IDDocumento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TipoMovimento)</td>
+                    <td>@item.DataHora.Date.ToString().Substring(0, item.DataHora.Date.ToString().IndexOf(" 00:00:00"))</td>
+                    <td>@Html.DisplayFor(modelItem => item.Valor)€</td>
+                    <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+                </tr>
+            }
         }
     </tbody>
 </table>
