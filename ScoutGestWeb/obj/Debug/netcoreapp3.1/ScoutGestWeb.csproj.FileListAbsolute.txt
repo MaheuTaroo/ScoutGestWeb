@@ -208,3 +208,4 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcAppl
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\ScoutGestWeb.MvcApplicationPartsAssemblyInfo.cache
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Rankings.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Analises\RankingsAtivs.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Analises\RankingsGrupos.cshtml.g.cs

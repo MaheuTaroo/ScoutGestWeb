@@ -7,21 +7,67 @@
 
 @using (Html.BeginForm("RankingsAtivs", "Movimentos", FormMethod.Post))
 {
-    <label>Atividade inicial: <select name="ativInicio">
-        @foreach (string s in ViewBag.ativs)
-        {
-            <option>@s</option>
-        }
-    </select></label><br />
-    <label>Atividade final:<select name="ativFim">
-        @foreach (string s in ViewBag.ativs)
-        {
-            <option>@s</option>
-        }
-    </select></label><br />
-    <label>Ordem: <select name="ordem">
-        <option>Ascendente</option>
-        <option>Descendente</option>
-    </select></label><br />
+    <h2>Atividades</h2>
+    <label>
+        Atividade inicial: <select name="ativInicio">
+            @foreach (string s in ViewBag.ativs)
+            {
+                <option>@s</option>
+            }
+        </select>
+    </label>
+    <br />
+    <label>
+        Atividade final:<select name="ativFim">
+            @foreach (string s in ViewBag.ativs)
+            {
+                <option>@s</option>
+            }
+        </select>
+    </label>
+    <br />
+    <label>
+        Ordem:
+        <select name="ordem">
+            <option>Ascendente</option>
+            <option>Descendente</option>
+        </select>
+    </label>
+    <br />
     <input type="submit" value="Criar relatório" />
 }
+<br />
+@using (Html.BeginForm("RankingsGrupos", "Movimentos", FormMethod.Post))
+{
+    <h2>Grupos</h2>
+    <label>
+        Grupo inicial:
+        <select name="grupoInicio">
+            @foreach (string s in ViewBag.grupos)
+            {
+                <option>@s</option>
+            }
+        </select>
+    </label>
+    <br />
+    <label>
+        Grupo final:
+        <select name="grupoFim">
+            @foreach (string s in ViewBag.grupos)
+            {
+                <option>@s</option>
+            }
+        </select>
+    </label>
+    <br />
+    <label>
+        Ordem:
+        <select name="ordem">
+            <option>Ascendente</option>
+            <option>Descendente</option>
+        </select>
+    </label>
+    <br />
+    <input type="submit" value="Criar relatório" />
+}
+<br />
