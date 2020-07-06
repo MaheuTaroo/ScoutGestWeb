@@ -13,11 +13,12 @@ using System.Reflection;
 
 [assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap4")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-ScoutGestWeb-C4D9B37E-487D-4FCF-961D-7BAB94A307E2")]
-[assembly: System.Reflection.AssemblyCompanyAttribute("ScoutGestWeb")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("ScoutGest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute(@"Esta aplicação foi construída no âmbito da Prova de Aptidão Profissional do curso de Técnico de Gestão e Programação de Sistemas Informáticos da EPED - Escola Profissional de Educação para o Desenvolvimento. Foi programada pelos alunos João Jesus e João Martins, e supervisionada pelo professor Carlos Romão.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("ScoutGestWeb")]
+[assembly: System.Reflection.AssemblyProductAttribute("ScoutGest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScoutGestWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 

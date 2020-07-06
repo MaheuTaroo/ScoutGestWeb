@@ -13,9 +13,10 @@ using System.Reflection;
 
 [assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ProvideApplicationPartFactoryAttribute("Microsoft.AspNetCore.Mvc.ApplicationParts.CompiledRazorAssemblyApplicationPartFac" +
     "tory, Microsoft.AspNetCore.Mvc.Razor")]
-[assembly: System.Reflection.AssemblyCompanyAttribute("ScoutGestWeb")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("ScoutGest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyProductAttribute("ScoutGestWeb")]
+[assembly: System.Reflection.AssemblyProductAttribute("ScoutGest")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute(@"Esta aplicação foi construída no âmbito da Prova de Aptidão Profissional do curso de Técnico de Gestão e Programação de Sistemas Informáticos da EPED - Escola Profissional de Educação para o Desenvolvimento. Foi programada pelos alunos João Jesus e João Martins, e supervisionada pelo professor Carlos Romão.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScoutGestWeb.Views")]

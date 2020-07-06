@@ -10053,7 +10053,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "D:\\GitHub\\ScoutGestWeb\\ScoutGestWeb\\ScoutGestWeb.csproj",
-      "projectName": "ScoutGestWeb",
+      "projectName": "ScoutGest",
       "projectPath": "D:\\GitHub\\ScoutGestWeb\\ScoutGestWeb\\ScoutGestWeb.csproj",
       "packagesPath": "C:\\Users\\pantu\\.nuget\\packages\\",
       "outputPath": "D:\\GitHub\\ScoutGestWeb\\ScoutGestWeb\\obj\\",
