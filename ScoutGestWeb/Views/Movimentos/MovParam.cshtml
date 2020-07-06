@@ -1,101 +1,109 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Movimentos entre parâmetros - Tesouraria";
 }
+<h3>Movimentos entre parâmetros</h3>
+<div class="split">
+    @using (Html.BeginForm("MovParam", "Movimentos", FormMethod.Post))
+    {
+    <div class="split left" style="margin-top:160px;margin-left:5%; width:40%">
+        <div>
+            <h4>Data</h4>
+            <label>
+                Início: <input type="date" min="1900-01-01" step="1" name="dataInicio" />
+            </label><br />
+            <label>Fim: <input type="date" min="1900-01-01" step="1" name="dataFim" /></label>
+        </div><br />
 
-<h1>Movimentos entre parâmetros</h1>
+        <div>
+            <h4>Caixas</h4>
+            <label>
+                Início:
+                <select name="caixaInicio">
+                    @foreach (string s in ViewBag.caixas)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label><br />
+            <label>
+                Fim:
+                <select name="caixaFim">
+                    @foreach (string s in ViewBag.caixas)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label>
+        </div><br />
 
-@using (Html.BeginForm("MovParam", "Movimentos", FormMethod.Post))
-{
-    <div>
-        <h3>Data</h3><br />
-        <label>Início: <input type="date" min="1900-01-01" step="1" name="dataInicio" /></label><br />
-        <label>Fim: <input type="date" min="1900-01-01" step="1" name="dataFim" /></label>
+        <div>
+            <h4>Tipos de pagamento</h4>
+            <label>
+                Início:
+                <select name="tipoPagInicio">
+                    @foreach (string s in ViewBag.pags)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label><br />
+            <label>
+                Fim:
+                <select name="tipoPagFim">
+                    @foreach (string s in ViewBag.pags)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label>
+        </div><br />
+
+       
+        <div class="split right" style="margin-top:160px; width:40%; margin-right:5%">
+            <div>
+                <h4>Atividades</h4>
+                <label>
+                    Início:
+                    <select name="ativInicio">
+                        @foreach (string s in ViewBag.ativs)
+                        {
+                        <option>@s</option>
+                        }
+                    </select>
+                </label><br />
+                <label>
+                    Fim:
+                    <select name="ativFim">
+                        @foreach (string s in ViewBag.ativs)
+                        {
+                        <option>@s</option>
+                        }
+                    </select>
+                </label>
+            </div><br />
+
+            <h4>Secções</h4>
+            <label>
+                Início:
+                <select name="seccaoInicio">
+                    @foreach (string s in ViewBag.seccoes)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label><br />
+            <label>
+                Fim:
+                <select name="seccaoFim">
+                    @foreach (string s in ViewBag.seccoes)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label> <br />
+            <label><input type="checkbox" name="detalhado" value="true" /> Mapa detalhado?</label><br />
+            <input type="submit" value="Gerar consulta" />
+        </div><br />
     </div>
-    <div>
-        <h3>Caixas</h3><br />
-        <label>
-            Início:
-            <select name="caixaInicio">
-                @foreach (string s in ViewBag.caixas)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label><br />
-        <label>
-            Fim:
-            <select name="caixaFim">
-                @foreach (string s in ViewBag.caixas)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label>
-    </div>
-    <div>
-        <h3>Tipos de pagamento</h3><br />
-        <label>
-            Início:
-            <select name="tipoPagInicio">
-                @foreach (string s in ViewBag.pags)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label><br />
-        <label>
-            Fim:
-            <select name="tipoPagFim">
-                @foreach (string s in ViewBag.pags)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label>
-    </div>
-    <div>
-        <h3>Atividades</h3><br />
-        <label>
-            Início:
-            <select name="ativInicio">
-                @foreach (string s in ViewBag.ativs)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label><br />
-        <label>
-            Fim:
-            <select name="ativFim">
-                @foreach (string s in ViewBag.ativs)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label>
-    </div>
-    <div>
-        <h3>Secções</h3><br />
-        <label>
-            Início:
-            <select name="seccaoInicio">
-                @foreach (string s in ViewBag.seccoes)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label><br />
-        <label>
-            Fim:
-            <select name="seccaoFim">
-                @foreach (string s in ViewBag.seccoes)
-                {
-                    <option>@s</option>
-                }
-            </select>
-        </label>
-    </div>
-    <label><input type="checkbox" name="detalhado" value="true"/> Mapa detalhado?</label><br />
-    <input type="submit" value="Gerar consulta" />
-}
+    }
+</div>

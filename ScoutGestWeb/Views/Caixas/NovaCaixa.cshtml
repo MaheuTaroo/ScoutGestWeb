@@ -1,44 +1,58 @@
 ﻿@model ScoutGestWeb.Models.CaixaViewModel
-
 @{
     ViewData["Title"] = "Nova caixa - Caixas";
 }
 
-<h2>Nova caixa</h2>
+<h1>Nova caixa</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="NovaCaixa">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--<div class="form-group">
-                <label asp-for="ID" class="control-label"></label>
-                <input asp-for="ID" class="form-control" />
-                <span asp-validation-for="ID" class="text-danger"></span>
-            </div>-->
-            <label asp-for="Nome" class="control-label"></label>
-            <input asp-for="Nome" class="form-control" /><br />
-            <div class="text-danger">@Html.ValidationMessageFor(x => x.Nome)</div>
+            <div class="split">
+                <div class="split left" style="margin-top:210px;margin-left:5%; width:40%">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control" /><br />
+                    <div class="text-danger">@Html.ValidationMessageFor(x => x.Nome)</div>
 
-            <label asp-for="Grupo" class="control-label"></label>
-            <select asp-for="Grupo" class="form-control">
-                @foreach (var grupo in ViewBag.grupos)
-                {
-                <option>@grupo</option>
-                }
-            </select><br />
-            <div class="text-danger">@Html.ValidationMessageFor(x => x.Grupo)</div>
-            <label asp-for="Responsavel" class="control-label">Responsável</label>
-            <input asp-for="Responsavel" class="form-control" /><br />
-            <div class="text-danger">@Html.ValidationMessageFor(x => x.Responsavel)</div>
-            <label asp-for="Saldo" class="control-label">Saldo</label>
-            <input asp-for="Saldo" class="form-control" type="number" max="99999999999999999999999999999999999999999999999999999999999999999.99" min="0.00" step="0.01" value="0.00" /><br />
-            <div class="text-danger">@Html.ValidationMessageFor(x => x.Saldo)</div>
-            <button type="submit" class="btn btn-primary">Criar</button>
+                    <label asp-for="Grupo" class="control-label"></label>
+                    <select asp-for="Grupo" class="form-control">
+                        @foreach (var grupo in ViewBag.grupos)
+                        {
+                        <option>@grupo</option>
+                        }
+                    </select><br />
+                    <!--am bacc-->
+                    <!--e como tb vamos meter a imagem tb nao posso fazer muito nos views da tesouraria mas simplesmente
+                        meti alguns com os looks consistent, tipo aqueles onde tem varios text boxes meti como os das
+                        outras views-->
+                    <!--metemos como background, bruh lmao-->
+                    <!--i know mas quando alterei a outra view tu falaste na imagem e pensei "ok nao alterar muito as
+                        views da tesouraria
+                        also brb-->
+                </div>
+                <div class="split right" style="margin-top:210px; width:40%; margin-right:5%">
+                    <div class="text-danger">@Html.ValidationMessageFor(x => x.Grupo)</div>
+                    <label asp-for="Responsavel" class="control-label">Responsável</label>
+                    <input asp-for="Responsavel" class="form-control" /><br />
+                    <div class="text-danger">@Html.ValidationMessageFor(x => x.Responsavel)</div>
+
+                    <label asp-for="Saldo" class="control-label">Saldo</label>
+                    <input asp-for="Saldo" class="form-control" type="number" max="99999999999999999999999999999999999999999999999999999999999999999.99" min="0.00" step="0.01" value="0.00" /><br />
+                    <div class="text-danger">@Html.ValidationMessageFor(x => x.Saldo)</div>
+                    <button type="submit" class="btn btn-primary">Criar</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar à listagem</a>
 </div>
 
+
+            <!--<div class="form-group">
+        <label asp-for="ID" class="control-label"></label>
+        <input asp-for="ID" class="form-control" />
+        <span asp-validation-for="ID" class="text-danger"></span>
+    </div>-->

@@ -194,7 +194,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Moviment
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PdfLayout.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\DiarioCaixa.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\MovParam.cshtml.g.cs
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\View.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\InserirEscuteiro\Eliminar.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\InserirEscuteiro\EditarEscuteiro.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll

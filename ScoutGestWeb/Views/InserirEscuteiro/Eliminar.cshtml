@@ -7,117 +7,42 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Totem)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Totem)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cargos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cargos)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NumTelefone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NumTelefone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Grupo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Grupo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Morada)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Morada)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Morada2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Morada2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CodPostal)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CodPostal)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Localidade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Localidade)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GrupoSanguineo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GrupoSanguineo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Alergias)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Alergias)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Medicacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Medicacao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Problemas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Problemas)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Observacoes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Observacoes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Seccao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Seccao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Idade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Idade)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FotoDown)
-        </dt>
-        <dd class = "col-sm-10">
-            <img src="@Html.DisplayFor(model => model.FotoDown)" />
-        </dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Nome): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Nome)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Totem): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Totem)</dd>
+        <dt class="col-sm-2"> @Html.DisplayNameFor(model => model.Cargos): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Cargos)</dd>
+        <dt class="col-sm-2">Número(s) de telefone: </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.NumTelefone)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Grupo): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Grupo)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Morada): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Morada) @Html.DisplayFor(model => model.Morada2)</dd>
+        <dt class="col-sm-2">Código-postal: </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.CodPostal)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Localidade): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Localidade)</dd>
+        <dt class="col-sm-2">Gruo sanguíneo: </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.GrupoSanguineo)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Alergias): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Alergias)</dd>
+        <dt class="col-sm-2">Medicação: </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Medicacao)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Problemas): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Problemas)</dd>
+        <dt class="col-sm-2">Observações: </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Observacoes)</dd>
+        <dt class="col-sm-2">Secção: </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Seccao)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Estado): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Estado)</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Idade): </dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Idade)</dd>
+        <dt class="col-sm-2">Fotografia: </dt>
+        <dd class="col-sm-10"><img src="@Html.DisplayFor(model => model.FotoDown)" /></dd>
     </dl>
-    <form asp-action="ElimPost" method="Post">
-        <input type="hidden" asp-route-id="@Model.ID" />
+    <form asp-action="ElimPost" method="Post" asp-route-id="@Model.ID">
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index">Cancelar</a>
     </form>

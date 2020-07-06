@@ -42,13 +42,13 @@
                         </select>
                         <span asp-validation-for="Seccao" class="text-danger"></span>
                     </div>
-                </div>
-                <div class="split right" style="margin-top:210px; width:40%; margin-right:5%">
                     <div class="form-group">
                         <label asp-for="Local" class="control-label"></label>
                         <input asp-for="Local" class="form-control" />
                         <span asp-validation-for="Local" class="text-danger"></span>
                     </div>
+                </div>
+                <div class="split right" style="margin-top:210px; width:40%; margin-right:5%">
                     <div class="form-group">
                         <label asp-for="DataInicio" class="control-label"></label>
                         <input type="date" min="1900-01-01" asp-for="DataInicio" class="form-control" />
@@ -70,13 +70,13 @@
                         <span asp-validation-for="Ativa" class="text-danger"></span>
                     </div>
                     <input type="submit" value="Inserir" class="btn btn-primary container-fluid" />
-               </div>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar à listagem</a>
 </div>
 

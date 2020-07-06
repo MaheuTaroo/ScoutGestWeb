@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<ScoutGestWeb.Models.AtividadeViewModel>
-
 @{
     ViewData["Title"] = "Atividades";
 }
@@ -11,123 +10,29 @@
     <br /><a asp-action="InserirAtividade">Criar nova atividade</a>
 </p>
 
-<!--<div class="main">-->
-
-@if (User.IsInRole("Administração de Agrupamento") || User.IsInRole("Equipa de Animação"))
-{
-    <div style="overflow-y: scroll; text-align: center">
-        @using (Html.BeginForm("Index", "Atividades", FormMethod.Get))
-        {
-            <select name="coluna">
-                <option>Nome</option>
-                <option>Tipo</option>
-                <option>Tema</option>
-                <option>Secção</option>
-                <option>Local</option>
-                <option>Data inicial</option>
-                <option>Data final</option>
-                <option>Orçamento</option>
-                <option>Aberta a movimentos</option>
-            </select>
-            <input name="procura" />
-            <input type="submit" value="Procurar" class="btn btn-success" />
-        }
-        @foreach (var item in Model)
-        {
-            <div class="container-fluid" style="padding: 0 0 0 0">
-                <p>
-                    <h2>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </h2>
-                </p>
-                <p>
-                    <!--Data das atividades-->
-                    <h5>
-                        De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-                    </h5>
-                </p>
-                <!--botao dos detalhes-->
-                <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
-            </div>
-        }
-    </div>
-}
-else
-{
-    DateTime dl = DateTime.Now;
-    string.Format("{0}/{1}/{2}", dl.Date.Day, dl.Date.Month, dl.Date.Year);
-    foreach (var item in Model)
+<div style="margin-left:30%">
+    @if (User.IsInRole("Administração de Agrupamento") || User.IsInRole("Equipa de Animação"))
     {
-        if (item.DataInicio >= DateTime.Today.AddMonths(-1) && item.DataInicio <= DateTime.Today.AddSeconds(-1))
-        {
-            <div class="container-fluid" style="text-align: center">
-                <h3 class="text-center">Atividade(s) do último mês</h3>
-                <hr />
-                <div style="padding: 0; width: 100%;">
-                    <p>
-                        <h2>
-                            @Html.DisplayFor(modelItem => item.Nome)
-                        </h2>
-                    </p>
-                    <p>
-                        <!--Data das atividades-->
-                        <h5>
-                            De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-                        </h5>
-                    </p>
-                    <!--botao dos detalhes-->
-                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
-                </div>
-            </div>
-        }
-        if (item.DataInicio >= DateTime.Today && item.DataInicio <= DateTime.Today + new TimeSpan(23, 59, 59))
-        {
-            <div class="container-fluid">
-                <h3 class="text-center">Atividade(s) de hoje</h3>
-                <hr />
-                <div style="padding: 0; width: 100%; text-align: center">
-                    <p>
-                        <h2>
-                            @Html.DisplayFor(modelItem => item.Nome)
-                        </h2>
-                    </p>
-                    <p>
-                        <!--Data das atividades-->
-                        <h5>
-                            De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-                        </h5>
-                    </p>
-                    <!--botao dos detalhes-->
-                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
-                </div>
-            </div>
-        }
-        if (item.DataInicio >= DateTime.Today.AddDays(1) && item.DataInicio <= DateTime.Today.AddMonths(1))
-        {
-            <div class="container-fluid">
-                <h3 class="text-center">Atividade(s) do próximo mês</h3>
-                <hr />
-                <div style="padding: 0; width: 100%; text-align: center">
-                    <p>
-                        <h2>
-                            @Html.DisplayFor(modelItem => item.Nome)
-                        </h2>
-                    </p>
-                    <p>
-                        <!--Data das atividades-->
-                        <h5>
-                            De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-                        </h5>
-                    </p>
-                    <!--botao dos detalhes-->
-                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
-                </div>
-            </div>
-        }
-    }
-    //substituir o bool for something else
-    @*foreach (var item in Model.Where(Html.DisplayFor(modelItem => item.DataInicio), @Html.DisplayFor(modelItem => item.DataFim)) => @Html.DisplayFor(modelItem => item.DataFim) !=dl )
-        {
+
+        <div text-align: center">
+            @using (Html.BeginForm("Index", "Atividades", FormMethod.Get))
+            {
+                <select name="coluna">
+                    <option>Nome</option>
+                    <option>Tipo</option>
+                    <option>Tema</option>
+                    <option>Secção</option>
+                    <option>Local</option>
+                    <option>Data inicial</option>
+                    <option>Data final</option>
+                    <option>Orçamento</option>
+                    <option>Aberta a movimentos</option>
+                </select>
+                <input name="procura" />
+                <input type="submit" value="Procurar" class="btn btn-success" />
+            }
+            @foreach (var item in Model)
+            {
                 <div class="container-fluid" style="padding: 0 0 0 0">
                     <p>
                         <h2>
@@ -141,12 +46,105 @@ else
                         </h5>
                     </p>
                     <!--botao dos detalhes-->
-                    <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
+                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                 </div>
-        }*@
-}
+            }
+        </div>
+    }
+    else
+    {
+        DateTime dl = DateTime.Now;
+        string.Format("{0}/{1}/{2}", dl.Date.Day, dl.Date.Month, dl.Date.Year);
+        foreach (var item in Model)
+        {
+            if (item.DataInicio >= DateTime.Today.AddMonths(-1) && item.DataInicio <= DateTime.Today.AddSeconds(-1))
+            {
+                <div class="container-fluid" style="text-align: center">
+                    <h3 class="text-center">Atividade(s) do último mês</h3>
+                    <hr />
+                    <div style="padding: 0; width: 100%;">
+                        <p>
+                            <h2>
+                                @Html.DisplayFor(modelItem => item.Nome)
+                            </h2>
+                        </p>
+                        <p>
+                            <!--Data das atividades-->
+                            <h5>
+                                De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
+                            </h5>
+                        </p>
+                        <!--botao dos detalhes-->
+                        <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
+                    </div>
+                </div>
+            }
+            if (item.DataInicio >= DateTime.Today && item.DataInicio <= DateTime.Today + new TimeSpan(23, 59, 59))
+            {
+                <div class="container-fluid">
+                    <h3 class="text-center">Atividade(s) de hoje</h3>
+                    <hr />
+                    <div style="padding: 0; width: 100%; text-align: center">
+                        <p>
+                            <h2>
+                                @Html.DisplayFor(modelItem => item.Nome)
+                            </h2>
+                        </p>
+                        <p>
+                            <!--Data das atividades-->
+                            <h5>
+                                De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
+                            </h5>
+                        </p>
+                        <!--botao dos detalhes-->
+                        <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
+                    </div>
+                </div>
+            }
+            if (item.DataInicio >= DateTime.Today.AddDays(1) && item.DataInicio <= DateTime.Today.AddMonths(1))
+            {
+                <div class="container-fluid">
+                    <h3 class="text-center">Atividade(s) do próximo mês</h3>
+                    <hr />
+                    <div style="padding: 0; width: 100%; text-align: center">
+                        <p>
+                            <h2>
+                                @Html.DisplayFor(modelItem => item.Nome)
+                            </h2>
+                        </p>
+                        <p>
+                            <!--Data das atividades-->
+                            <h5>
+                                De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
+                            </h5>
+                        </p>
+                        <!--botao dos detalhes-->
+                        <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
 
-
+@*foreach (var item in Model.Where(Html.DisplayFor(modelItem => item.DataInicio), @Html.DisplayFor(modelItem => item.DataFim)) => @Html.DisplayFor(modelItem => item.DataFim) !=dl )
+{
+    <div class="container-fluid" style="padding: 0 0 0 0">
+        <p>
+            <h2>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </h2>
+        </p>
+        <p>
+            <!--Data das atividades-->
+            <h5>
+                De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
+            </h5>
+        </p>
+        <!--botao dos detalhes-->
+        <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
+    </div>
+}*@
 <!--</div>
 <!--can i start?-->
 <!--ya-->
@@ -241,3 +239,4 @@ o resto pd td ver detalhes-->
 <!--<p>
 A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
 </p>-->
+<!--<div class="main">-->

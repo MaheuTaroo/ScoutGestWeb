@@ -79,7 +79,6 @@ namespace ScoutGestWeb.Controllers
                                     break;
                             }
                         }
-                        await cmd.PrepareAsync();
                     }
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -280,6 +279,13 @@ namespace ScoutGestWeb.Controllers
                         ievm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
                     }
                 }
+                cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
+                await cmd.PrepareAsync();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) ievm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
+                }
+                ievm.NumTelefone = ievm.NumTelefone == null ? "nenhum número de telefone" : ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
                 cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
                 cmd.Parameters["@id"].Value = ievm.Grupo;
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -308,7 +314,7 @@ namespace ScoutGestWeb.Controllers
                 ModelState.AddModelError("Erro na eliminação do registo", mse.Message);
                 return await Task.Run(() => ElimGet(id));
             }
-            return await Task.Run(() => View());
+            return await Task.Run(() => RedirectToAction("Index"));
         }
         public async Task<IActionResult> EditarEscuteiro(int id)
         {
@@ -355,7 +361,6 @@ namespace ScoutGestWeb.Controllers
                     }
                 }
                 cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
-                cmd.Parameters["@id"].Value = grupo;
                 await cmd.PrepareAsync();
                 using (MySqlDataReader dr = (MySqlDataReader) await cmd.ExecuteReaderAsync())
                 {
@@ -363,6 +368,7 @@ namespace ScoutGestWeb.Controllers
                 }
                 ievm.NumTelefone = ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
                 cmd.CommandText = "select IDGrupo, Nome from grupos where IDGrupo > 0";
+                cmd.Parameters["@id"].Value = grupo;
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());

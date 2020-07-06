@@ -12,18 +12,15 @@
         <a asp-action="NovoGrupo"><button class="btn btn-secondary">Novo grupo</button></a>
         <br />
     }
-    @using (Html.BeginForm("Index", "Atividades", FormMethod.Get))
+    @using (Html.BeginForm("Index", "Grupos", FormMethod.Get))
     {
         <select name="coluna">
             <option>Nome</option>
-            <option>Tipo</option>
-            <option>Tema</option>
-            <option>Secção</option>
-            <option>Local</option>
-            <option>Data inicial</option>
-            <option>Data final</option>
-            <option>Orçamento</option>
-            <option>Aberta a movimentos</option>
+            <option>Sigla</option>
+            @if (User.IsInRole("Administração de Agrupamento"))
+            {
+                <option>Secção</option>
+            }
         </select>
         <input name="procura" />
         <input type="submit" value="Procurar" class="btn btn-success" />
@@ -32,10 +29,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th style="background-color:lightgreen">@Html.DisplayNameFor(model => model.ID)</th>
-            <th style="background-color:lightgreen">@Html.DisplayNameFor(model => model.Nome)</th>
-            <th style="background-color:lightgreen">@Html.DisplayNameFor(model => model.Sigla)</th>
-            <th style="background-color:lightgreen">Secção</th>
+            <th>@Html.DisplayNameFor(model => model.ID)</th>
+            <th>@Html.DisplayNameFor(model => model.Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.Sigla)</th>
+            <th>Secção</th>
             <th>Opções</th>
         </tr>
     </thead>

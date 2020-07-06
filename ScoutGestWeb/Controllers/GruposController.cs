@@ -16,18 +16,33 @@ namespace ScoutGestWeb.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         public GruposController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string coluna, string procura)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<GrupoViewModel> gvm = new List<GrupoViewModel>();
-            using (MySqlCommand cmd = new MySqlCommand("select * from grupos where IDGrupo > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select * from grupos where IDGrupo > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                if (!(string.IsNullOrEmpty(coluna) && string.IsNullOrEmpty(procura)))
+                {
+                    cmd.CommandText = cmd.CommandText.Replace(";", " and pesquisa;");
+                    switch (coluna)
+                    {
+                        case "Nome":
+                        case "Sigla":
+                            cmd.CommandText = cmd.CommandText.Replace("pesquisa", coluna + " like '%" + procura + "%'");
+                            break;
+                        case "Secção":
+                            cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Seccao like '%" + procura + "%'");
+                            break;
+                    }
+                }
                 if (User.IsInRole("Equipa de Animação"))
                 {
                     cmd.CommandText += " and Seccao = @seccao";
                     cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
                 }
+                await cmd.PrepareAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())

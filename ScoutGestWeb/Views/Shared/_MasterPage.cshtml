@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    bool ativ = ViewData["Title"].ToString().Contains("Atividades");
+    //whatsapp
 }
 
 <html translate="no">
@@ -60,16 +60,34 @@
             if (ViewData["Title"].ToString() != "Página inicial")
             {
                 <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="min-height: calc(100% - 10vh - 30px)"> 
-                    @if (ViewData["Title"].ToString().Contains("Tesouraria"))
+                    @if (ViewData["Title"].ToString() == "Tesouraria")
                     {
                         <style>
                             body {
-                                background-image: url(../../wwwroot/imgs/back_tesouraria.png);
+                                background-image: url(../imgs/back_tesouraria.png);
                                 background-size: calc(auto - 10vh - 30px);
                             }
                         </style>
                     }
-                    else if (ativ)
+                    else if (ViewData["Title"].ToString().Contains("Tesouraria"))
+                    {
+                        <style>
+                            body {
+                                background-image: url(../imgs/back_tesouraria.png);
+                                background-size: calc(auto - 10vh - 30px);
+                            }
+                        </style>
+                    }
+                    else if (ViewData["Title"].ToString() == "Atividades")
+                    {
+                        <style>
+                            body {
+                                background-image: url(../imgs/back_atividades.png);
+                                background-size: calc(auto - 10vh - 30px);
+                            }
+                        </style>
+                    }
+                    else if (ViewData["Title"].ToString().Contains("Atividades"))
                     {
                         <style>
                             body {
@@ -78,7 +96,15 @@
                             }
                         </style>
                     }
-                    
+                    else if (ViewData["Title"].ToString() == "Escuteiros")
+                    {
+                        <style>
+                            body {
+                                background-image: url(../imgs/back_escuteiros.png);
+                                background-size: calc(auto - 10vh - 30px);
+                            }
+                        </style>
+                    }
                     else if (ViewData["Title"].ToString().Contains("Escuteiros"))
                     {
                         <style>
@@ -88,12 +114,11 @@
                             }
                         </style>
                     }
-                    
-                    else if (ViewData["Title"].ToString().Contains("Informações e logout"))
+                    else if (ViewData["Title"].ToString() == "Informações e logout")
                     {
                         <style>
                             body {
-                                background-image: url(../../wwwroot/imgs/back_info_logout.png);
+                                background-image: url(../imgs/back_info_logout.png);
                                 background-size: calc(auto - 10vh - 30px);
                             }
                         </style>
