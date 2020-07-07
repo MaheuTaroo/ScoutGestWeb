@@ -73,14 +73,12 @@ body > div > h1 {
     width: 10vw;
     position: fixed;
     z-index: 1;
-    top: 0;
     left: 0;
     background-color: #333;
     overflow-x: hidden;
-    padding-top: 20px;
-    margin: 30vh 0 11vh 0;
+    top: var(--header-height);
+    bottom: 30px;
 }
-
 .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
@@ -88,9 +86,68 @@ body > div > h1 {
     color: #818181;
     display: block;
 }
-
 .sidenav a:hover {
     color: #f1f1f1;
+}
+
+.linksMovs {
+    margin-bottom: 15px;
+}
+.linksMovs a {
+    color: rgba(255,255,255,0.5);
+    display: inline-flex;
+    transition: transform 0.5s, color 0.5s;
+    -webkit-transition: transform 0.5s, color 0.5s;
+    list-style-position: outside;
+}
+.linksMovs a:hover {
+    color: red;
+    transform: translate(10%, -10%);
+}
+
+.linksEscut {
+    margin-bottom: 15px;
+}
+.linksEscut a {
+    color: rgba(255,255,255,0.5);
+    display: inline-flex;
+    transition: transform 0.5s, color 0.5s;
+    -webkit-transition: transform 0.5s, color 0.5s;
+    list-style-position: outside;
+}
+.linksEscut a:hover {
+    color: green;
+    transform: translate(10%, -10%);
+}
+
+.linksAtivs {
+    margin-bottom: 15px;
+}
+.linksAtivs a {
+    color: rgba(255,255,255,0.5);
+    display: inline-flex;
+    transition: transform 0.5s, color 0.5s;
+    -webkit-transition: transform 0.5s, color 0.5s;
+    list-style-position: outside;
+}
+.linksAtivs a:hover {
+    color: rgb(0, 114, 255);
+    transform: translate(10%, -10%);
+}
+
+.linksInfoLogout {
+    margin-bottom: 15px;
+}
+.linksInfoLogout a {
+    color: rgba(255,255,255,0.5);
+    display: inline-flex;
+    transition: transform 0.5s, color 0.5s;
+    -webkit-transition: transform 0.5s, color 0.5s;
+    list-style-position: outside;
+}
+.linksInfoLogout a:hover {
+    color: yellow;
+    transform: translate(10%, -10%);
 }
 
 @media screen and (max-width: 1100px) {
@@ -234,7 +291,6 @@ footer {
     margin: auto 0 auto 0;
 }
 
-
 .column {
     float: left;
     width: 50%; 
@@ -247,7 +303,6 @@ footer {
     display: table;
     clear: both;
 }
-
 
 .maine {
     float: left;
@@ -327,23 +382,9 @@ footer {
 .toptesoura~a {
     color:black;
 }
-    .toptesoura a:hover {
-        background-color: #ccc;
-    }
-
-
-  /*  .toptesoura img {
-        width: 100%;
-        height:auto;
-        opacity: 0.5;
-    }
-
-    .toptesoura button {
-        position: absolute;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        position: absolute;
-    }*/
+.toptesoura a:hover {
+    background-color: #ccc;
+}
 
 .contain {
     width: 100%;  
@@ -591,3 +632,15 @@ footer {
 /*cya at 14h then
         vais fzr o teste d melhoria?*/
 /*i still haven't decided */
+/*.toptesoura img {
+    width: 100%;
+    height:auto;
+    opacity: 0.5;
+}
+
+.toptesoura button {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    position: absolute;
+}*/

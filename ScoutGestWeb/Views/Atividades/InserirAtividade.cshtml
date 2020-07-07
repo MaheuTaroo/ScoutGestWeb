@@ -1,9 +1,7 @@
 ﻿@model ScoutGestWeb.Models.AtividadeViewModel
-
 @{
     ViewData["Title"] = "Inserir atividade - Atividades";
 }
-
 
 <h1>Nova atividade</h1>
 <hr />
@@ -11,15 +9,15 @@
     <div class="col-md-4">
         <form asp-action="InserirAtividade">
             <div class="split">
-                <div class="split left" style="margin-top:210px;margin-left:5%; width:40%">
+                <div class="split left" style="margin-top:210px;margin-left:20%; width:20%">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="Nome" class="control-label">Nome:</label>
+                        <label asp-for="Nome" class="control-label"></label>
                         <input asp-for="Nome" class="form-control" />
                         <span asp-validation-for="Nome" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Tipo" class="control-label">Tipo:</label>
+                        <label asp-for="Tipo" class="control-label"></label>
                         <select asp-for="Tipo" class="form-control">
                             <option>Sábado</option>
                             <option>Acampamentos</option>
@@ -31,7 +29,7 @@
                         <span asp-validation-for="Tipo" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Seccao" class="control-label"></label>
+                        <label asp-for="Seccao" class="control-label">Secção</label>
                         <select asp-for="Seccao" class="form-control">
                             <option value="1">Lobitos</option>
                             <option value="1">Exploradores</option>
@@ -48,18 +46,18 @@
                         <span asp-validation-for="Local" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="split right" style="margin-top:210px; width:40%; margin-right:5%">
+                <div class="split right" style="margin-top:210px; width:20%; margin-right:20%">
                     <div class="form-group">
-                        <label asp-for="DataInicio" class="control-label"></label>
+                        <label asp-for="DataInicio" class="control-label">Data inicial</label>
                         <input type="date" min="1900-01-01" asp-for="DataInicio" class="form-control" />
                         <span asp-validation-for="DataInicio.Date" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="DataFim" class="control-label"></label>
+                        <label asp-for="DataFim" class="control-label">Data final</label>
                         <input type="date" min="1900-01-01" asp-for="DataFim" class="form-control" />
                         <span asp-validation-for="DataFim" class="text-danger"></span>
                     </div><div class="form-group">
-                        <label asp-for="Orcamento" class="control-label"></label>
+                        <label asp-for="Orcamento" class="control-label">Orçamento</label>
                         <input type="number" asp-for="Orcamento" step="0.01" class="form-control" />
                         <span asp-validation-for="Orcamento" class="text-danger"></span>
                     </div>

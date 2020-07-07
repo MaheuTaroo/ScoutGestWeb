@@ -1,42 +1,47 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Informação e Logout";
 }
 
-<h1>Informações e Logout</h1>
-<br />
-<div style="text-align: center; position: relative; margin: auto">
-    <div style="float: left; margin-left: 40vh">
-        <!--<p>Para voltar à página anterior, carregue aqui:</p>-->
-        <a href="@Url.ActionLink("Index", "Home")"><button class="btn btn-secondary">Voltar ao dashboard</button></a>
+<div>
+    <aside style="left: 0; background-color: #333; overflow-x:visible; overflow-y: hidden; width: 12vw; height: calc(100% - 90px); position: absolute;">
+        <br />
+        <div style="padding: 3px 3px 6px 3px">
+            <ul>
+                <li class="linksInfoLogout">
+                    <a asp-action="Index">Voltar</a>
+                    <br />
+                </li>
+                <li class="linksInfoLogout">
+                    <a asp-action="LogOut">Logout</a>
+                    <br />
+                </li>
+            </ul>
+        </div>
+    </aside>
+</div>
+<div style="margin-left: 12vw">
+    <h1 style="text-align: center">Informações e Logout</h1>
+    <br />
+    <div class="bordlogout" style="padding-left: 10px;">
+        <h2 style="text-align: center">Informação geral</h2><hr />
+        <p>Bem vindo a scoutgest. Esta aplicação foi criada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
+
+        <p>-Gestão de atividades;</p>
+        <p>-Gestão de escuteiros;</p>
+        <p>-Gestão de grupos</p>
     </div>
-    <div style="float: right; margin-right: 40vh" ">
-        <!--<p>Em caso queira fazer logout, carregue aqui:</p>-->
-        <a href="@Url.ActionLink("LogOut", "Home")"><button class="btn btn-secondary">Logout</button></a>
+    <br />
+    <div class="bordlogout" style="padding-left: 10px;">
+        <h2 style="text-align: center">Contactos</h2><hr />
+        <p>A mesma foi feita pelo JM e JJ, em caso de alguma dúvida, sugestão, ou a aplicação deixar de funcionar poderá contactar-nos através das seguintes formas:</p>
+
+        <p><b>JM</b></p>
+        <p>Email: emailfalso.com</p>
+        <p>Telemóvel: (+351) 961234578</p><br />
+
+        <p><b>JJ</b></p>
+        <p>Email: emailfalso2.com</p>
+        <p>Telemóvel: (+351) 912345678</p>
     </div>
+    <br />
 </div>
-<br />
-<br />
-<div class="bordlogout" style="padding-left: 10px;">
-    <h2 style="text-align: center">Informação geral</h2><hr />
-    <p>Bem vindo a scoutgest. Esta aplicação foi criada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
-
-    <p>-Gestão de atividades;</p>
-    <p>-Gestão de escuteiros;</p>
-    <p>-Gestão de grupos</p>
-</div>
-<br />
-
-<div class="bordlogout" style="padding-left: 10px;">
-    <h2 style="text-align: center">Contactos</h2><hr />
-    <p>A mesma foi feita pelo JM e JJ, em caso de alguma dúvida, sugestão, ou a aplicação deixar de funcionar poderá contactar-nos através das seguintes formas:</p>
-
-    <p><b>JM</b></p>
-    <p>Email: emailfalso.com</p>
-    <p>Telemóvel: (+351) 961234578</p><br />
-
-    <p><b>JJ</b></p>
-    <p>Email: emailfalso2.com</p>
-    <p>Telemóvel: (+351) 912345678</p>
-</div>
-<br />

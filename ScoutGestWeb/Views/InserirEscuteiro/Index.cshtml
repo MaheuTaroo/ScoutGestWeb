@@ -4,71 +4,110 @@
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 
-<h1>Escuteiros</h1>
-
-<div style="text-align: center">
-    @if (User.IsInRole("Administração de Agrupamento"))
-    {
-        <a asp-action="InserirEscuteiro" style="margin-right: 10vw"><button class="btn btn-secondary">Inserir novo escuteiro</button></a>
-        <a asp-action="Index" asp-controller="Grupos" style="margin-left: 10vw"><button class="btn btn-secondary">Visualizar grupos</button></a>
-    }
-    else if (User.IsInRole("Equipa de Animação"))
-    {
-        <a asp-action="Index" asp-controller="Grupos"><button class="btn btn-secondary">Visualizar grupos</button></a>
-    }
-    <!--<br />-->
-    @using (Html.BeginForm("Index", "InserirEscuteiro", FormMethod.Get))
-    {
-        <div class="bg-danger rounded">@Html.ValidationSummary(false)</div><br />
-        <select name="coluna">
-            <option>Nome</option>
-            <option>Totem</option>
-            <option>Cargo</option>
-            <option>Secção</option>
-            <option>Grupo</option>
-            <option>Morada</option>
-            <option>Código-postal</option>
-            <option>Localidade</option>
-            <option>Grupo sanguíneo</option>
-            <option>Alergias</option>
-            <option>Medicação</option>
-            <option>Problemas</option>
-            <option>Observações</option>
-            <option>Idade</option>
-            <option>Estado</option>
-            <option>Número de telefone</option>
-        </select>
-        <input name="procura" />
-        <input type="submit" value="Procurar" class="btn btn-success" />
-    }
+<div class="text-white">
+    <aside style="left: 0; background-color: #333; overflow-x: hidden; overflow-y: auto; width: 12vw; height: calc(100% - 90px); position:absolute;">
+        <!--dude primeiro chill segundo pq e que ha duas partes as duas chamadas movimento?-->
+        <!--pq ainda n mudei o nome, bruh-->
+        <br />
+        @if (User.IsInRole("Administração de Agrupamento"))
+        {
+            <div style="padding: 3px 3px 6px 3px">
+                <h4 style="color: white; padding-left: 40px">Escuteiros</h4>
+                <hr />
+                <ul>
+                    <li class="linksEscut">
+                        <a asp-action="InserirEscuteiro">Inserir escuteiro</a>
+                        <br />
+                    </li>
+                </ul>
+                <hr />
+            </div>
+        }
+        <div style="padding: 3px">
+            <h4 style="color: white; padding-left: 40px">Grupos</h4>
+            <hr />
+            <ul>
+                <li class="linksEscut">
+                    <a asp-action="Index" asp-controller="Grupos">Visualizar grupos</a>
+                </li>
+                @if (User.IsInRole("Administração de Agrupamento"))
+                {
+                    <li class="linksEscut">
+                        <a asp-action="NovoGrupo" asp-controller="Grupos">Novo grupo</a>
+                    </li>
+                }
+            </ul>
+            <hr />
+        </div>
+    </aside>
 </div>
-<!--<br />-->
-<div style="height: 80%; vertical-align: middle">
-    @foreach (var item in Model)
-    {
-        <!--column a rodear tudo, float left tem um margin e max height-->
-        <div class="column" style="margin:auto">
-            <div class="row" style="float:left; margin: 0px 15px 15px 0px; max-height: 180px;">
-                <div>
-                    <!--foto e texto alinhado-->
-                    <!--column 1 rodear a foto com float right/no style da foto um float left width e padding-->
-                    <div class="column">
-                        <input type="hidden" value="" />
-                        <img src="@Html.DisplayFor(modelItem => item.FotoDown)" style="float:left;  min-height:180px; height: 180px;" />
-                    </div>
-                    <!--column 2 margin and float right-->
-                    <div class="column" style="margin: calc(3vh / 2) 0 calc(3vh / 2) 0; width:200px">
-                        <div class="row cima" style="vertical-align: middle">@Html.DisplayFor(modelItem => item.Nome)</div><br />
-                        <div class="row centro" style="vertical-align: middle">Secção: @Html.DisplayFor(modelItem => item.Seccao)||Totem: @Html.DisplayFor(modelItem => item.Totem)</div><br />
-                        <div class="row baixo" style="vertical-align: middle">
-                            <a href="@Url.ActionLink("Detalhes", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Detalhes</a>
-                            <a href="@Url.ActionLink("EditarEscuteiro", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Editar</a>
+<div style="margin-left: 12vw">
+    <h1>Escuteiros</h1>
+
+    <div style="text-align: center">
+        @if (User.IsInRole("Administração de Agrupamento"))
+        {
+            <a asp-action="InserirEscuteiro" style="margin-right: 10vw"><button class="btn btn-secondary">Inserir novo escuteiro</button></a>
+            <a asp-action="Index" asp-controller="Grupos" style="margin-left: 10vw"><button class="btn btn-secondary">Visualizar grupos</button></a>
+        }
+        else if (User.IsInRole("Equipa de Animação"))
+        {
+            <a asp-action="Index" asp-controller="Grupos"><button class="btn btn-secondary">Visualizar grupos</button></a>
+        }
+        <!--<br />-->
+        @using (Html.BeginForm("Index", "InserirEscuteiro", FormMethod.Get))
+        {
+            <div class="bg-danger rounded">@Html.ValidationSummary(false)</div><br />
+            <select name="coluna">
+                <option>Nome</option>
+                <option>Totem</option>
+                <option>Cargo</option>
+                <option>Secção</option>
+                <option>Grupo</option>
+                <option>Morada</option>
+                <option>Código-postal</option>
+                <option>Localidade</option>
+                <option>Grupo sanguíneo</option>
+                <option>Alergias</option>
+                <option>Medicação</option>
+                <option>Problemas</option>
+                <option>Observações</option>
+                <option>Idade</option>
+                <option>Estado</option>
+                <option>Número de telefone</option>
+            </select>
+            <input name="procura" />
+            <input type="submit" value="Procurar" class="btn btn-success" />
+        }
+    </div>
+    <!--<br />-->
+    <div style="height: 80%; vertical-align: middle">
+        @foreach (var item in Model)
+        {
+            <!--column a rodear tudo, float left tem um margin e max height-->
+            <div class="column" style="margin:auto">
+                <div class="row" style="float:left; margin: 0px 15px 15px 0px; max-height: 180px;">
+                    <div>
+                        <!--foto e texto alinhado-->
+                        <!--column 1 rodear a foto com float right/no style da foto um float left width e padding-->
+                        <div class="column">
+                            <input type="hidden" value="" />
+                            <img src="@Html.DisplayFor(modelItem => item.FotoDown)" style="float:left;  min-height:180px; height: 180px;" />
+                        </div>
+                        <!--column 2 margin and float right-->
+                        <div class="column" style="margin: calc(3vh / 2) 0 calc(3vh / 2) 0; width:200px">
+                            <div class="row cima" style="vertical-align: middle">@Html.DisplayFor(modelItem => item.Nome)</div><br />
+                            <div class="row centro" style="vertical-align: middle">Secção: @Html.DisplayFor(modelItem => item.Seccao)||Totem: @Html.DisplayFor(modelItem => item.Totem)</div><br />
+                            <div class="row baixo" style="vertical-align: middle">
+                                <a href="@Url.ActionLink("Detalhes", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Detalhes</a>
+                                <a href="@Url.ActionLink("EditarEscuteiro", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Editar</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <!--<p>

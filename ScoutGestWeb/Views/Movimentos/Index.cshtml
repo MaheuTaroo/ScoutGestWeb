@@ -1,84 +1,123 @@
 ﻿@model IEnumerable<ScoutGestWeb.Models.MovimentoViewModel>
-
 @{
     ViewData["Title"] = "Movimentos - Tesouraria";
 }
 
+<div class="text-white">
+    <aside style="left: 0; background-color: #333; overflow-x:visible; overflow-y: hidden; width: 12vw; height: calc(100% - 90px); position: absolute;">
+        <br />
+        <div style="padding: 3px 3px 6px 3px">
+            <h4 style="color: white; padding-left: 40px">Movimentos</h4>
+            <hr />
+            <ul>
+                <li class="linksMovs">
+                    <a asp-action="Entrada" asp-controller="Movimentos">Entradas</a>
+                    <br />
+                </li>
+                <li class="linksMovs">
+                    <a asp-action="Saida" asp-controller="Movimentos">Saídas</a>
+                    <br />
+                </li>
+                <li class="linksMovs">
+                    <a asp-action="Transferencia" asp-controller="Movimentos">Transferências</a>
+                    <br />
+                </li>
+            </ul>
+            <hr />
+        </div>
+        <div style="padding: 3px">
+            <h4 style="color: white; padding-left: 40px">Análises</h4>
+            <hr />
+            <ul>
+                <li class="linksMovs">
+                    <a asp-action="DiarioCaixa" asp-controller="Movimentos">Diário de caixa</a>
+                </li>
+                <li class="linksMovs">
+                    <a asp-action="MovParam" asp-controller="Movimentos">Movimentos entre parâmetros</a>
+                </li>
+                <li class="linksMovs">
+                    <a asp-action="Rankings" asp-controller="Movimentos">Rankings</a>
+                </li>
+            </ul>
+            <hr />
+        </div>
+        @if (User.IsInRole("Administração de Agrupamento"))
+        {
+            <div style="padding: 3px">
+                <h4 style="color: white; padding-left: 40px">Tabelas</h4>
+                <hr />
+                <ul>
+                    <li class="linksMovs">
+                        <a asp-action="Index" asp-controller="Caixas">Caixas</a>
+                    </li>
+                    <li class="linksMovs">
+                        <a asp-action="Index" asp-controller="TiposDocs">Documentos</a>
+                    </li>
+                    <li class="linksMovs">
+                        <a asp-action="Index" asp-controller="TiposPags">Pagamentos</a>
+                    </li>
+                </ul>
+                <hr />
+            </div>
+        }
+    </aside>
+</div>
+<div style="margin-left: 12vw">
+    <h1>Index</h1>
+
+    @if (Model.Count() == 0)
+    {
+        <p><b>Não existem movimentos para mostrar</b></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID de mov.</th>
+                    <th>Caixa</th>
+                    <th>Documento</th>
+                    <th>Tipo de mov.</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Tipo de pag.</th>
+                    <th>Descrição</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.IDMovimento)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IDCaixa)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IDDocumento)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TipoMovimento)</td>
+                        <td>@item.DataHora.ToString().Substring(0, item.DataHora.ToString().IndexOf(" 00:00:00"))</td>
+                        <td>@Html.DisplayFor(modelItem => item.Valor)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TipoPagamento)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+<!--
+<a class="dropdown-item" asp-action="PDFTransfs">Transferências</a>
+<a class="dropdown-item" >Entradas e saídas</a>
+<a class="dropdown-item" asp-action="PDFPags">Tipos de pagamento</a>
+-->
+<!--dude primeiro chill segundo pq e que ha duas partes as duas chamadas movimento?-->
+<!--pq ainda n mudei o nome, bruh-->
 <!--<style>
     body div h1:not([value~="ScoutGest"]) {
         margin: 0;
         height: 100%;
     }
 </style>-->
-
-<h1>Index</h1>
-
-<div style="text-align: center; position: relative;">
-    <div class="dropdown dropleft" style="float: right; margin-right: 20%">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Movimentos de tesouraria
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" asp-action="Entrada" asp-controller="Movimentos">Entradas</a>
-            <a class="dropdown-item" asp-action="Saida" asp-controller="Movimentos">Saídas</a>
-            <a class="dropdown-item" asp-action="Transferencia" asp-controller="Movimentos">Transferências</a>
-        </div>
-    </div>
-    <div class="dropdown dropright" style="float: left; margin-left: 25%">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Análises
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" asp-action="DiarioCaixa">Diário de caixa</a>
-            <a class="dropdown-item" asp-action="MovParam">Movimentos entre parâmetros</a>
-            <a class="dropdown-item" asp-action="Rankings">Rankings</a>
-        </div>
-    </div>
-</div>
-@if (Model.Count() == 0)
-{
-    <p><b>Não existem movimentos para mostrar</b></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID de mov.</th>
-                <th>Caixa</th>
-                <th>Documento</th>
-                <th>Tipo de mov.</th>
-                <th>Data / hora</th>
-                <th>Valor</th>
-                <th>Tipo de pag.</th>
-                <th>Descrição</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.IDMovimento)</td>
-                    <td>@Html.DisplayFor(modelItem => item.IDCaixa)</td>
-                    <td>@Html.DisplayFor(modelItem => item.IDDocumento)</td>
-                    <td>@Html.DisplayFor(modelItem => item.TipoMovimento)</td>
-                    <td>@Html.DisplayFor(modelItem => item.DataHora)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Valor)</td>
-                    <td>@Html.DisplayFor(modelItem => item.TipoPagamento)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-<!--
-<a class="dropdown-item" asp-action="PDFTransfs">Transferências</a>
-<a class="dropdown-item" >Entradas e saídas</a>
-<a class="dropdown-item" asp-action="PDFPags">Tipos de pagamento</a>
--->

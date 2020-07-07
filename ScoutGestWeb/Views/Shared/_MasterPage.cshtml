@@ -53,7 +53,7 @@
             </aside>-->
             <!--Header-->
             <div class="container-fluid bg-dark text-white pt-1 pb-1 pr-3 pl-3">
-                <div class="container-fluid bg-light text-center border-primary header p-1" style="margin: 0 0 -1px 0;">
+                <div class="container-fluid bg-light text-center border-primary header p-1">
                     <h1 style="color:rgb(82, 82, 82)"><img src="~/imgs/logo.png" style="width: calc(100% / 40); margin: 3px 0px 3px 0px;">  ScoutGest</h1>
                 </div>
             </div>
@@ -62,12 +62,26 @@
                 <div class="container-fluid animate__animated animate__fadeIn overflow-auto" style="min-height: calc(100% - 10vh - 30px)"> 
                     @if (ViewData["Title"].ToString() == "Tesouraria")
                     {
-                        <style>
-                            body {
-                                background-image: url(../imgs/back_tesouraria.png);
-                                background-size: calc(auto - 10vh - 30px);
-                            }
-                        </style>
+                        @if (ViewData["Title"].ToString() == "Movimentos - Tesouraria")
+                        {
+                            <style>
+                                body {
+                                    background-image: url(../imgs/back_tesouraria.png);
+                                    background-size: calc(cover - 10vh - 30px);
+                                    margin-left: 30%;
+                                }
+                            </style>
+                        }
+                        else
+                        {
+                            <style>
+                                body {
+                                    background-image: url(../imgs/back_tesouraria.png);
+                                    background-size: calc(cover - 10vh - 30px);
+                                }
+                            </style>
+                        }
+
                     }
                     else if (ViewData["Title"].ToString().Contains("Tesouraria"))
                     {
@@ -101,7 +115,7 @@
                         <style>
                             body {
                                 background-image: url(../imgs/back_escuteiros.png);
-                                background-size: calc(auto - 10vh - 30px);
+                                background-size: cover calc(auto - 10vh - 30px);
                             }
                         </style>
                     }
@@ -134,8 +148,8 @@
             }
         }
         <!--Footer-->
-        <footer class="footer bg-dark text-white text-center">
-            ASPNET.CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
+        <footer class="bg-dark text-white text-center" style="position: sticky">
+            ASP.NET CORE &copy; @DateTime.Now.Year, Criado por João Martins e João Jesus
         </footer>
     </body>
 </html>

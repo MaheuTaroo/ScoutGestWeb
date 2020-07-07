@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 namespace ScoutGestWeb.Controllers
@@ -22,7 +21,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where Ativa = 1" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? " and Seccao = @seccao or Seccao = \"Agrupamento\"" + (User.IsInRole("Comum") ? " and DataInicio between now() - interval 3 day and now() + interval 3 day" : "") : "") + (User.IsInRole("Comum") ? ";" : " order by DataInicio desc limit 25;"), new MySqlConnection("server =localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync(); ;
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
                     {
                         cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
@@ -40,6 +39,45 @@ namespace ScoutGestWeb.Controllers
                             });
                         }
                     }
+                }
+            }
+            else
+            {
+                try
+                {
+                    using (MySqlCommand cmd = new MySqlCommand("select IDAtividade, Nome, DataInicio, DataFim from atividades where pesquisa" + (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum") ? " and Seccao = @seccao or Seccao = \"Agrupamento\"" + (User.IsInRole("Comum") ? " and DataInicio between now() - interval 3 day and now() + interval 3 day" : "") : "") + (User.IsInRole("Comum") ? ";" : " order by DataInicio desc limit 25;"), new MySqlConnection("server =localhost; port=3306; database=scoutgest; user=root")))
+                    {
+                        if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                        if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
+                        {
+                            cmd.Parameters.AddWithValue("@seccao", (await _userManager.GetUserAsync(User)).Seccao);
+                        }
+                        switch (coluna)
+                        {
+                            case "Nome":
+                            case "Tipo":
+                            case "Tema":
+                            case "Local":
+                                cmd.CommandText = cmd.CommandText.Replace("pesquisa", coluna + " like '%" + procura + "%'"); ;
+                                break;
+                            case "Data inicial":
+                            case "Data final":
+                                cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Data" + (coluna.Contains("inicial") ? "Inicio" : "Fim") + " like " + Convert.ToDateTime(procura).ToString("yyyy-MM-dd"));
+                                break;
+                            case "Orçamento":
+                                cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Orcamento = " + double.Parse(procura));
+                                break;
+                            case "Aberta a movimentos":
+                                cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Ativa = " + bool.Parse(procura));
+                                break;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (e.Message.Contains("was not recognized as a valid DateTime.")) ModelState.AddModelError("", "O texto introduzido não foi reconhecido como uma data válida");
+                    if (e.Message.Contains("")) ModelState.AddModelError("", e.Message);
+                    return await Task.Run(() => Index(null, null));
                 }
             }
             return await Task.Run(() => View(avm));
