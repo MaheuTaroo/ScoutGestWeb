@@ -11,6 +11,7 @@ using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class CaixasController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

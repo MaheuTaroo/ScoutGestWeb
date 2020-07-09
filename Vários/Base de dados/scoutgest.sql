@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 07-Jul-2020 às 21:15
+-- Tempo de geração: 09-Jul-2020 às 21:03
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -214,7 +214,7 @@ CREATE TABLE `atividades` (
   `Tema` tinytext COLLATE utf8mb4_bin NOT NULL,
   `Seccao` set('Teste','Lobitos','Exploradores','Pioneiros','Caminheiros','Dirigentes','Agrupamento') COLLATE utf8mb4_bin NOT NULL,
   `Local` text COLLATE utf8mb4_bin NOT NULL,
-  `DataInicio` datetime NOT NULL,
+  `DataInicio` date NOT NULL,
   `DataFim` datetime NOT NULL,
   `Orcamento` decimal(65,2) NOT NULL DEFAULT 0.00,
   `Ativa` tinyint(1) NOT NULL DEFAULT 1
@@ -225,10 +225,10 @@ CREATE TABLE `atividades` (
 --
 
 INSERT INTO `atividades` (`IDAtividade`, `Nome`, `Tipo`, `Tema`, `Seccao`, `Local`, `DataInicio`, `DataFim`, `Orcamento`, `Ativa`) VALUES
-(0, 'Teste', 'Teste', 'Teste', 'Teste', 'Teste', '1000-01-01 00:00:00', '9999-12-31 23:59:59', '0.00', 0),
-(1, 'Atividade de Sábado', 'Sábado', 'Regular atividade de sábado', 'Agrupamento', 'Sede', '2020-03-21 00:00:00', '2020-03-21 00:00:00', '0.00', 1),
-(2, 'Acampamento de integração', 'Acampamentos', 'Integração dos noviços', 'Pioneiros', 'Herdade florestal da Aroeira', '2020-03-21 00:00:00', '2020-03-28 00:00:00', '0.00', 1),
-(3, 'Café Concerto', 'Sábado', 'Angariação de fundos', 'Exploradores', 'Armazém B', '2020-06-30 00:04:24', '2020-07-01 00:00:00', '0.00', 1);
+(0, 'Teste', 'Teste', 'Teste', 'Teste', 'Teste', '1000-01-01', '9999-12-31 23:59:59', '0.00', 0),
+(1, 'Atividade de Sábado', 'Sábado', 'Regular atividade de sábado', 'Agrupamento', 'Sede', '2020-03-21', '2020-03-21 00:00:00', '0.00', 1),
+(2, 'Acampamento de integração', 'Acampamentos', 'Integração dos noviços', 'Pioneiros', 'Herdade florestal da Aroeira', '2020-03-21', '2020-03-28 00:00:00', '0.00', 1),
+(3, 'Café Concerto', 'Sábado', 'Angariação de fundos', 'Exploradores', 'Armazém B', '2020-06-30', '2020-07-01 00:00:00', '0.00', 1);
 
 --
 -- Acionadores `atividades`
@@ -283,7 +283,7 @@ INSERT INTO `caixas` (`IDCaixa`, `Nome`, `Grupo`, `Responsavel`, `Saldo`) VALUES
 (22, 'Tribo Nuno Álvares Pereira', 22, 169, '0.00'),
 (23, 'Tribo São João de Deus', 23, 177, '0.00'),
 (24, 'Alcateia', 24, 185, '0.00'),
-(25, 'Expedição', 25, 191, '0.00'),
+(25, 'Expedição', 25, 191, '-99.50'),
 (26, 'Comunidade', 26, 197, '0.00'),
 (27, 'Clã', 27, 203, '0.00'),
 (28, 'Administração de Agrupamento', 28, 210, '0.00');
@@ -675,7 +675,7 @@ CREATE TABLE `movimentos` (
 --
 
 INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `Seccao`, `IDDocumento`, `TipoMovimento`, `User`, `DataHora`, `Valor`, `TipoPag`, `Descricao`, `Atividade`) VALUES
-(0, 0, 'Teste', '00', 'Teste', 'Teste', '1000-01-01', '0.00', '00', 'Teste', 0),
+(0, 0, 'Teste', '00', 'Teste', 'Teste', '2001-01-01', '0.00', '00', 'Teste', 0),
 (1, 1, 'Lobitos', 'EN', 'Entrada de tesouraria', 'AdminAgr', '2019-10-01', '1.00', 'DI', '1111111111', 1),
 (2, 2, 'Lobitos', 'EN', 'Entrada de tesouraria', 'AdminAgr', '2019-10-08', '2.00', 'DI', '2222222222', 1),
 (3, 3, 'Lobitos', 'EN', 'Entrada de tesouraria', 'AdminAgr', '2019-10-15', '3.00', 'DI', '3333333333', 1),

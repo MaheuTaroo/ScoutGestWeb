@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class TesourariaController : Controller
     {
         public async Task<IActionResult> Index()

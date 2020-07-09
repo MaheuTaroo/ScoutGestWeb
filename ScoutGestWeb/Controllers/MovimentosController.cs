@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class MovimentosController : Controller
     {
         #region Variáveis 

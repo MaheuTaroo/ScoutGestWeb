@@ -1,17 +1,19 @@
-﻿@model ScoutGestWeb.Models.InserirEscuteiroViewModel
+﻿@model ScoutGestWeb.Models.EscuteirosViewModel
 @{
-    ViewData["Title"] = "Inserir escuteiro - Escuteiros";
+    ViewData["Title"] = "Editar escuteiro - Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 <!--Aqui esta o código para a página de inserir novos escuteiros -->
+<script src="~/js/site.js"></script>
 <h1>Inserir escuteiro</h1>
-<hr />
 
+<h4>Editar dados</h4>
+<hr />
 <div class="text-center">
     <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger">@Html.ValidationSummary(false)</div>
         <div class="form-group col-xl-3 text-sm-left">
-            <label asp-for="ID">Nome:</label>
+            <label asp-for="ID">ID:</label>
             <input asp-for="ID" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
             <label asp-for="Nome">Nome:</label>
@@ -52,6 +54,7 @@
         </div>
         <div class="col-xl-3 text-sm-left">
             <label>Cargo:</label><br />
+            <!--<input type="checkbox" asp-for="Guia.Selecionado" /> Guia <br />-->
             @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
             @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
             @Html.CheckBoxFor(modelItem => modelItem.Cozinheiro.Selecionado) Cozinheiro<br />

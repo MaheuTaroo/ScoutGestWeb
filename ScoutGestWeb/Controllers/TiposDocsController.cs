@@ -9,6 +9,7 @@ using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class TiposDocsController : Controller
     {
         public async Task<IActionResult> Index()

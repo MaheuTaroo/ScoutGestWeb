@@ -1,0 +1,84 @@
+﻿@model ScoutGestWeb.Models.MovimentoViewModel
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+
+<h1>Eliminar</h1>
+
+<h3>Tem a certeza que deseja eliminar este movimento?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            ID do movimento:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IDMovimento)
+        </dd>
+        <dt class="col-sm-2">
+            Caixa:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IDCaixa)
+        </dd>
+        <dt class="col-sm-2">
+            Documento
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IDDocumento)
+        </dd>
+        <dt class="col-sm-2">
+            Secção:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seccao)
+        </dd>
+        <dt class="col-sm-2">
+            Tipo de movimento:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipoMovimento)
+        </dd>
+        <dt class="col-sm-2">
+            Utilizador:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            Data:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataHora.Date)
+        </dd>
+        <dt class="col-sm-2">
+            Valor:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Valor)€
+        </dd>
+        <dt class="col-sm-2">
+            Tipo de pagamento:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipoPagamento)
+        </dd>
+        <dt class="col-sm-2">
+            Descrição
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+        <dt class="col-sm-2">
+            Atividade:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Atividade)
+        </dd>
+    </dl>
+    
+    <form asp-action="EliminarPost" asp-route-id="@Model.IDMovimento">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Cancelar</a>
+    </form>
+</div>

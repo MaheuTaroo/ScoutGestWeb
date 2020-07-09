@@ -8,9 +8,9 @@ using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class AnalisesController : Controller
     {
-
         public async Task<IActionResult> Movimentos(List<MovimentoViewModel> mvm)
         {
             return await Task.Run(() => new ViewAsPdf(mvm));

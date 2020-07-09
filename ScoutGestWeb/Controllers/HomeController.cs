@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     [AllowAnonymous]
     public class HomeController : Controller
     {

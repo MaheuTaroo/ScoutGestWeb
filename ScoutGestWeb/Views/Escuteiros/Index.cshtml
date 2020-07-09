@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ScoutGestWeb.Models.InserirEscuteiroViewModel>
+﻿@model IEnumerable<ScoutGestWeb.Models.EscuteirosViewModel>
 @{
     ViewData["Title"] = "Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
@@ -6,8 +6,6 @@
 
 <div class="text-white">
     <aside style="left: 0; background-color: #333; overflow-x: hidden; overflow-y: auto; width: 12vw; height: calc(100% - 90px); position:absolute;">
-        <!--dude primeiro chill segundo pq e que ha duas partes as duas chamadas movimento?-->
-        <!--pq ainda n mudei o nome, bruh-->
         <br />
         @if (User.IsInRole("Administração de Agrupamento"))
         {
@@ -45,16 +43,6 @@
     <h1>Escuteiros</h1>
 
     <div style="text-align: center">
-        @if (User.IsInRole("Administração de Agrupamento"))
-        {
-            <a asp-action="InserirEscuteiro" style="margin-right: 10vw"><button class="btn btn-secondary">Inserir novo escuteiro</button></a>
-            <a asp-action="Index" asp-controller="Grupos" style="margin-left: 10vw"><button class="btn btn-secondary">Visualizar grupos</button></a>
-        }
-        else if (User.IsInRole("Equipa de Animação"))
-        {
-            <a asp-action="Index" asp-controller="Grupos"><button class="btn btn-secondary">Visualizar grupos</button></a>
-        }
-        <!--<br />-->
         @using (Html.BeginForm("Index", "InserirEscuteiro", FormMethod.Get))
         {
             <div class="bg-danger rounded">@Html.ValidationSummary(false)</div><br />
@@ -277,3 +265,5 @@ also brb again lmao-->
     guess what, a bug turned into a feature-->
 <!--well thats great. o que e que tenho de fazer com os detalhes?-->
 <!--se vires como estao vais perceber-->
+<!--dude primeiro chill segundo pq e que ha duas partes as duas chamadas movimento?-->
+<!--pq ainda n mudei o nome, bruh-->

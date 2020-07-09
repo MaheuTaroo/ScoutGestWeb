@@ -12,14 +12,16 @@ using System.Collections;
 
 namespace ScoutGestWeb.Models
 {
-    public class InserirEscuteiroViewModel
+    public class EscuteirosViewModel
     {
         [Key]
         [Required(ErrorMessage = "Não foi introduzido um número de escuteiro", AllowEmptyStrings = false)]
         public int ID { get; set; }
         [Required(ErrorMessage = "Por favor, insira o nome")]
+        [StringLength(50)]
         public string Nome { get; set; }
         [Required(ErrorMessage = "Por favor, insira o totem")]
+        [StringLength(25)]
         public string Totem { get; set; }
         public Cargos Guia { get; set; } = new Cargos("Guia");
         public Cargos Animador { get; set; } = new Cargos("Animador");

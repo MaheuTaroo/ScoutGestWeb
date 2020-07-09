@@ -9,6 +9,7 @@ using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class AtividadesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

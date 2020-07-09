@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Inserir atividade - Atividades";
 }
-
 <h1>Nova atividade</h1>
 <hr />
 <div class="row">
@@ -29,14 +28,14 @@
                         <span asp-validation-for="Tipo" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Seccao" class="control-label">Secção</label>
-                        <select asp-for="Seccao" class="form-control">
-                            <option value="1">Lobitos</option>
-                            <option value="1">Exploradores</option>
-                            <option value="1">Pioneiros</option>
-                            <option value="1">Caminheiros</option>
-                            <option value="1">Dirigentes</option>
-                            <option value="1">Agrupamento</option>
+                        <label>Secção</label>
+                         <select asp-for="Seccao" class="form-control">
+                            <option>Lobitos</option>
+                            <option>Exploradores</option>
+                            <option>Pioneiros</option>
+                            <option>Caminheiros</option>
+                            <option>Dirigentes</option>
+                            <option>Agrupamento</option>
                         </select>
                         <span asp-validation-for="Seccao" class="text-danger"></span>
                     </div>
@@ -73,8 +72,6 @@
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Voltar à listagem</a>
 </div>
-

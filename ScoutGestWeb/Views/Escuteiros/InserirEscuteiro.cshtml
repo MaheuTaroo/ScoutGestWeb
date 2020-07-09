@@ -1,27 +1,31 @@
-﻿@model ScoutGestWeb.Models.InserirEscuteiroViewModel
+﻿@model ScoutGestWeb.Models.EscuteirosViewModel
 @{
-    ViewData["Title"] = "Editar escuteiro - Escuteiros";
+    ViewData["Title"] = "Inserir escuteiro - Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
 <!--Aqui esta o código para a página de inserir novos escuteiros -->
-<script src="~/js/site.js"></script>
 <h1>Inserir escuteiro</h1>
-
-<h4>Editar dados</h4>
 <hr />
-<div class="text-center">
+
+<div class="text-center" style="margin: auto">
     <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">
+        <style>
+            input, select, textarea {
+                float: right;
+                clear: both;
+            }
+        </style>
         <div asp-validation-summary="ModelOnly" class="text-danger">@Html.ValidationSummary(false)</div>
-        <div class="form-group col-xl-3 text-sm-left">
-            <label asp-for="ID">ID:</label>
+        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+            <label asp-for="ID">ID de escuteiro:</label>
             <input asp-for="ID" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
             <label asp-for="Nome">Nome:</label>
-            <input asp-for="Nome" /><br />
+            <input asp-for="Nome" style="width: 100%" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Nome)</div>
             <br />
             <label asp-for="Totem">Totem:</label>
-            <input asp-for="Totem" />
+            <input asp-for="Totem" style="width: 100%" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Totem)</div>
             <br />
             <label asp-for="Seccao">Secção:</label>
@@ -51,14 +55,11 @@
                     <option>@s</option>
                 }
             </select>
-        </div>
-        <div class="col-xl-3 text-sm-left">
             <label>Cargo:</label><br />
-            <!--<input type="checkbox" asp-for="Guia.Selecionado" /> Guia <br />-->
             @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
             @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
             @Html.CheckBoxFor(modelItem => modelItem.Cozinheiro.Selecionado) Cozinheiro<br />
-            @Html.CheckBoxFor(modelItem => modelItem.GuardaMaterial.Selecionado) GuardaMaterial<br />
+            @Html.CheckBoxFor(modelItem => modelItem.GuardaMaterial.Selecionado) Guarda-material<br />
             @Html.CheckBoxFor(modelItem => modelItem.Secretario.Selecionado) Secretario<br />
             @Html.CheckBoxFor(modelItem => modelItem.Tesoureiro.Selecionado) Tesoureiro<br />
             @Html.CheckBoxFor(modelItem => modelItem.RelPub.Selecionado) Relações públicas<br />
@@ -68,7 +69,7 @@
             @Html.CheckBoxFor(modelItem => modelItem.Chefe.Selecionado) Chefe<br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationSummary(true)</div>
         </div>
-        <div class="col-xl-3 text-sm-left">
+        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
             <label asp-for="Idade">Idade:</label>
             <input asp-for="Idade" type="number" value="6" min="6" max="150" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Idade)</div>
@@ -87,12 +88,10 @@
             <label asp-for="CodPostal">Código-postal:</label>
             <input asp-for="CodPostal" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.CodPostal)</div>
-            <label asp-for="Localidade">Código-postal:</label>
+            <label asp-for="Localidade">Localidade:</label>
             <input asp-for="Localidade" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Localidade)</div>
             <br />
-        </div>
-        <div class="col-xl-3 text-sm-left">
             <label asp-for="GrupoSanguineo">Grupo sanguíneo:</label>
             <select asp-for="GrupoSanguineo">
                 <option>A+</option>
@@ -104,21 +103,30 @@
                 <option>O+</option>
                 <option>O-</option>
             </select>
-            <br />
-            <label asp-for="Alergias">Alergias:</label>
-            <input asp-for="Alergias" type="text" />
-            <br />
-            <label asp-for="Medicacao">Medicação:</label>
-            <input asp-for="Medicacao" type="text" />
-            <br />
-            <label asp-for="Problemas">Problemas de saúde:</label>
-            <input asp-for="Problemas" type="text" />
-            <br />
-            <label asp-for="Observacoes">Observações:</label>
-            <input asp-for="Observacoes" type="text" />
+            <div>
+                <label asp-for="Alergias">Alergias:</label>
+                <textarea asp-for="Alergias" style="width: 100%; height: 200px"></textarea>
+            </div>
             <br />
         </div>
-        <input class="text-center btn btn-primary container-fluid" type="submit" value="Create" />
+        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+            <div>
+                <label asp-for="Medicacao">Medicação:</label>
+                <textarea asp-for="Medicacao" style="width: 100%; height: 200px"></textarea>
+            </div>
+            <br />
+            <div>
+                <label asp-for="Problemas">Problemas de saúde:</label>
+                <textarea asp-for="Problemas" style="width: 100%; height: 200px"></textarea>
+            </div>
+            <br />
+            <div>
+                <label asp-for="Observacoes">Observações:</label>
+                <textarea asp-for="Observacoes" style="width: 100%; height: 200px"></textarea>
+            </div>
+            <br />
+        </div>
+        <input class="text-center btn btn-primary container-fluid" type="submit" value="Criar ficha de escuteiro" />
     </form>
 </div>
 <!--botão para voltar à lista de escuteiros-->

@@ -405,7 +405,6 @@ footer {
 /*just a question: why "rowdeth" instead of "rowdet"? why the 'h'?*/
 /*look dude it works ok? i just gave it that name so it wouldn't use the ouhter rows*/
 /*calma, era so curiosidade, n tava a querer mudar nd*/
-/**/
 /*este botao parece me igual ao botao q aparece no btn-secondary*/
 /*entao apaga e altera aqueles que estao com obottaoin*/
 /*mas deixa so comparar primeiro*/
@@ -418,7 +417,6 @@ footer {
 /*ok then lemme check where it is called
     its not called anywhere, just in here. maybe let us delete, it aint useful rn*/
 /*okii, there now if u excuse me im going to see if i find a solution to our problem*/
-
 /*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
 /*ooh, o que qeures que eu faça com o side nav? */
 /*tenta fzr c q a caixa principal recupere o tamanho total. eu pus a margem esquerda igual a largura do sidenav,
@@ -430,12 +428,10 @@ footer {
 /*simplesmente comentei o main pq o main é utilizado para meter as cenas de lado do side nav */
 /*eu vou tirar, ja percebi que nao era isso que querias */
 /*onde e q comentaste? n encontro*/
-
 /*acho q tnh uma ideia, pera ai*/
 /*diz la*/
 /*queres que eu continue com o que tava a fazer com o side nav, ou queres que eu continue com o tentar eliminar
-    o branco?
-*/
+    o branco?*/
 /*como assim eliminar o branco? o branco n e p eliminar*/
 /*diminuir o body, quis dizer isso*/
 /*eu tb tou a ver como isso se faz, pq n consigo ver mt bem as mnh alteracoes
@@ -470,7 +466,6 @@ footer {
 /*essa classe dei mesmo o nome assim para meter aqui no css, mas por alem disso há algum mistype em relação ao tetxo?*/
 /*ve*/
 /*oki*/
-
 /*isto e preciso p q?*/
 /*isso a partida era para alinhar as cenas com o side nav, tava no cod quano o tirei */
 /*acho que ja sei como resolver, este main nao estava a fazer o seu trabalho pq o div de onde estava as cenas nao 
@@ -493,8 +488,7 @@ footer {
 /*entao o que tas a dizer e dividir cada caixa e meter iuma imagen e texto como esta no log in?*/
 /*yes*/
 /*oki then, mas isso deve ser facil entao, nao envolve so o mesmo codigo do log in? claro com algumas alterações 
-    se for necessário
-*/
+    se for necessário*/
 /*ainda tnh d fzr as imgs, mas o q te peco p fzrs e p veres como alinhar o texto ao canto*/
 /*ok im right on it*/
 /*ja dividi as cenas, so qr agr q alinhes ao canto*/
@@ -575,15 +569,12 @@ footer {
 /*habits*/
 /*tens mais algumas ideias para o log in?*/
 /*oh wait maybe we could add fb and insta button but for that i think we need those type of links that give us
-    resources, idk what do u think?
-*/
+    resources, idk what do u think?*/
 /*i think this should be better*/
 /*u mean leaving less space open?*/
 /*yea, and beautifying this*/
 /*well we could add the footer and change the button style and some fonts but how about we try moving both of the st
-    stuff more to the center the image a bit more.
-*/
-
+    stuff more to the center the image a bit more.*/
 /*queres que eu tente puxar mais o log in para o centro da pag ou esta good e avanço para detalhes do log in ?*/
 /*ta bom acho eu, deixa ver
     acho q deviamos tirar o footer e fzr c q o "benvindo ao scoutgest" fosse uma animacao em q aparecesse e
@@ -622,7 +613,6 @@ footer {
 /*oki*/
 /*bacc, i is*/
 /*searching is a i*/
-
 /*like it think it look good, but whatd do u think?*/
 /*i dont have any fuckin idea, unless we mess up with the media tag*/
 /*lunch time, see ya at 14h
@@ -637,10 +627,11 @@ footer {
     height:auto;
     opacity: 0.5;
 }
-
 .toptesoura button {
     position: absolute;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     position: absolute;
 }*/
+/*nao te esqueças que outras coisas utilizem o split*/
+/*eu so vim ver o q e q tava aqui, n sei se reparaste q eu tou a fzr as alteracoes la*/

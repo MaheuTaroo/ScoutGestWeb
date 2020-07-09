@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ScoutGestWeb.Controllers
 {
+    [RequireHttps]
     public class GruposController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

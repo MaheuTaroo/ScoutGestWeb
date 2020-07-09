@@ -24,6 +24,8 @@ namespace ScoutGestWeb.Models
         [Required(ErrorMessage = "Não foi indicado um tipo de movimento", AllowEmptyStrings = false)]
         [ForeignKey("IDTipoMov")]
         public string TipoMovimento { get; set; }
+        [Required(ErrorMessage = "Não foi referida a secção em que o movimento se insere", AllowEmptyStrings = false)]
+        public string Seccao { get; set; }
         public ApplicationUser User { get; set; }
         [Required(ErrorMessage = "Não foi indicada uma data e hora para o movimento")]
         public DateTime DataHora { get; set; }

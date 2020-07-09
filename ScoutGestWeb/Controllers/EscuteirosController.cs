@@ -16,16 +16,18 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace ScoutGestWeb.Controllers
 {
-    public class InserirEscuteiroController : Controller
+    [RequireHttps]
+    public class EscuteirosController : Controller
     {
+        List<string> grupos = new List<string>();
         private readonly UserManager<ApplicationUser> _userManager;
-        public InserirEscuteiroController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
+        public EscuteirosController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index(string coluna, string procura)
         {
             if (User.Identity.IsAuthenticated)
             {
                 //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
-                List<InserirEscuteiroViewModel> escuteiros = new List<InserirEscuteiroViewModel>();
+                List<EscuteirosViewModel> escuteiros = new List<EscuteirosViewModel>();
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     //Abrir a ligação
@@ -87,7 +89,7 @@ namespace ScoutGestWeb.Controllers
                         int i = 0;
                         while (await dr.ReadAsync())
                         {
-                            escuteiros.Add(new InserirEscuteiroViewModel()
+                            escuteiros.Add(new EscuteirosViewModel()
                             {
                                 ID = int.Parse(dr["IDEscuteiro"].ToString()),
                                 Nome = dr["Nome"].ToString(),
@@ -115,8 +117,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> InserirEscuteiro()
         {
             if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
-            InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
-            List<string> grupos = new List<string>();
+            EscuteirosViewModel ievm = new EscuteirosViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
@@ -135,7 +136,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View(ievm));
         }
         [HttpPost]
-        public async Task<IActionResult> InserirEscuteiro(InserirEscuteiroViewModel insert)
+        public async Task<IActionResult> InserirEscuteiro(EscuteirosViewModel insert)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
@@ -203,13 +204,22 @@ namespace ScoutGestWeb.Controllers
                     return await Task.Run(() => View("InserirEscuteiro", insert));
                 }
             }
+            using (MySqlCommand cmd = new MySqlCommand("select IDGrupo, Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
+                }
+            }
+            grupos.Sort();
+            ViewBag.grupos = grupos;
             return await Task.Run(() => View("InserirEscuteiro"));
         }
         public async Task<IActionResult> Detalhes(int id)
         {
             if (User.Identity.IsAuthenticated)
             {
-                InserirEscuteiroViewModel ievm = null;
+                EscuteirosViewModel ievm = null;
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
@@ -217,7 +227,7 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) ievm = new InserirEscuteiroViewModel()
+                        while (await dr.ReadAsync()) ievm = new EscuteirosViewModel()
                         {
                             ID = int.Parse(dr["IDEscuteiro"].ToString()),
                             Nome = dr["Nome"].ToString(),
@@ -250,7 +260,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> ElimGet(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
+            EscuteirosViewModel ievm = new EscuteirosViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id" + (!User.IsInRole("Administração de Agrupamento") ? " and Seccao = @seccao;" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
@@ -319,7 +329,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> EditarEscuteiro(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            InserirEscuteiroViewModel ievm = new InserirEscuteiroViewModel();
+            EscuteirosViewModel ievm = new EscuteirosViewModel();
             int grupo = 0;
             List<string> grupos = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
