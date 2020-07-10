@@ -56,11 +56,11 @@ namespace ScoutGestWeb.Models
         [Required(ErrorMessage = "Por favor, insira o grupo sanguíneo")]
         [StringLength(2)]
         public string GrupoSanguineo { get; set; }
-        [StringLength(65535)]
+        [StringLength(255)]
         public string Alergias { get; set; }
-        [StringLength(65535)]
+        [StringLength(255)]
         public string Medicacao { get; set; }
-        [StringLength(65535)]
+        [StringLength(255)]
         public string Problemas { get; set; }
         [StringLength(255)]
         public string Observacoes { get; set; }

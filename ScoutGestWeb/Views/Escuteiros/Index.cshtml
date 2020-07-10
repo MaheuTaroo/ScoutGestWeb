@@ -5,12 +5,12 @@
 }
 
 <div class="text-white">
-    <aside style="left: 0; background-color: #333; overflow-x: hidden; overflow-y: auto; width: 12vw; height: calc(100% - 90px); position:absolute;">
+    <aside class="sidenav">
         <br />
         @if (User.IsInRole("Administração de Agrupamento"))
         {
             <div style="padding: 3px 3px 6px 3px">
-                <h4 style="color: white; padding-left: 40px">Escuteiros</h4>
+                <h4>Escuteiros</h4>
                 <hr />
                 <ul>
                     <li class="linksEscut">
@@ -22,7 +22,7 @@
             </div>
         }
         <div style="padding: 3px">
-            <h4 style="color: white; padding-left: 40px">Grupos</h4>
+            <h4>Grupos</h4>
             <hr />
             <ul>
                 <li class="linksEscut">
@@ -39,7 +39,7 @@
         </div>
     </aside>
 </div>
-<div style="margin-left: 12vw">
+<div class="mainBody">
     <h1>Escuteiros</h1>
 
     <div style="text-align: center">

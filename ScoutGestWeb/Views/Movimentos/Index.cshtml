@@ -4,10 +4,10 @@
 }
 
 <div class="text-white">
-    <aside style="left: 0; background-color: #333; overflow-x:visible; overflow-y: hidden; width: 12vw; height: calc(100% - 90px); position: absolute;">
+    <aside class="sidenav">
         <br />
         <div style="padding: 3px 3px 6px 3px">
-            <h4 style="color: white; padding-left: 40px">Movimentos</h4>
+            <h4>Movimentos</h4>
             <hr />
             <ul>
                 <li class="linksMovs">
@@ -26,7 +26,7 @@
             <hr />
         </div>
         <div style="padding: 3px">
-            <h4 style="color: white; padding-left: 40px">Análises</h4>
+            <h4>Análises</h4>
             <hr />
             <ul>
                 <li class="linksMovs">
@@ -44,7 +44,7 @@
         @if (User.IsInRole("Administração de Agrupamento"))
         {
             <div style="padding: 3px">
-                <h4 style="color: white; padding-left: 40px">Tabelas</h4>
+                <h4>Tabelas</h4>
                 <hr />
                 <ul>
                     <li class="linksMovs">
@@ -62,8 +62,8 @@
         }
     </aside>
 </div>
-<div style="margin-left: 12vw">
-    <h1>Index</h1>
+<div class="mainBody">
+    <h1>Movimentos</h1>
 
     @if (Model.Count() == 0)
     {
