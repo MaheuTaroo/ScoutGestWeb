@@ -1,100 +1,119 @@
 ﻿@model IEnumerable<ScoutGestWeb.Models.CaixaViewModel>
 
 @{
-    ViewData["Title"] = "Caixas de pagamentos";
+    ViewData["Title"] = "Caixas de pagamentos - Tesouraria";
 }
-
-<h1>Caixas</h1>
 <!--Informações sobre as caixas para os pagamentos -->
 
-@if (User.IsInRole("Administração de Agrupamento"))
-{
-    <p>
-        <a asp-action="NovaCaixa">Nova caixa</a>
-    </p>
-}
-@if (!User.IsInRole("Comum"))
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nome)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Grupo)
-                </th>
-                <th>
-                    Responsável
-                </th>
-                <th>
-                    Saldo
-                </th>
-                <th>Opções</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+<div>
+    <aside class="sidenav">
+        <ul>
+            <li class="linksMovs">
+                <a asp-action="NovaCaixa">Nova caixa</a>
+            </li>
+        </ul>
+    </aside>
+</div>
+<div class="mainBody">
+    @if (!User.IsInRole("Comum"))
+    {
+        <h1>Caixas</h1>
+        if (TempData["msg"] != null)
+        {
+            if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Grupo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Responsavel)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Saldo)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
-                </tr>
+                <div class="bg-danger rounded text-center">
+                    <b>TempData["msg"]</b>
+                </div>
             }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="text-center">
-        <h1>A sua caixa</h1>
-        <div style="display: flex; justify-content: center; align-items: center">
-            <table>
+            else
+            {
+                <div class="bg-success rounded text-center">
+                    <b>TempData["msg"]</b>
+                </div>
+            }
+        }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nome)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Grupo)
+                    </th>
+                    <th>
+                        Responsável
+                    </th>
+                    <th>
+                        Saldo
+                    </th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <th>ID de caixa:</th>
-                        <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                    </tr>
-                    <tr>
-                        <th>Nome:</th>
-                        <td>@Html.DisplayFor(modelItem => item.Nome)</td>
-                    </tr>
-                    <tr>
-                        <th>Grupo atribuído:</th>
-                        <td>@Html.DisplayFor(modelItem => item.Grupo)</td>
-                    </tr>
-                    <tr>
-                        <th>Responsável atribuído:</th>
-                        <td>@Html.DisplayFor(modelItem => item.Responsavel)</td>
-                    </tr>
-                    <tr>
-                        <th>Saldo de caixa:</th>
-                        <td>@Html.DisplayFor(modelItem => item.Saldo)€</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Grupo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Responsavel)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Saldo)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
                     </tr>
                 }
-            </table>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="text-center">
+            <h1>A sua caixa</h1>
+            <div style="display: flex; justify-content: center; align-items: center">
+                <table>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th>ID de caixa:</th>
+                            <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                        </tr>
+                        <tr>
+                            <th>Nome:</th>
+                            <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                        </tr>
+                        <tr>
+                            <th>Grupo atribuído:</th>
+                            <td>@Html.DisplayFor(modelItem => item.Grupo)</td>
+                        </tr>
+                        <tr>
+                            <th>Responsável atribuído:</th>
+                            <td>@Html.DisplayFor(modelItem => item.Responsavel)</td>
+                        </tr>
+                        <tr>
+                            <th>Saldo de caixa:</th>
+                            <td>@Html.DisplayFor(modelItem => item.Saldo)€</td>
+                        </tr>
+                    }
+                </table>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>

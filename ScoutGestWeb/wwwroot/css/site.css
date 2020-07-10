@@ -66,6 +66,38 @@ body > div > h1 {
     --header-height: 10vh;
 }
 
+.gradeInsEsc {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 1.2fr 0.8fr;
+    grid-gap: 20px 20px;
+    grid-template-areas: "col1 col1 col1 col2 col2 col2 col3 col3 col3 col4 col4 col4" "alerg alerg alerg medic medic medic prob prob prob observ observ observ";
+}
+.col1 {
+    grid-area: col1;
+}
+.col2 {
+    grid-area: col2;
+}
+.col3 {
+    grid-area: col3;
+}
+.col4 {
+    grid-area: col4;
+}
+.alerg {
+    grid-area: alerg;
+}
+.medic {
+    grid-area: medic;
+}
+.prob {
+    grid-area: prob;
+}
+.observ {
+    grid-area: observ;
+}
+
 .sidenav {
     left: 0;
     background-color: #333;
@@ -81,18 +113,6 @@ body > div > h1 {
 }
 .mainBody {
     margin-left: 12vw;
-}
-@media screen and (width: 1024px) and (height: 768px) {
-    .sidenav h4 {
-        color: white;
-        padding-left: 0;
-    }
-    .sidenav {
-        width: 15vw;
-    }
-    .mainBody {
-        margin-left: 15vw;
-    }
 }
 
 /*.sidenav {
@@ -432,6 +452,21 @@ footer {
     border-right: none; /* Prevent double borders */
 }
 
+@media screen and (width: 1024px) and (height: 768px) {
+    .sidenav h4 {
+        color: white;
+        padding-left: 0;
+    }
+    .sidenav {
+        width: 15vw;
+    }
+    .mainBody {
+        margin-left: 15vw;
+    }
+    /*.col2 input[type=file] {
+        width: 58%;
+    }*/
+}
 
 /*just a question: why "rowdeth" instead of "rowdet"? why the 'h'?*/
 /*look dude it works ok? i just gave it that name so it wouldn't use the ouhter rows*/

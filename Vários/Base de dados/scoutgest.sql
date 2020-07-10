@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 09-Jul-2020 às 21:03
+-- Tempo de geração: 10-Jul-2020 às 22:00
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -312,7 +312,7 @@ CREATE TABLE `escuteiros` (
   `Alergias` tinytext COLLATE utf8mb4_bin NOT NULL,
   `Medicacao` tinytext COLLATE utf8mb4_bin NOT NULL,
   `Problemas` tinytext COLLATE utf8mb4_bin NOT NULL,
-  `Observacoes` text COLLATE utf8mb4_bin NOT NULL
+  `Observacoes` tinytext COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 --
@@ -1015,7 +1015,8 @@ INSERT INTO `tipos_docs` (`IDDocumento`, `Descricao`) VALUES
 ('00', 'Teste'),
 ('EN', 'Entradas'),
 ('SA', 'Saídas'),
-('TC', 'Transferências entre caixas');
+('TC', 'Transferências entre caixas'),
+('aa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
 -- --------------------------------------------------------
 

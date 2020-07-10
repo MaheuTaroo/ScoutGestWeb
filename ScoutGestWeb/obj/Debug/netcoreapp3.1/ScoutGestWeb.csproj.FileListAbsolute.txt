@@ -210,3 +210,5 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Escuteir
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Escuteiros\Index.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Escuteiros\InserirEscuteiro.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposPags\EliminarGet.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposDocs\Eliminar.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\Eliminar.cshtml.g.cs

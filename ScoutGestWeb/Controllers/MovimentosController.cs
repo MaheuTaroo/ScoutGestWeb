@@ -606,7 +606,7 @@ namespace ScoutGestWeb.Controllers
             List<TiposPagsViewModel> listtpvm = new List<TiposPagsViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_pags where IDPag not like \"00\";", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
+                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) listtpvm.Add(new TiposPagsViewModel()
@@ -628,7 +628,7 @@ namespace ScoutGestWeb.Controllers
             List<MovimTransfViewModel> listmtvm = new List<MovimTransfViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0 and IDDocumento in (select IDDocumento from tipos_docs where Descricao like \"%ransferência%\") and TipoMovimento = 1;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
+                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync()) listmtvm.Add(new MovimTransfViewModel()

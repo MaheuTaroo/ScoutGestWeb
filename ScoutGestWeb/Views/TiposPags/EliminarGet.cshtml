@@ -25,8 +25,8 @@
         </dd>
     </dl>
     
-    <form asp-action="EliminarGet">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+    <form asp-action="EliminarPost" method="post" asp-route-id="@Model.IDPagamento">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Voltar à listagem</a>
     </form>
 </div>

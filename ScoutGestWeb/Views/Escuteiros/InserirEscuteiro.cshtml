@@ -7,16 +7,136 @@
 <h1>Inserir escuteiro</h1>
 <hr />
 
-<div class="text-center" style="margin: auto">
-    <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">
-        <style>
-            input, select, textarea {
-                float: right;
-                clear: both;
-            }
-        </style>
-        <div asp-validation-summary="ModelOnly" class="text-danger">@Html.ValidationSummary(false)</div>
-        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+@*
+    <div class="text-center" style="margin: auto">
+        <form asp-for="InserirEscuteiro" class="row" enctype="multipart/form-data" style="margin:auto" method="post">
+            <style>
+                input, select, textarea {
+                    float: right;
+                    clear: both;
+                }
+            </style>
+            <div asp-validation-summary="ModelOnly" class="text-danger">@Html.ValidationSummary(false)</div>
+            <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+                <label asp-for="ID">ID de escuteiro:</label>
+                <input asp-for="ID" /><br />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
+                <label asp-for="Nome">Nome:</label>
+                <input asp-for="Nome" style="width: 100%" /><br />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Nome)</div>
+                <br />
+                <label asp-for="Totem">Totem:</label>
+                <input asp-for="Totem" style="width: 100%" />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Totem)</div>
+                <br />
+                <label asp-for="Seccao">Secção:</label>
+                <select asp-for="Seccao">
+                    <option>Lobitos</option>
+                    <option>Exploradores</option>
+                    <option>Pioneiros</option>
+                    <option>Caminheiros</option>
+                    <option>Dirigentes</option>
+                </select>
+                <br />
+                <label asp-for="Estado">Estado da promessa:</label>
+                <select asp-for="Estado">
+                    <option>Inscrito</option>
+                    <option>Noviço</option>
+                    <option>Aspirante</option>
+                    <option>Promessa feita</option>
+                </select>
+                <br />
+                <label asp-for="FotoUp">Fotografia:</label>
+                <input asp-for="FotoUp" type="file" accept=".jpg,.png" />
+                <br />
+                <label asp-for="Grupo">Grupo:</label>
+                <select asp-for="Grupo">
+                    @foreach (string s in ViewBag.grupos)
+                    {
+                        <option>@s</option>
+                    }
+                </select>
+                <label asp-for="Idade">Idade:</label>
+                <input asp-for="Idade" type="number" value="6" min="6" max="150" />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Idade)</div>
+                <br />
+                <label asp-for="NumTelefone">Telefone: +351</label>
+                <input asp-for="NumTelefone" />
+                <br />
+                <label asp-for="GrupoSanguineo">Grupo sanguíneo:</label>
+                <select asp-for="GrupoSanguineo">
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                </select>
+            </div>
+            <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+                <label asp-for="Morada">Morada:</label>
+                <input asp-for="Morada" />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada)</div>
+                <br />
+                <label asp-for="Morada2">Morada (continuação):</label>
+                <input asp-for="Morada2" />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada2)</div>
+                <br />
+                <label asp-for="CodPostal">Código-postal:</label>
+                <input asp-for="CodPostal" />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.CodPostal)</div>
+                <label asp-for="Localidade">Localidade:</label>
+                <input asp-for="Localidade" />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Localidade)</div>
+                <br />
+                <label>Cargo:</label><br />
+                @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
+                @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
+                @Html.CheckBoxFor(modelItem => modelItem.Cozinheiro.Selecionado) Cozinheiro<br />
+                @Html.CheckBoxFor(modelItem => modelItem.GuardaMaterial.Selecionado) Guarda-material<br />
+                @Html.CheckBoxFor(modelItem => modelItem.Secretario.Selecionado) Secretario<br />
+                @Html.CheckBoxFor(modelItem => modelItem.Tesoureiro.Selecionado) Tesoureiro<br />
+                @Html.CheckBoxFor(modelItem => modelItem.RelPub.Selecionado) Relações públicas<br />
+                @Html.CheckBoxFor(modelItem => modelItem.Socorrista.Selecionado) Socorrista<br />
+                @Html.CheckBoxFor(modelItem => modelItem.GuiaRegiao.Selecionado) Guia de região<br />
+                @Html.CheckBoxFor(modelItem => modelItem.SubGuia.Selecionado) Sub-guia<br />
+                @Html.CheckBoxFor(modelItem => modelItem.Chefe.Selecionado) Chefe<br />
+                <div class="bg-danger rounded-lg text-center">@Html.ValidationSummary(true)</div>
+            </div>
+            <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+                <div>
+                    <label asp-for="Alergias">Alergias:</label>
+                    <textarea asp-for="Alergias" style="width: 100%; resize: none" rows="10" placeholder="Alergias"></textarea>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="Medicacao">Medicação:</label>
+                    <textarea asp-for="Medicacao" style="width: 100%; resize: none" rows="10" placeholder="Medicação"></textarea>
+                </div>
+                <br />
+            </div>
+            <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+                <div>
+                    <label asp-for="Problemas">Problemas de saúde:</label>
+                    <textarea asp-for="Problemas" style="width: 100%; resize: none" rows="10" placeholder="Problemas"></textarea>
+                </div>
+                <br />
+                <div>
+                    <label asp-for="Observacoes">Observações:</label>
+                    <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10" placeholder="Observações"></textarea>
+                </div>
+                <br />
+            </div>
+            <input class="text-center btn btn-primary container-fluid" type="submit" value="Criar ficha de escuteiro" />
+        </form>
+    </div>
+*@
+
+<form asp-action="InserirEscuteiro" enctype="multipart/form-data" method="post">
+    <div class="gradeInsEsc">
+        <div class="col1" >
             <label asp-for="ID">ID de escuteiro:</label>
             <input asp-for="ID" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
@@ -37,6 +157,8 @@
                 <option>Dirigentes</option>
             </select>
             <br />
+        </div>
+        <div class="col2">
             <label asp-for="Estado">Estado da promessa:</label>
             <select asp-for="Estado">
                 <option>Inscrito</option>
@@ -46,15 +168,16 @@
             </select>
             <br />
             <label asp-for="FotoUp">Fotografia:</label>
-            <input asp-for="FotoUp" type="file" accept=".jpg,.png" />
+            <input asp-for="FotoUp" type="file" accept=".jpg,.png" style="width: 100%" />
             <br />
             <label asp-for="Grupo">Grupo:</label>
-            <select asp-for="Grupo">
+            <select asp-for="Grupo" style="width: 100%">
                 @foreach (string s in ViewBag.grupos)
                 {
                     <option>@s</option>
                 }
             </select>
+            <br />
             <label asp-for="Idade">Idade:</label>
             <input asp-for="Idade" type="number" value="6" min="6" max="150" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Idade)</div>
@@ -74,22 +197,22 @@
                 <option>O-</option>
             </select>
         </div>
-        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
+        <div class="col3">
             <label asp-for="Morada">Morada:</label>
-            <input asp-for="Morada" />
+            <textarea asp-for="Morada" style="width: 100%; resize: none" rows="2"></textarea>
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada)</div>
-            <br />
             <label asp-for="Morada2">Morada (continuação):</label>
-            <input asp-for="Morada2" />
+            <textarea asp-for="Morada2" style="width: 100%; resize: none" rows="2"></textarea>
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada2)</div>
-            <br />
             <label asp-for="CodPostal">Código-postal:</label>
             <input asp-for="CodPostal" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.CodPostal)</div>
+            <br />
             <label asp-for="Localidade">Localidade:</label>
             <input asp-for="Localidade" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Localidade)</div>
-            <br />
+        </div>
+        <div class="col4">
             <label>Cargo:</label><br />
             @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
             @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
@@ -104,33 +227,30 @@
             @Html.CheckBoxFor(modelItem => modelItem.Chefe.Selecionado) Chefe<br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationSummary(true)</div>
         </div>
-        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
-            <div>
-                <label asp-for="Alergias">Alergias:</label>
-                <textarea asp-for="Alergias" style="width: 100%; resize: none" rows="10" placeholder="Alergias"></textarea>
-            </div>
-            <br />
-            <div>
-                <label asp-for="Medicacao">Medicação:</label>
-                <textarea asp-for="Medicacao" style="width: 100%; resize: none" rows="10" placeholder="Medicação"></textarea>
-            </div>
-            <br />
+        <div class="alerg">
+            <label asp-for="Alergias">Alergias:</label>
+            <textarea asp-for="Alergias" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
-        <div class="col-lg-3 text-sm-left" style="width: calc(calc(100% + calc(100% / 3)) / 3)">
-            <div>
-                <label asp-for="Problemas">Problemas de saúde:</label>
-                <textarea asp-for="Problemas" style="width: 100%; resize: none" rows="10" placeholder="Problemas"></textarea>
-            </div>
-            <br />
-            <div>
-                <label asp-for="Observacoes">Observações:</label>
-                <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10" placeholder="Observações"></textarea>
-            </div>
-            <br />
+        <div class="medic">
+            <label asp-for="Medicacao">Medicação:</label>
+            <textarea asp-for="Medicacao" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
-        <input class="text-center btn btn-primary container-fluid" type="submit" value="Criar ficha de escuteiro" />
-    </form>
-</div>
+        <div class="prob">
+            <label asp-for="Problemas">Problemas de saúde:</label>
+            <textarea asp-for="Problemas" style="width: 100%; resize: none" rows="10"></textarea>
+        </div>
+        <div class="observ">
+            <label asp-for="Observacoes">Observações:</label>
+            <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10"></textarea>
+        </div>
+    </div>
+    @if (TempData["insert"] != null && bool.Parse(TempData["insert"].ToString()))
+    {
+        <input type="hidden" name="idold" value="@Model.ID" />
+    }
+    <input class="text-center btn btn-primary container-fluid" type="submit" value="Criar ficha de escuteiro" />
+</form>
+
 <!--botão para voltar à lista de escuteiros-->
 <p class="text-center">
     <a asp-action="Index">Voltar à listagem</a>

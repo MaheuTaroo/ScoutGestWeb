@@ -90,7 +90,7 @@ namespace ScoutGestWeb.Controllers
             AtividadeViewModel avm = new AtividadeViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();;
+                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 cmd.Parameters.AddWithValue("@id", id);
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
@@ -122,7 +122,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     using (MySqlCommand cmd = new MySqlCommand("insert into atividades(Nome, Tipo, Seccao, Local, DataInicio, DataFim, Ativa) values (@nome, @tipo, @seccao, @local, @inicio, @fim, @ativa);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@nome", avm.Nome);
                         cmd.Parameters.AddWithValue("@tipo", avm.Tipo);
                         cmd.Parameters.AddWithValue("@seccao", avm.Seccao);

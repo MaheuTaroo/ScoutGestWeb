@@ -41,7 +41,21 @@
 </div>
 <div class="mainBody">
     <h1>Escuteiros</h1>
-
+    @if (TempData["msg"] != null)
+    {
+        if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
+        {
+            <div class="bg-danger rounded text-center">
+                <b>@TempData["msg"]</b>
+            </div>
+        }
+        else
+        {
+            <div class="bg-success rounded text-center">
+                <b>@TempData["msg"]</b>
+            </div>
+        }
+    }
     <div style="text-align: center">
         @using (Html.BeginForm("Index", "InserirEscuteiro", FormMethod.Get))
         {
@@ -87,8 +101,8 @@
                             <div class="row cima" style="vertical-align: middle">@Html.DisplayFor(modelItem => item.Nome)</div><br />
                             <div class="row centro" style="vertical-align: middle">Secção: @Html.DisplayFor(modelItem => item.Seccao)||Totem: @Html.DisplayFor(modelItem => item.Totem)</div><br />
                             <div class="row baixo" style="vertical-align: middle">
-                                <a href="@Url.ActionLink("Detalhes", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Detalhes</a>
-                                <a href="@Url.ActionLink("EditarEscuteiro", "InserirEscuteiro", new { id = item.ID})" class="btn btn-secondary">Editar</a>
+                                <a href="@Url.ActionLink("Detalhes", "Escuteiros", new { id = item.ID})" class="btn btn-secondary">Detalhes</a>
+                                <a href="@Url.ActionLink("EditarEscuteiro", "Escuteiros", new { id = item.ID})" class="btn btn-secondary">Editar</a>
                             </div>
                         </div>
                     </div>

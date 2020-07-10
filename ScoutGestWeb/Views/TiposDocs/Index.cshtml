@@ -4,34 +4,63 @@
     ViewData["Title"] = "Documentos - Tesouraria";
 }
 
-<h1>Documentos</h1>
-
-<p>
-    <a asp-action="NovoDocumento">Novo documento</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID de documento</th>
-            <th>Descrição</th>
-            <th>Opções</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDDocumento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div>
+    <aside class="sidenav">
+        <br />
+        <div style="padding: 3px 3px 6px 3px">
+            <h4>Documentos</h4>
+            <hr />
+            <ul>
+                <li class="linksMovs">
+                    <a asp-action="NovoDocumento">Novo documento</a>
+                    <br />
+                </li>
+            </ul>
+            <hr />
+        </div>
+    </aside>
+</div>
+<div class="mainBody">
+    <h1>Documentos</h1>
+    @if (TempData["msg"] != null)
+    {
+        if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
+        {
+            <div class="bg-danger rounded text-center">
+                <b>@TempData["msg"]</b>
+            </div>
+        }
+        else
+        {
+            <div class="bg-success rounded text-center">
+                <b>@TempData["msg"]</b>
+            </div>
+        }
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID de documento</th>
+                <th>Descrição</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDDocumento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Editar", new { id = item.IDDocumento }) |
+                        @Html.ActionLink("Eliminar", "EliminarGet", new { id = item.IDDocumento })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

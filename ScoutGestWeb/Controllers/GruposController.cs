@@ -74,7 +74,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("insert into grupos(Nome, Sigla, Foto, Seccao, Pseudonimo) values (@nome, @sigla, @foto, @seccao, @pseudonimo", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
+                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@nome", gvm.Nome);
                     cmd.Parameters.AddWithValue("@sigla", gvm.Sigla);
                     cmd.Parameters.AddWithValue("@seccao", gvm.Seccao);
@@ -96,7 +96,7 @@ namespace ScoutGestWeb.Controllers
             GrupoViewModel gvm = null;
             using (MySqlCommand cmd = new MySqlCommand("select * from grupos where IDGrupo = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
+                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.Prepare();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())

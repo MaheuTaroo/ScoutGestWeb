@@ -17,10 +17,12 @@ namespace ScoutGestWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly List<CaixaViewModel> cvm = new List<CaixaViewModel>();
         private readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
+        bool insert = true;
         public CaixasController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (TempData["msg"] != null) TempData.Keep("msg");
             using (MySqlCommand cmd = new MySqlCommand("select * from caixas", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
@@ -73,12 +75,14 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View(cvm));
         }
+        #region Nova caixa
+        [HttpGet]
         public async Task<IActionResult> NovaCaixa()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
+                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     List<string> grupos = new List<string>();
@@ -89,118 +93,205 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View());
         }
+        public async Task<IActionResult> NovaCaixa(object model)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            TempData["insert"] = insert;
+            return await Task.Run(() => View("NovaCaixa", model));
+        }
         [HttpPost]
         public async Task<IActionResult> NovaCaixa(CaixaViewModel cvm)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
-                using (MySqlCommand cmd = new MySqlCommand("insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                try
                 {
-                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
-                    cmd.Parameters.AddWithValue("@nome", cvm.Nome);
-                    using (MySqlCommand cmd2 = new MySqlCommand("select IDGrupo from grupos where Nome = @nome", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);" : "update caixas set Nome = @nome, Grupo = @grupo, Responsavel = @responsavel where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();;
-                        cmd2.Parameters.AddWithValue("@nome", cvm.Grupo);
-                        await cmd2.PrepareAsync();
-                        using (MySqlDataReader dr2 = cmd2.ExecuteReader())
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); ;
+                        cmd.Parameters.AddWithValue("@nome", cvm.Nome);
+                        using (MySqlCommand cmd2 = new MySqlCommand("select IDGrupo from grupos where Nome = @nome", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                         {
-                            if (!dr2.HasRows)
+                            if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); ;
+                            cmd2.Parameters.AddWithValue("@nome", cvm.Grupo);
+                            await cmd2.PrepareAsync();
+                            using (MySqlDataReader dr2 = cmd2.ExecuteReader())
                             {
-                                ModelState.AddModelError("Grupo não existente", "O grupo selecionado não existe");
-                                ViewData.Add(new KeyValuePair<string, object>("Error", "A equipa selecionada não existe"));
-                                return await Task.Run(() => RedirectToAction("NovaCaixa"));
+                                if (!dr2.HasRows)
+                                {
+                                    ModelState.AddModelError("Grupo não existente", "O grupo selecionado não existe");
+                                    ViewData.Add(new KeyValuePair<string, object>("Error", "A equipa selecionada não existe"));
+                                    return await Task.Run(() => RedirectToAction("NovaCaixa"));
+                                }
+                                else while (await dr2.ReadAsync()) cmd.Parameters.AddWithValue("@grupo", int.Parse(dr2["IDGrupo"].ToString()));
                             }
-                            else while (await dr2.ReadAsync()) cmd.Parameters.AddWithValue("@grupo", int.Parse(dr2["IDGrupo"].ToString()));
-                        }
-                        cmd2.Parameters.Clear();
-                        cmd2.CommandText = "select * from escuteiros where ";
-                        if (int.TryParse(cvm.Responsavel, out _))
-                        {
-                            cmd2.CommandText += "IDEscuteiro = @id";
-                            cmd2.Parameters.AddWithValue("@id", cvm.Responsavel);
-                        }
-                        else
-                        {
-                            cmd.CommandText += "Nome = @nome or Totem = @totem";
-                            cmd2.Parameters.AddWithValue("@nome", cvm.Responsavel);
-                            cmd2.Parameters.AddWithValue("@totem", cvm.Responsavel);
-                        }
-                        await cmd2.PrepareAsync();
-                        using (MySqlDataReader dr2 = cmd2.ExecuteReader())
-                        {
-                            if (!dr2.HasRows)
+                            cmd2.Parameters.Clear();
+                            cmd2.CommandText = "select * from escuteiros where ";
+                            if (int.TryParse(cvm.Responsavel, out _))
                             {
-                                ModelState.AddModelError("Escuteiro não existente", "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido");
-                                return await Task.Run(() => RedirectToAction("NovaCaixa"));
+                                cmd2.CommandText += "IDEscuteiro = @id";
+                                cmd2.Parameters.AddWithValue("@id", cvm.Responsavel);
                             }
-                            else while (await dr2.ReadAsync()) cmd.Parameters.AddWithValue("@responsavel", int.Parse(dr2["IDEscuteiro"].ToString()));
+                            else
+                            {
+                                cmd.CommandText += "Nome = @nome or Totem = @totem";
+                                cmd2.Parameters.AddWithValue("@nome", cvm.Responsavel);
+                                cmd2.Parameters.AddWithValue("@totem", cvm.Responsavel);
+                            }
+                            await cmd2.PrepareAsync();
+                            using (MySqlDataReader dr2 = cmd2.ExecuteReader())
+                            {
+                                if (!dr2.HasRows)
+                                {
+                                    ModelState.AddModelError("Escuteiro não existente", "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido");
+                                    return await Task.Run(() => RedirectToAction("NovaCaixa"));
+                                }
+                                else while (await dr2.ReadAsync()) cmd.Parameters.AddWithValue("@responsavel", int.Parse(dr2["IDEscuteiro"].ToString()));
+                            }
+
+                            ///try
+                            ///{
+                            ///    cmd.Parameters.AddWithValue("@id", int.Parse(cvm.Responsavel));
+                            ///}
+                            ///catch (FormatException)
+                            ///{
+                            ///    cmd.CommandText = cmd.CommandText.Replace("IDEscuteiro = @id", "Nome = @nome or Totem = @totem");
+                            ///    cmd.Parameters.AddWithValue("@nome", cvm.Responsavel);
+                            ///    cmd.Parameters.AddWithValue("@totem", cvm.Responsavel);
+                            ///}
+                            ///cmd.Prepare();
+                            ///using (MySqlDataReader dr = cmd.ExecuteReader())
+                            ///{
+                            ///    if (!dr.HasRows)
+                            ///    {
+                            ///        ViewBag.Error = "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido";
+                            ///        return RedirectToAction("NovaCaixa");
+                            ///    }
+                            ///}
+
                         }
-                       
-                        ///try
-                        ///{
-                        ///    cmd.Parameters.AddWithValue("@id", int.Parse(cvm.Responsavel));
-                        ///}
-                        ///catch (FormatException)
-                        ///{
-                        ///    cmd.CommandText = cmd.CommandText.Replace("IDEscuteiro = @id", "Nome = @nome or Totem = @totem");
-                        ///    cmd.Parameters.AddWithValue("@nome", cvm.Responsavel);
-                        ///    cmd.Parameters.AddWithValue("@totem", cvm.Responsavel);
-                        ///}
-                        ///cmd.Prepare();
-                        ///using (MySqlDataReader dr = cmd.ExecuteReader())
-                        ///{
-                        ///    if (!dr.HasRows)
-                        ///    {
-                        ///        ViewBag.Error = "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido";
-                        ///        return RedirectToAction("NovaCaixa");
-                        ///    }
-                        ///}
-                      
+                        if (insert) cmd.Parameters.AddWithValue("@id", cvm.ID);
+                        await cmd.PrepareAsync();
+                        int i = await cmd.ExecuteNonQueryAsync();
+                        if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{cvm.ID}\"");
                     }
-                    await cmd.PrepareAsync();
-                    await cmd.ExecuteNonQueryAsync();
+                    return await Task.Run(() => RedirectToAction("Index"));
                 }
-                return await Task.Run(() => RedirectToAction("Index"));
+                catch (Exception e)
+                {
+                    TempData["msg"] = "Ocorreu um erro com a edição do registo: " + e.Message;
+                }
             }
             return await Task.Run(() => RedirectToAction("NovaCaixa"));
         }
+        #endregion
         public async Task<IActionResult> Editar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            insert = false;
             CaixaViewModel cvm = new CaixaViewModel();
-            using (MySqlCommand cmd = new MySqlCommand("select * from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            try
             {
-                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.Prepare();
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                using (MySqlCommand cmd = new MySqlCommand("select * from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    while (await dr.ReadAsync())
+                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Prepare();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        cvm.ID = id;
-                        cvm.Nome = dr["Nome"].ToString();
-                        cvm.Saldo = decimal.Parse(dr["Saldo"].ToString());
-                        cvm.Grupo = dr["Grupo"].ToString();
-                        cvm.Responsavel = dr["Responsavel"].ToString();
+                        if (!dr.HasRows) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                        else
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                cvm.ID = id;
+                                cvm.Nome = dr["Nome"].ToString();
+                                cvm.Saldo = decimal.Parse(dr["Saldo"].ToString());
+                                cvm.Grupo = dr["Grupo"].ToString();
+                                cvm.Responsavel = dr["Responsavel"].ToString();
+                            }
+                        }
+                    }
+                    cmd.CommandText = "select Nome from escuteiros where IDEscuteiro = @id";
+                    cmd.Parameters["@id"].Value = cvm.Responsavel;
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) cvm.Responsavel = dr["Nome"].ToString();
+                    }
+                    cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
+                    cmd.Parameters["@id"].Value = cvm.Grupo;
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) cvm.Grupo = dr["Nome"].ToString();
                     }
                 }
-                cmd.CommandText = "select Nome from escuteiros where IDEscuteiro = @id";
-                cmd.Parameters["@id"].Value = cvm.Responsavel;
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                return await Task.Run(() => View("NovoGrupo", (object)cvm));
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocorreu um erro com a edição do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
+        }
+        #region Eliminar
+        public async Task<IActionResult> EliminarGet(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            CaixaViewModel cvm = new CaixaViewModel();
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand("select caixas.*, grupos.Nome, escuteiros.Nome as NomeEscut from caixas inner join grupos on caixas.Grupo = grupos.IDGrupo inner join escuteiros on caixas.Responsavel = escuteiros.IDEscuteiro where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    while (await dr.ReadAsync()) cvm.Responsavel = dr["Nome"].ToString();
+                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        if (!dr.HasRows) throw new Exception($"não existe nenhum registo com o ID \"{id}\"");
+                        else
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                cvm.ID = int.Parse(dr["IDCaixa"].ToString());
+                                cvm.Nome = dr["Nome"].ToString();
+                                cvm.Grupo = dr["Grupo"].ToString() + " - " + dr["Nome"].ToString();
+                                cvm.Responsavel = dr["Responsavel"].ToString() + " - " + dr["NomeEscut"].ToString();
+                                cvm.Saldo = decimal.Parse(dr["Saldo"].ToString());
+                            }
+                        }
+                    }
                 }
-                cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
-                cmd.Parameters["@id"].Value = cvm.Grupo;
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                return await Task.Run(() => View("Eliminar", cvm));
+            }
+            catch (Exception e)
+            {
+                ViewBag["msg"] = "Ocorreu um erro com a eliminação do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
+        }
+        [HttpPost]
+        public async Task<IActionResult> EliminarPost(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand("delete from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    while (await dr.ReadAsync()) cvm.Grupo = dr["Nome"].ToString();
+                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
+                    int i = await cmd.ExecuteNonQueryAsync();
+                    if (i == 0) throw new Exception($"não existe nenhum registo com o ID \"{id}\"");
                 }
             }
-            return await Task.Run(() => View("Index", cvm));
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocorreu um erro com a eliminação do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
         }
+        #endregion
     }
 }
 
