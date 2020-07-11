@@ -127,7 +127,7 @@ namespace ScoutGestWeb.Controllers
             GrupoViewModel gvm = new GrupoViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select * from grupos where IDGrupo = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
-                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 cmd.Parameters.AddWithValue("@id", id);
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {

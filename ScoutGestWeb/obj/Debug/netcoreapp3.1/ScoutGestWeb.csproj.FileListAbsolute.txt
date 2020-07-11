@@ -161,7 +161,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAna
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Tesouraria\Index.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Home\InfoLogout.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\SixLabors.ImageSharp.dll
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\NovaCaixa.cshtml.g.cs
@@ -212,3 +211,4 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Escuteir
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposPags\EliminarGet.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposDocs\Eliminar.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\Eliminar.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Atividades\Eliminar.cshtml.g.cs

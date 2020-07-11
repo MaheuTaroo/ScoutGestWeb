@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 10-Jul-2020 às 22:00
+-- Tempo de geração: 11-Jul-2020 às 23:35
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -228,7 +228,8 @@ INSERT INTO `atividades` (`IDAtividade`, `Nome`, `Tipo`, `Tema`, `Seccao`, `Loca
 (0, 'Teste', 'Teste', 'Teste', 'Teste', 'Teste', '1000-01-01', '9999-12-31 23:59:59', '0.00', 0),
 (1, 'Atividade de Sábado', 'Sábado', 'Regular atividade de sábado', 'Agrupamento', 'Sede', '2020-03-21', '2020-03-21 00:00:00', '0.00', 1),
 (2, 'Acampamento de integração', 'Acampamentos', 'Integração dos noviços', 'Pioneiros', 'Herdade florestal da Aroeira', '2020-03-21', '2020-03-28 00:00:00', '0.00', 1),
-(3, 'Café Concerto', 'Sábado', 'Angariação de fundos', 'Exploradores', 'Armazém B', '2020-06-30', '2020-07-01 00:00:00', '0.00', 1);
+(3, 'Café Concerto', 'Sábado', 'Angariação de fundos', 'Exploradores', 'Armazém B', '2020-06-30', '2020-07-01 00:00:00', '0.00', 1),
+(4, 'aaa', 'Acampamentos', 'a', 'Pioneiros', 'a', '2020-03-21', '2020-03-28 00:00:00', '0.00', 1);
 
 --
 -- Acionadores `atividades`
@@ -705,7 +706,17 @@ INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `Seccao`, `IDDocumento`, `Ti
 -- Acionadores `movimentos`
 --
 DELIMITER $$
-CREATE TRIGGER `Change_Saldo` AFTER INSERT ON `movimentos` FOR EACH ROW if new.TipoMovimento = "Entrada de tesouraria" then 
+CREATE TRIGGER `Change_Saldo_Insert` AFTER INSERT ON `movimentos` FOR EACH ROW if new.TipoMovimento = "Entrada de tesouraria" then 
+	update caixas set Saldo = Saldo + new.Valor where IDCaixa = new.IDCaixa;
+else 
+	if new.TipoMovimento = "Saída de tesouraria" THEN
+		update caixas set Saldo = Saldo -new.Valor where IDCaixa = new.IDCaixa;
+	end if;
+end if
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `Change_Saldo_Update` AFTER UPDATE ON `movimentos` FOR EACH ROW if new.TipoMovimento = "Entrada de tesouraria" then 
 	update caixas set Saldo = Saldo + new.Valor where IDCaixa = new.IDCaixa;
 else 
 	if new.TipoMovimento = "Saída de tesouraria" THEN
@@ -978,27 +989,6 @@ INSERT INTO `participantes` (`IDAtividade`, `IDParticipante`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `recursos`
---
-
-CREATE TABLE `recursos` (
-  `IDAtividade` int(11) NOT NULL,
-  `RecHumanos` longtext COLLATE utf8mb4_bin NOT NULL,
-  `RecMateriais` longtext COLLATE utf8mb4_bin NOT NULL,
-  `RecFinanceiros` longtext COLLATE utf8mb4_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
---
--- Extraindo dados da tabela `recursos`
---
-
-INSERT INTO `recursos` (`IDAtividade`, `RecHumanos`, `RecMateriais`, `RecFinanceiros`) VALUES
-(1, 'a', 'a', 'a'),
-(2, 'b', 'b', 'b');
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `tipos_docs`
 --
 
@@ -1185,13 +1175,6 @@ ALTER TABLE `participantes`
   ADD KEY `IDParticipante` (`IDParticipante`);
 
 --
--- Índices para tabela `recursos`
---
-ALTER TABLE `recursos`
-  ADD PRIMARY KEY (`IDAtividade`),
-  ADD KEY `IDAtividade` (`IDAtividade`);
-
---
 -- Índices para tabela `tipos_docs`
 --
 ALTER TABLE `tipos_docs`
@@ -1229,7 +1212,7 @@ ALTER TABLE `aspnetuserclaims`
 -- AUTO_INCREMENT de tabela `atividades`
 --
 ALTER TABLE `atividades`
-  MODIFY `IDAtividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `IDAtividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `caixas`
@@ -1247,7 +1230,7 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT de tabela `movimentos`
 --
 ALTER TABLE `movimentos`
-  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Restrições para despejos de tabelas
@@ -1331,12 +1314,6 @@ ALTER TABLE `numtelefones`
 ALTER TABLE `participantes`
   ADD CONSTRAINT `IDAtividade` FOREIGN KEY (`IDAtividade`) REFERENCES `atividades` (`IDAtividade`),
   ADD CONSTRAINT `participantes_ibfk_1` FOREIGN KEY (`IDParticipante`) REFERENCES `escuteiros` (`IDEscuteiro`);
-
---
--- Limitadores para a tabela `recursos`
---
-ALTER TABLE `recursos`
-  ADD CONSTRAINT `recursos_ibfk_1` FOREIGN KEY (`IDAtividade`) REFERENCES `recursos` (`IDAtividade`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,7 +1,7 @@
 ﻿@model ScoutGestWeb.Models.MovimentoViewModel
 
 @{
-    ViewData["Title"] = "Eliminar";
+    ViewData["Title"] = "Eliminar movimento - Tesouraria";
 }
 
 <h1>Eliminar</h1>
@@ -77,8 +77,8 @@
         </dd>
     </dl>
     
-    <form asp-action="EliminarPost" asp-route-id="@Model.IDMovimento">
+    <form asp-action="EliminarPost" method="post" asp-route-id="@Model.IDMovimento">
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Cancelar</a>
+        <a asp-action="Index">voltar à listagem</a>
     </form>
 </div>

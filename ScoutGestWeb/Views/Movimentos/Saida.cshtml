@@ -8,6 +8,21 @@
 <hr />
 
 <div class="col-md-4">
+    @if (TempData["insertMsg"] != null)
+    {
+        if (TempData["insertMsg"].ToString().Contains("Ocorreu um erro"))
+        {
+            <div class="bg-danger rounded text-center">
+                <b>@TempData["insertMsg"].ToString()</b>
+            </div>
+        }
+        else
+        {
+            <div class="bg-success rounded text-center">
+                <b>@TempData["insertMsg"].ToString()</b>
+            </div>
+        }
+    }
     <form asp-action="Saida">
         <div class="split">
             <div class="split left" style="margin-top:210px;margin-left:5%; width:40%">
@@ -17,7 +32,7 @@
                     <select asp-for="IDCaixa" class="form-control">
                         @foreach (string s in ViewBag.caixas)
                         {
-                        <option>@s</option>
+                            <option>@s</option>
                         }
                     </select>
                     <span asp-validation-for="IDCaixa" class="text-danger"></span>
@@ -27,14 +42,14 @@
                     <select asp-for="IDDocumento" class="form-control">
                         @foreach (string s in ViewBag.documentos)
                         {
-                        <option>@s</option>
+                            <option>@s</option>
                         }
                     </select>
                     <span asp-validation-for="IDDocumento" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DataHora" class="control-label">Data</label>
-                    <input asp-for="DataHora" class="form-control" />
+                    <input asp-for="DataHora.Date" class="form-control" />
                     <span asp-validation-for="DataHora" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -42,6 +57,7 @@
                     <input asp-for="Valor" class="form-control" />
                     <span asp-validation-for="Valor" class="text-danger"></span>
                 </div>
+                <a asp-action="Index">Voltar à página anterior</a>
             </div>
             <div class="split right" style="margin-top:210px; width:40%; margin-right:5%">
                 <div class="form-group">
@@ -82,15 +98,13 @@
                     <span asp-validation-for="Atividade" class="text-danger"></span>
                 </div>
                 <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
-                <div class="form-group">
-                    <input type="submit" value="Submeter saída de tesouraria" class="btn btn-primary" />
-                </div>
+                <input type="submit" value="Submeter saída de tesouraria" class="btn btn-primary" />
             </div>
         </div>
     </form>
 </div>
 
 <div>
-    <a asp-action="Index">Voltar à página anterior</a>
+    
 </div>
 

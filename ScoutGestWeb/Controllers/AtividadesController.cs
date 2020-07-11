@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 namespace ScoutGestWeb.Controllers
@@ -13,10 +14,12 @@ namespace ScoutGestWeb.Controllers
     public class AtividadesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        bool insert = true;
         public AtividadesController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index(string coluna, string procura)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (TempData["msg"] != null) TempData.Keep("msg");
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
             if (string.IsNullOrEmpty(coluna) && string.IsNullOrEmpty(procura))
             {
@@ -83,34 +86,17 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View(avm));
         }
-        [Route("Atividades/Detalhes/{id}")]
-        public async Task<IActionResult> Detalhes(int id)
-        {
-            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            AtividadeViewModel avm = new AtividadeViewModel();
-            using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
-            {
-                if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
-                cmd.Parameters.AddWithValue("@id", id);
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync())
-                    {
-                        avm.IDAtividade = int.Parse(dr["IDAtividade"].ToString());
-                        avm.Nome = dr["Nome"].ToString();
-                        avm.Tipo = dr["Tipo"].ToString();
-                        avm.Seccao = dr["Seccao"].ToString();
-                        avm.Local = dr["Local"].ToString();
-                        avm.DataInicio = DateTime.Parse(dr["DataInicio"].ToString());
-                        avm.DataFim = DateTime.Parse(dr["DataInicio"].ToString());
-                    }
-                }
-            }
-            return await Task.Run(() => View(avm));
-        }
+        #region Nova atividade
+        [HttpGet]
         public async Task<IActionResult> InserirAtividade()
         {
             return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
+        }
+        public async Task<IActionResult> InserirAtividade(object model)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            insert = false;
+            return null;
         }
         [HttpPost]
         public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
@@ -120,19 +106,22 @@ namespace ScoutGestWeb.Controllers
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand("insert into atividades(Nome, Tipo, Seccao, Local, DataInicio, DataFim, Ativa) values (@nome, @tipo, @seccao, @local, @inicio, @fim, @ativa);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into atividades(Nome, Tipo, Tema, Seccao, Local, DataInicio, DataFim, Orcamento, Ativa) values (@nome, @tipo, @tema, @seccao, @local, @inicio, @fim, @orcamento, @ativa);" : "update atividades set Nome = @nome, Tipo = @tipo, Tema = @tema, Seccao = @seccao, Local = @local, DataInicio = @dataInicio, DataFim = @dataFim, Orcamento = @orcamento, Ativa = @ativa where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@nome", avm.Nome);
                         cmd.Parameters.AddWithValue("@tipo", avm.Tipo);
+                        cmd.Parameters.AddWithValue("@tema", avm.Tema);
                         cmd.Parameters.AddWithValue("@seccao", avm.Seccao);
                         cmd.Parameters.AddWithValue("@local", avm.Local);
                         cmd.Parameters.AddWithValue("@inicio", avm.DataInicio);
                         cmd.Parameters.AddWithValue("@fim", avm.DataFim);
+                        cmd.Parameters.AddWithValue("@orcamento", avm.Orcamento);
                         cmd.Parameters.AddWithValue("@ativa", avm.Ativa == true ? 1 : 0);
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
                     }
+                    return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
                 }
                 catch (MySqlException mse)
                 {
@@ -143,5 +132,148 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View());
         }
+        #endregion
+        public async Task<IActionResult> Editar(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            try
+            {
+                AtividadeViewModel avm = new AtividadeViewModel();
+                using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                {
+                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        else
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                avm.IDAtividade = int.Parse(dr["IDAtividade"].ToString());
+                                avm.Nome = dr["Nome"].ToString();
+                                avm.Tipo = dr["Tipo"].ToString();
+                                avm.Tema = dr["Tema"].ToString();
+                                avm.Seccao = dr["Seccao"].ToString();
+                                avm.Local = dr["Local"].ToString();
+                                avm.DataInicio = Convert.ToDateTime(dr["DataInicio"].ToString());
+                                avm.DataFim = Convert.ToDateTime(dr["DataFim"].ToString());
+                                avm.Orcamento = double.Parse(dr["Orcamento"].ToString());
+                                avm.Ativa = bool.Parse(dr["Ativa"].ToString());
+                            }
+                        }
+                    }
+                }
+                return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocorreu um erro com a edição do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
+        }
+        public async Task<IActionResult> Detalhes(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            try
+            {
+                AtividadeViewModel avm = new AtividadeViewModel();
+                using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                {
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        if (dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        else
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                avm.IDAtividade = int.Parse(dr["IDAtividade"].ToString());
+                                avm.Nome = dr["Nome"].ToString();
+                                avm.Tipo = dr["Tipo"].ToString();
+                                avm.Tema = dr["Tema"].ToString();
+                                avm.Seccao = dr["Seccao"].ToString();
+                                avm.Local = dr["Local"].ToString();
+                                avm.DataInicio = DateTime.Parse(dr["DataInicio"].ToString());
+                                avm.DataFim = DateTime.Parse(dr["DataInicio"].ToString());
+                                avm.Orcamento = double.Parse(dr["Orcamento"].ToString());
+                                avm.Ativa = bool.Parse(dr["Ativa"].ToString());
+                            }
+                        }
+                    }
+                }
+                return await Task.Run(() => View(avm));
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocorreu um erro com a apresentação dos detalhes do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
+        }
+        #region Eliminar
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            try
+            {
+                AtividadeViewModel avm = new AtividadeViewModel();
+                using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                {
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        else
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                avm.IDAtividade = int.Parse(dr["IDAtividade"].ToString());
+                                avm.Nome = dr["Nome"].ToString();
+                                avm.Tipo = dr["Tipo"].ToString();
+                                avm.Tema = dr["Tema"].ToString();
+                                avm.Seccao = dr["Seccao"].ToString();
+                                avm.Local = dr["Local"].ToString();
+                                avm.DataInicio = Convert.ToDateTime(dr["DataInicio"].ToString());
+                                avm.DataFim = Convert.ToDateTime(dr["DataFim"].ToString());
+                                avm.Orcamento = double.Parse(dr["Orcamento"].ToString());
+                                avm.Ativa = bool.Parse(dr["Ativa"].ToString());
+                            }
+                        }
+                    }
+                }
+                return await Task.Run(() => View(avm));
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocorreu um erro com a eliminação do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
+        }
+        [HttpPost]
+        public async Task<IActionResult> EliminarPost(int id)
+        {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            try
+            {
+                using (MySqlCommand cmd = new MySqlCommand("delete from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                {
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
+                    int i = await cmd.ExecuteNonQueryAsync();
+                    if (i == 0) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["msg"] = "Ocorreu um erro com a eliminação do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
+        }
+        #endregion
     }
 }

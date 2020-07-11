@@ -64,7 +64,21 @@
 </div>
 <div class="mainBody">
     <h1>Movimentos</h1>
-
+    @if (TempData["msg"] != null)
+    {
+        if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
+        {
+            <div class="bg-danger rounded text-center">
+                <b>@TempData["msg"]</b>
+            </div>
+        }
+        else
+        {
+            <div class="bg-success rounded text-center">
+                <b>@TempData["msg"]</b>
+            </div>
+        }
+    }
     @if (Model.Count() == 0)
     {
         <p><b>Não existem movimentos para mostrar</b></p>
@@ -98,8 +112,8 @@
                         <td>@Html.DisplayFor(modelItem => item.TipoPagamento)</td>
                         <td>@Html.DisplayFor(modelItem => item.Descricao)</td>
                         <td>
-                            @Html.ActionLink("Editar", "Editar", new { id=item.IDMovimento }) |
-                            @Html.ActionLink("Eliminar", "EliminarGet", new { id=item.IDMovimento })
+                            @Html.ActionLink("Editar", "Editar", new { id = item.IDMovimento }) |
+                            @Html.ActionLink("Eliminar", "Eliminar", new { id = item.IDMovimento })
                         </td>
                     </tr>
                 }

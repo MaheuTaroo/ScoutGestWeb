@@ -87,8 +87,8 @@
                 </dd>
             </dl>
             <div class="row">
-                @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) | @Html.ActionLink("Eliminar", "ElimGet", new { id = Model.ID}) | 
-                <a asp-action="Index">Voltar à listagem</a>
+                @Html.ActionLink("Editar", "Editar", new { id = Model.ID }) | @Html.ActionLink("Eliminar", "Eliminar", new { id = Model.ID}) | 
+                <a asp-action="Index">Voltar</a>
             </div>
         </div>
         <div class="split right" style="margin-top:35px; width:40%; margin-right:10%">

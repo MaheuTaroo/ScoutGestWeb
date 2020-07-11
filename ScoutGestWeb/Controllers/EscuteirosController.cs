@@ -142,7 +142,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
             if (TempData["insert"] != null) TempData.Keep("insert");
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("InserirEscuteiro", model));
         }
         [HttpPost]
         public async Task<IActionResult> InserirEscuteiro(EscuteirosViewModel insert, int? idold = null)
@@ -161,6 +161,11 @@ namespace ScoutGestWeb.Controllers
                     if (selecionados.Count > 1 && selecionados.Contains(insert.Guia))
                     {
                         ModelState.AddModelError("Demasiados cargos selecionados", "Foi selecionado o cargo de guia, juntamente com outros cargos. Por favor, selecione o cargo de guia individualmente, ou exclua esse cargo das seleções");
+                        return await Task.Run(() => View(insert));
+                    }
+                    else if (selecionados.Count > 3)
+                    {
+                        ModelState.AddModelError("Demasiados cargos selecionados", "Foram selecionados cargos em excesso, e o limite máximo é de 3 cargos. Por favor, selecione uma quantidade de cargos dentro do limite");
                         return await Task.Run(() => View(insert));
                     }
                     //Tenta inserir os seguintes valores na tabela escuteiros
@@ -232,7 +237,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => RedirectToAction("Index"));
         }
         #endregion
-        public async Task<IActionResult> EditarEscuteiro(int id)
+        public async Task<IActionResult> Editar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             EscuteirosViewModel ievm = new EscuteirosViewModel();
@@ -242,7 +247,7 @@ namespace ScoutGestWeb.Controllers
                 List<string> grupos = new List<string>();
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -306,111 +311,108 @@ namespace ScoutGestWeb.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                EscuteirosViewModel ievm = null;
-                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                try
                 {
-                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
-                    cmd.Parameters.AddWithValue("@id", id);
-                    await cmd.PrepareAsync();
-                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    EscuteirosViewModel ievm = null;
+                    using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        while (await dr.ReadAsync()) ievm = new EscuteirosViewModel()
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
+                        cmd.Parameters.AddWithValue("@id", id);
+                        await cmd.PrepareAsync();
+                        using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                         {
-                            ID = int.Parse(dr["IDEscuteiro"].ToString()),
-                            Nome = dr["Nome"].ToString(),
-                            Totem = dr["Totem"].ToString(),
-                            Morada = dr["Morada"].ToString(),
-                            Morada2 = dr["Morada2"].ToString(),
-                            CodPostal = dr["CodPostal"].ToString(),
-                            GrupoSanguineo = dr["GrupoSang"].ToString(),
-                            Alergias = dr["Alergias"].ToString(),
-                            Medicacao = dr["Medicacao"].ToString(),
-                            Problemas = dr["Problemas"].ToString(),
-                            Observacoes = dr["Observacoes"].ToString(),
-                            Seccao = dr["Seccao"].ToString(),
-                            Idade = int.Parse(dr["Idade"].ToString()),
-                            FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"])
-                        };
+                            while (await dr.ReadAsync()) ievm = new EscuteirosViewModel()
+                            {
+                                ID = int.Parse(dr["IDEscuteiro"].ToString()),
+                                Nome = dr["Nome"].ToString(),
+                                Totem = dr["Totem"].ToString(),
+                                Morada = dr["Morada"].ToString(),
+                                Morada2 = dr["Morada2"].ToString(),
+                                CodPostal = dr["CodPostal"].ToString(),
+                                GrupoSanguineo = dr["GrupoSang"].ToString(),
+                                Alergias = dr["Alergias"].ToString(),
+                                Medicacao = dr["Medicacao"].ToString(),
+                                Problemas = dr["Problemas"].ToString(),
+                                Observacoes = dr["Observacoes"].ToString(),
+                                Seccao = dr["Seccao"].ToString(),
+                                Idade = int.Parse(dr["Idade"].ToString()),
+                                FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"])
+                            };
+                        }
+                        cmd.CommandText = "select NumTelefone from numtelefones";
+                        using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                        {
+                            while (await dr.ReadAsync()) ievm.NumTelefone = dr["NumTelefone"].ToString() + ", ";
+                        }
+                        ievm.NumTelefone = ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
+                        return await Task.Run(() => View(ievm));
                     }
-                    cmd.CommandText = "select NumTelefone from numtelefones";
-                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                    {
-                        while (await dr.ReadAsync()) ievm.NumTelefone = dr["NumTelefone"].ToString() + ", ";
-                    }
-                    ievm.NumTelefone = ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
-                    return await Task.Run(() => View(ievm));
                 }
+                catch (Exception e)
+                {
+                    TempData["msg"] = "Ocorreu um erro com a apresentação dos detalhes do registo: " + e.Message;
+                }
+                return await Task.Run(() => RedirectToAction("Index"));
             }
             return await Task.Run(() => RedirectToAction("Index", "Home"));
         }
         #region Eliminar
         [HttpGet]
-        public async Task<IActionResult> ElimGet(int id)
+        public async Task<IActionResult> Eliminar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            EscuteirosViewModel ievm = new EscuteirosViewModel();
-            using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id" + (!User.IsInRole("Administração de Agrupamento") ? " and Seccao = @seccao;" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            try
             {
-                if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
-                cmd.Parameters.AddWithValue("@id", id);
-                await cmd.PrepareAsync();
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                EscuteirosViewModel ievm = new EscuteirosViewModel();
+                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id" + (!User.IsInRole("Administração de Agrupamento") ? " and Seccao = @seccao;" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    while (await dr.ReadAsync())
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
+                    cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        ievm.ID = int.Parse(dr["IDEscuteiro"].ToString());
-                        ievm.Nome = dr["Nome"].ToString();
-                        ievm.Grupo = dr["Grupo"].ToString();
-                        ievm.Totem = dr["Totem"].ToString();
-                        ievm.Cargos = dr["Cargo"].ToString().Replace(",", ", ");
-                        ievm.Morada = dr["Morada"].ToString();
-                        ievm.Morada2 = dr["Morada2"].ToString();
-                        ievm.CodPostal = dr["CodPostal"].ToString();
-                        ievm.Localidade = dr["Localidade"].ToString();
-                        ievm.GrupoSanguineo = dr["GrupoSang"].ToString();
-                        ievm.Alergias = dr["Alergias"].ToString();
-                        ievm.Medicacao = dr["Medicacao"].ToString();
-                        ievm.Problemas = dr["Problemas"].ToString();
-                        ievm.Observacoes = dr["Observacoes"].ToString();
-                        ievm.Seccao = dr["Seccao"].ToString();
-                        ievm.Estado = dr["Estado"].ToString();
-                        ievm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
+                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                    }
+                    cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) ievm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
+                    }
+                    ievm.NumTelefone = ievm.NumTelefone == null ? "nenhum número de telefone" : ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
+                    cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
+                    cmd.Parameters["@id"].Value = ievm.Grupo;
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) ievm.Grupo += " - " + dr["Nome"].ToString();
                     }
                 }
-                cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
-                await cmd.PrepareAsync();
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) ievm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
-                }
-                ievm.NumTelefone = ievm.NumTelefone == null ? "nenhum número de telefone" : ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
-                cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
-                cmd.Parameters["@id"].Value = ievm.Grupo;
-                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                {
-                    while (await dr.ReadAsync()) ievm.Grupo += " - " + dr["Nome"].ToString();
-                }
+                return await Task.Run(() => View("Eliminar", ievm));
             }
-            return await Task.Run(() => View("Eliminar", ievm));
+            catch (Exception e)
+            {
+                TempData["msg"] = "ocorreu um erro com a eliminação do registo: " + e.Message;
+            }
+            return await Task.Run(() => RedirectToAction("Index"));
         }
         [HttpPost]
-        public async Task<IActionResult> ElimPost(int id)
+        public async Task<IActionResult> EliminarPost(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand("delete from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
-                    await cmd.ExecuteNonQueryAsync();
+                    int i = await cmd.ExecuteNonQueryAsync();
+                    if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
                 }
             }
-            catch (MySqlException mse)
+            catch (Exception e)
             {
-                ModelState.AddModelError("Erro na eliminação do registo", mse.Message);
-                return await Task.Run(() => ElimGet(id));
+                TempData["msg"] = "Ocorreu um erro com a eliminação do registo: " + e.Message;
             }
             return await Task.Run(() => RedirectToAction("Index"));
         }

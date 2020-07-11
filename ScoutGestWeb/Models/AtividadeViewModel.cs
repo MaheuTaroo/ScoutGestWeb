@@ -17,6 +17,8 @@ namespace ScoutGestWeb.Models
         [Required]
         public string Tipo { get; set; }
         [Required]
+        public string Tema { get; set; }
+        [Required]
         public string Seccao { get; set; }
         [Required(ErrorMessage = "Não foi atribuído um local à atividade")]
         public string Local { get; set; }
@@ -29,5 +31,10 @@ namespace ScoutGestWeb.Models
         public double Orcamento { get; set; }
         [Required(ErrorMessage = "Não foi confirmada a abertura da atividade a movimentos")]
         public bool Ativa { get; set; }
+        [Required(ErrorMessage = "Não foram adicionados participantes à atividade")]
+        public string Participantes { get; set; }
+        public string RecHumanos { get; set; }
+        public string RecFinanc { get; set; }
+        public string RecMateriais { get; set; }
     }
 }

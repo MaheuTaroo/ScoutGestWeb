@@ -11,22 +11,22 @@
     <h4>Tipos de pagamento</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IDPagamento)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IDPagamento)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Pagamento)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Pagamento)
         </dd>
     </dl>
     
     <form asp-action="EliminarPost" method="post" asp-route-id="@Model.IDPagamento">
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Voltar à listagem</a>
+        <a asp-action="Index">Voltar</a>
     </form>
 </div>

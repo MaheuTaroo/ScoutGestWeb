@@ -133,10 +133,9 @@
         </form>
     </div>
 *@
-
 <form asp-action="InserirEscuteiro" enctype="multipart/form-data" method="post">
-    <div class="gradeInsEsc">
-        <div class="col1" >
+    <div style="display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 1.2fr 0.8fr; grid-gap: 20px 20px; grid-template-areas: 'col1 col1 col1 col2 col2 col2 col3 col3 col3 col4 col4 col4' 'alerg alerg alerg medic medic medic prob prob prob observ observ observ'">
+        <div style="grid-area: col1">
             <label asp-for="ID">ID de escuteiro:</label>
             <input asp-for="ID" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
@@ -158,7 +157,7 @@
             </select>
             <br />
         </div>
-        <div class="col2">
+        <div style="grid-area: col2">
             <label asp-for="Estado">Estado da promessa:</label>
             <select asp-for="Estado">
                 <option>Inscrito</option>
@@ -197,7 +196,7 @@
                 <option>O-</option>
             </select>
         </div>
-        <div class="col3">
+        <div style="grid-area: col3">
             <label asp-for="Morada">Morada:</label>
             <textarea asp-for="Morada" style="width: 100%; resize: none" rows="2"></textarea>
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Morada)</div>
@@ -212,7 +211,7 @@
             <input asp-for="Localidade" />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Localidade)</div>
         </div>
-        <div class="col4">
+        <div style="grid-area: col4">
             <label>Cargo:</label><br />
             @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
             @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
@@ -227,19 +226,19 @@
             @Html.CheckBoxFor(modelItem => modelItem.Chefe.Selecionado) Chefe<br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationSummary(true)</div>
         </div>
-        <div class="alerg">
+        <div style="grid-area: alerg">
             <label asp-for="Alergias">Alergias:</label>
             <textarea asp-for="Alergias" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
-        <div class="medic">
+        <div style="grid-area: medic">
             <label asp-for="Medicacao">Medicação:</label>
             <textarea asp-for="Medicacao" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
-        <div class="prob">
+        <div style="grid-area: prob">
             <label asp-for="Problemas">Problemas de saúde:</label>
             <textarea asp-for="Problemas" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
-        <div class="observ">
+        <div style="grid-area: observ">
             <label asp-for="Observacoes">Observações:</label>
             <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
@@ -253,5 +252,5 @@
 
 <!--botão para voltar à lista de escuteiros-->
 <p class="text-center">
-    <a asp-action="Index">Voltar à listagem</a>
+    <a asp-action="Index">Voltar</a>
 </p>

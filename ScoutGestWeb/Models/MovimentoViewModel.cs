@@ -16,7 +16,6 @@ namespace ScoutGestWeb.Models
         [Required(ErrorMessage = "Não foi referida a caixa de entrada ou saída")]
         public string IDCaixa { get; set; }
         [ForeignKey("IDDocumento")]
-        [StringLength(2)]
         [Required(ErrorMessage = "Não foi referido o tipo de documento para o movimento", AllowEmptyStrings = false)]
         public string IDDocumento { get; set; }
         [Required(ErrorMessage = "Não foi referida a secção em que o movimento se insere", AllowEmptyStrings = false)]

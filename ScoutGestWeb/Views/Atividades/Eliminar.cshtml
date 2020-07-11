@@ -1,0 +1,84 @@
+﻿@model ScoutGestWeb.Models.AtividadeViewModel
+
+@{
+    ViewData["Title"] = "Eliminar atividade - Atividades";
+}
+
+<h1>Eliminar</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>AtividadeViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            ID:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IDAtividade)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tipo):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tema):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tema)
+        </dd>
+        <dt class="col-sm-2">
+            Secção:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Seccao)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Local):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Local)
+        </dd>
+        <dt class="col-sm-2">
+            Data de início
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataInicio)
+        </dd>
+        <dt class="col-sm-2">
+            Data de fim:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataFim)
+        </dd>
+        <dt class="col-sm-2">
+            Orçamento
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Orcamento)
+        </dd>
+        <dt class="col-sm-2">
+            Abertura a movimentos:
+        </dt>
+        @if (Model.Ativa)
+        {
+            <dd class="col-sm-10">Sim</dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">Não</dd>
+        }
+    </dl>
+    <form asp-action="EliminarPost" asp-route-id="@Model.IDAtividade">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index">Voltar à página inicial</a>
+    </form>
+</div>

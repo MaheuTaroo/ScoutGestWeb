@@ -82,7 +82,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where IDDocumento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -147,7 +147,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("delete from tipos_docs where IDDocumento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();

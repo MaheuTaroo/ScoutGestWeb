@@ -50,24 +50,25 @@
             <div style="text-align: center">
                 @foreach (var item in Model)
                 {
-                    <div class="container-fluid" style="padding: 0 0 0 0">
-                        <p>
-                            <h2>
-                                @Html.DisplayFor(modelItem => item.Nome)
-                            </h2>
-                        </p>
-                        <p>
-                            <!--Data das atividades-->
-                            <h5>
-                                De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-                            </h5>
-                        </p>
-                        <p>
-                            <h6>Descrição:</h6>
-                        </p>
-                        <!--botao dos detalhes-->
-                        <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
-                    </div>
+                <div class="container-fluid" style="padding: 0 0 0 0">
+                    <p>
+                        <h2>
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </h2>
+                    </p>
+                    <p>
+                        <!--Data das atividades-->
+                        <h5>
+                            De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
+                        </h5>
+                    </p>
+                    <p>
+                        <h6>Descrição:</h6>
+                    </p>
+                    <!--botao dos detalhes-->
+                    <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a><br />
+                    <a href="@Url.ActionLink("Eliminar", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Eliminar</button></a>
+                </div>
                 }
             </div>
         }

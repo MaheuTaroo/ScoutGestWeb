@@ -23,7 +23,7 @@
         <dd class="col-sm-10">@Html.DisplayFor(model => model.CodPostal)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Localidade): </dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.Localidade)</dd>
-        <dt class="col-sm-2">Gruo sanguíneo: </dt>
+        <dt class="col-sm-2">Grupo sanguíneo: </dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.GrupoSanguineo)</dd>
         <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Alergias): </dt>
         <dd class="col-sm-10">@Html.DisplayFor(model => model.Alergias)</dd>
@@ -42,7 +42,7 @@
         <dt class="col-sm-2">Fotografia: </dt>
         <dd class="col-sm-10"><img src="@Html.DisplayFor(model => model.FotoDown)" /></dd>
     </dl>
-    <form asp-action="ElimPost" method="Post" asp-route-id="@Model.ID">
+    <form asp-action="EliminarPost" method="Post" asp-route-id="@Model.ID">
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index">Cancelar</a>
     </form>
