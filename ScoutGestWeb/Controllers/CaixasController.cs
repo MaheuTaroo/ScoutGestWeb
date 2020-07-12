@@ -80,6 +80,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovaCaixa()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            insert = true;
             using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
@@ -235,7 +236,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => RedirectToAction("Index"));
         }
         #region Eliminar
-        public async Task<IActionResult> EliminarGet(int id)
+        public async Task<IActionResult> Eliminar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             CaixaViewModel cvm = new CaixaViewModel();
@@ -255,8 +256,8 @@ namespace ScoutGestWeb.Controllers
                             {
                                 cvm.ID = int.Parse(dr["IDCaixa"].ToString());
                                 cvm.Nome = dr["Nome"].ToString();
-                                cvm.Grupo = dr["Grupo"].ToString() + " - " + dr["Nome"].ToString();
-                                cvm.Responsavel = dr["Responsavel"].ToString() + " - " + dr["NomeEscut"].ToString();
+                                cvm.Grupo = $"{dr["Grupo"]} - {dr["Nome"]}";
+                                cvm.Responsavel = $"{dr["Responsavel"]} - {dr["NomeEscut"]}";
                                 cvm.Saldo = decimal.Parse(dr["Saldo"].ToString());
                             }
                         }
@@ -284,6 +285,10 @@ namespace ScoutGestWeb.Controllers
                     int i = await cmd.ExecuteNonQueryAsync();
                     if (i == 0) throw new Exception($"não existe nenhum registo com o ID \"{id}\"");
                 }
+            }
+            catch (MySqlException mse)
+            {
+                if (mse.Number == 1451) TempData["msg"] = "esta caixa tem dados associados a si mesma, como movimentos referentes a esta. Procure esses dados e remova as ligações a esta caixa, de modo a eliminá-la com segurança.";
             }
             catch (Exception e)
             {

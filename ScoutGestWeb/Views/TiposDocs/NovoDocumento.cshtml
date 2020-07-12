@@ -24,7 +24,7 @@
             {
                 if (bool.Parse(TempData["insert"].ToString()))
                 {
-                    <input type="hidden" name="idold" value="@bool.Parse(TempData["insert"].ToString())" />
+                    <input type="hidden" name="idold" value="@Model.IDDocumento" />
                 }
             }
             <div class="form-group">

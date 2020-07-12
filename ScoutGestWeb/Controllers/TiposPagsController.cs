@@ -161,6 +161,10 @@ namespace ScoutGestWeb.Controllers
                     TempData["msg"] = "Tipo de pagamento apagado com sucesso";
                 }
             }
+            catch (MySqlException mse)
+            {
+                if (mse.Number == 1451) TempData["msg"] = "este tipo de pagamento tem dados associados a si mesmo, como movimentos referentes a este. Procure esses dados e remova as ligações a este tipo de pagamento, de modo a eliminá-lo com segurança.";
+            }
             catch (Exception e)
             {
                 TempData["msg"] = "Ocorreu um erro ao eliminar o registo: " + e.Message;

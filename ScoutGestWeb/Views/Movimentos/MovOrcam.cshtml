@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Movimentos contra o orçamento - Tesouraria";
+}
+
+<h1>MovOrcam</h1>
+
+@using (Html.BeginForm("MovOrcam", "Movimentos", FormMethod.Post))
+{
+    @if (TempData["errAtiv"] != null)
+    {
+        <div class="bg-danger rounded text-center"><b>@TempData["errAtiv"].ToString()</b></div>
+    }
+    <select name="ativ">
+        @foreach (string s in ViewBag.ativs)
+        {
+            <option>@s</option>
+        }
+    </select>
+    <button type="submit">Gerar relatório</button>
+}

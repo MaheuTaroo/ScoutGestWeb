@@ -119,28 +119,29 @@ namespace ScoutGestWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> InserirEscuteiro()
         {
-            if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
-            EscuteirosViewModel ievm = new EscuteirosViewModel();
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            insert = true;
+            EscuteirosViewModel evm = new EscuteirosViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
-                    while (await dr.ReadAsync()) ievm.ID = Convert.ToInt32(dr["max(IDEscuteiro)"].ToString()) + 1;
+                    while (await dr.ReadAsync()) evm.ID = Convert.ToInt32(dr["max(IDEscuteiro)"].ToString()) + 1;
                 }
                 cmd.CommandText = "select IDGrupo, Nome from grupos;";
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
-                    while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
+                    while (await dr.ReadAsync()) grupos.Add($"{dr["IDGrupo"]} - {dr["Nome"]}");
                 }
             }
             grupos.Sort();
             ViewBag.grupos = grupos;
-            return await Task.Run(() => View(ievm));
+            return await Task.Run(() => View(evm));
         }
         public async Task<IActionResult> InserirEscuteiro(object model)
         {
-            if (!User.Identity.IsAuthenticated) RedirectToAction("Index", "Home");
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (TempData["insert"] != null) TempData.Keep("insert");
             return await Task.Run(() => View("InserirEscuteiro", model));
         }
@@ -223,7 +224,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
+                        while (await dr.ReadAsync()) grupos.Add($"{dr["IDGrupo"]} - {dr["Nome"]}");
                     }
                 }
                 grupos.Sort();
@@ -240,65 +241,63 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Editar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            EscuteirosViewModel ievm = new EscuteirosViewModel();
+            EscuteirosViewModel evm = new EscuteirosViewModel();
             try
             {
-                int grupo = 0;
                 List<string> grupos = new List<string>();
-                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                using (MySqlCommand cmd = new MySqlCommand("select escuteiros.*, grupos.Nome as NomeGrupo from escuteiros inner join grupos on escuteiros.Grupo = grupos.IDGrupo where escuteiros.IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync())
+                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        else
                         {
-                            ievm.Nome = dr["Nome"].ToString();
-                            ievm.Totem = dr["Totem"].ToString();
-                            grupo = int.Parse(dr["Grupo"].ToString());
-                            ievm.Morada = dr["Morada"].ToString();
-                            ievm.Morada2 = dr["Morada2"].ToString();
-                            ievm.CodPostal = dr["CodPostal"].ToString();
-                            ievm.Localidade = dr["Localidade"].ToString();
-                            ievm.GrupoSanguineo = dr["GrupoSang"].ToString();
-                            ievm.Alergias = dr["Alergias"].ToString();
-                            ievm.Medicacao = dr["Medicacao"].ToString();
-                            ievm.Problemas = dr["Problemas"].ToString();
-                            ievm.Observacoes = dr["Observacoes"].ToString();
-                            ievm.Seccao = dr["Seccao"].ToString();
-                            ievm.Estado = dr["Estado"].ToString();
-                            ievm.Idade = int.Parse(dr["Idade"].ToString());
-                            ievm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
-                            if (dr["Cargo"].ToString().Contains(ievm.Guia.Cargo)) ievm.Guia.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.Animador.Cargo)) ievm.Animador.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.Cozinheiro.Cargo)) ievm.Cozinheiro.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.GuardaMaterial.Cargo)) ievm.GuardaMaterial.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.Secretario.Cargo)) ievm.Secretario.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.Tesoureiro.Cargo)) ievm.Tesoureiro.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.RelPub.Cargo)) ievm.RelPub.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.Socorrista.Cargo)) ievm.Socorrista.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.GuiaRegiao.Cargo)) ievm.GuiaRegiao.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.SubGuia.Cargo)) ievm.SubGuia.Selecionado = true;
-                            if (dr["Cargo"].ToString().Contains(ievm.Chefe.Cargo)) ievm.Chefe.Selecionado = true;
+                            while (await dr.ReadAsync())
+                            {
+                                evm.Nome = dr["Nome"].ToString();
+                                evm.Totem = dr["Totem"].ToString();
+                                evm.Grupo = $"{dr["Grupo"]} - {dr["NomeGrupo"]}";
+                                evm.Morada = dr["Morada"].ToString();
+                                evm.Morada2 = dr["Morada2"].ToString();
+                                evm.CodPostal = dr["CodPostal"].ToString();
+                                evm.Localidade = dr["Localidade"].ToString();
+                                evm.GrupoSanguineo = dr["GrupoSang"].ToString();
+                                evm.Alergias = dr["Alergias"].ToString();
+                                evm.Medicacao = dr["Medicacao"].ToString();
+                                evm.Problemas = dr["Problemas"].ToString();
+                                evm.Observacoes = dr["Observacoes"].ToString();
+                                evm.Seccao = dr["Seccao"].ToString();
+                                evm.Estado = dr["Estado"].ToString();
+                                evm.Idade = int.Parse(dr["Idade"].ToString());
+                                evm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
+                                if (dr["Cargo"].ToString().Contains(evm.Guia.Cargo)) evm.Guia.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.Animador.Cargo)) evm.Animador.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.Cozinheiro.Cargo)) evm.Cozinheiro.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.GuardaMaterial.Cargo)) evm.GuardaMaterial.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.Secretario.Cargo)) evm.Secretario.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.Tesoureiro.Cargo)) evm.Tesoureiro.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.RelPub.Cargo)) evm.RelPub.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.Socorrista.Cargo)) evm.Socorrista.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.GuiaRegiao.Cargo)) evm.GuiaRegiao.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.SubGuia.Cargo)) evm.SubGuia.Selecionado = true;
+                                if (dr["Cargo"].ToString().Contains(evm.Chefe.Cargo)) evm.Chefe.Selecionado = true;
+                            }
                         }
                     }
                     cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) ievm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
+                        while (await dr.ReadAsync()) evm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
                     }
-                    ievm.NumTelefone = ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
-                    cmd.CommandText = "select IDGrupo, Nome from grupos where IDGrupo > 0";
-                    cmd.Parameters["@id"].Value = grupo;
-                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                    {
-                        while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
-                    }
+                    evm.NumTelefone = evm.NumTelefone.Substring(0, evm.NumTelefone.LastIndexOf(", "));
                     grupos.Sort();
                     ViewBag.grupos = grupos;
-                    return await Task.Run(() => RedirectToAction("InserirEscuteiro", (object)ievm));
+                    TempData["insert"] = insert = false;
+                    return await Task.Run(() => RedirectToAction("InserirEscuteiro", (object)evm));
                 }
             }
             catch (Exception e)
@@ -313,39 +312,43 @@ namespace ScoutGestWeb.Controllers
             {
                 try
                 {
-                    EscuteirosViewModel ievm = null;
-                    using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    EscuteirosViewModel evm = null;
+                    using (MySqlCommand cmd = new MySqlCommand("select escuteiros.*, grupos.Nome as NomeGrupo from escuteiros inner join grupos on escuteiros.Grupo = grupos.IDGrupo where escuteiros.IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@id", id);
                         await cmd.PrepareAsync();
                         using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                         {
-                            while (await dr.ReadAsync()) ievm = new EscuteirosViewModel()
+                            if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                            else
                             {
-                                ID = int.Parse(dr["IDEscuteiro"].ToString()),
-                                Nome = dr["Nome"].ToString(),
-                                Totem = dr["Totem"].ToString(),
-                                Morada = dr["Morada"].ToString(),
-                                Morada2 = dr["Morada2"].ToString(),
-                                CodPostal = dr["CodPostal"].ToString(),
-                                GrupoSanguineo = dr["GrupoSang"].ToString(),
-                                Alergias = dr["Alergias"].ToString(),
-                                Medicacao = dr["Medicacao"].ToString(),
-                                Problemas = dr["Problemas"].ToString(),
-                                Observacoes = dr["Observacoes"].ToString(),
-                                Seccao = dr["Seccao"].ToString(),
-                                Idade = int.Parse(dr["Idade"].ToString()),
-                                FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"])
-                            };
+                                while (await dr.ReadAsync()) evm = new EscuteirosViewModel()
+                                {
+                                    ID = int.Parse(dr["IDEscuteiro"].ToString()),
+                                    Nome = dr["Nome"].ToString(),
+                                    Totem = dr["Totem"].ToString(),
+                                    Morada = dr["Morada"].ToString(),
+                                    Morada2 = dr["Morada2"].ToString(),
+                                    CodPostal = dr["CodPostal"].ToString(),
+                                    GrupoSanguineo = dr["GrupoSang"].ToString(),
+                                    Alergias = dr["Alergias"].ToString(),
+                                    Medicacao = dr["Medicacao"].ToString(),
+                                    Problemas = dr["Problemas"].ToString(),
+                                    Observacoes = dr["Observacoes"].ToString(),
+                                    Seccao = dr["Seccao"].ToString(),
+                                    Idade = int.Parse(dr["Idade"].ToString()),
+                                    FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"])
+                                };
+                            }
                         }
                         cmd.CommandText = "select NumTelefone from numtelefones";
                         using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                         {
-                            while (await dr.ReadAsync()) ievm.NumTelefone = dr["NumTelefone"].ToString() + ", ";
+                            while (await dr.ReadAsync()) evm.NumTelefone = dr["NumTelefone"].ToString() + ", ";
                         }
-                        ievm.NumTelefone = ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
-                        return await Task.Run(() => View(ievm));
+                        evm.NumTelefone = evm.NumTelefone == "" ? "nenhum número de telefone" : evm.NumTelefone.Substring(0, evm.NumTelefone.LastIndexOf(", "));
+                        return await Task.Run(() => View(evm));
                     }
                 }
                 catch (Exception e)
@@ -363,8 +366,8 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             try
             {
-                EscuteirosViewModel ievm = new EscuteirosViewModel();
-                using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro = @id" + (!User.IsInRole("Administração de Agrupamento") ? " and Seccao = @seccao;" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                EscuteirosViewModel evm = new EscuteirosViewModel();
+                using (MySqlCommand cmd = new MySqlCommand("select escuteiros.* grupos.Nome as NomeGrupo from escuteiros inner join grupos on escuteiros.Grupo = grupos.IDGrupo where escuteiros.IDEscuteiro = @id" + (!User.IsInRole("Administração de Agrupamento") ? " and Seccao = @seccao;" : ";"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
@@ -372,22 +375,39 @@ namespace ScoutGestWeb.Controllers
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        else
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                evm.ID = int.Parse(dr["IDEscuteiro"].ToString());
+                                evm.Nome = dr["Nome"].ToString();
+                                evm.Grupo = $"{dr["Grupo"]} - {dr["NomeGrupo"]}";
+                                evm.Totem = dr["Totem"].ToString();
+                                evm.Cargos = dr["Cargo"].ToString().Replace(",", ", ");
+                                evm.Morada = dr["Morada"].ToString();
+                                evm.Morada2 = dr["Morada2"].ToString();
+                                evm.CodPostal = dr["CodPostal"].ToString();
+                                evm.Localidade = dr["Localidade"].ToString();
+                                evm.GrupoSanguineo = dr["GrupoSang"].ToString();
+                                evm.Alergias = dr["Alergias"].ToString();
+                                evm.Medicacao = dr["Medicacao"].ToString();
+                                evm.Problemas = dr["Problemas"].ToString();
+                                evm.Observacoes = dr["Observacoes"].ToString();
+                                evm.Seccao = dr["Seccao"].ToString();
+                                evm.Estado = dr["Estado"].ToString();
+                                evm.FotoDown = "data:image/png;base64," + Convert.ToBase64String((byte[])dr["Foto"]);
+                            }
+                        }
                     }
                     cmd.CommandText = "select NumTelefone from numtelefones where IDEscuteiro = @id";
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) ievm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
+                        while (await dr.ReadAsync()) evm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
                     }
-                    ievm.NumTelefone = ievm.NumTelefone == null ? "nenhum número de telefone" : ievm.NumTelefone.Substring(0, ievm.NumTelefone.LastIndexOf(", "));
-                    cmd.CommandText = "select Nome from grupos where IDGrupo = @id";
-                    cmd.Parameters["@id"].Value = ievm.Grupo;
-                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
-                    {
-                        while (await dr.ReadAsync()) ievm.Grupo += " - " + dr["Nome"].ToString();
-                    }
+                    evm.NumTelefone = evm.NumTelefone == null ? "nenhum número de telefone" : evm.NumTelefone.Substring(0, evm.NumTelefone.LastIndexOf(", "));
                 }
-                return await Task.Run(() => View("Eliminar", ievm));
+                return await Task.Run(() => View("Eliminar", evm));
             }
             catch (Exception e)
             {
@@ -430,15 +450,14 @@ namespace ScoutGestWeb.Controllers
 //na pap? eu ainda n comecei lmao h e l p
 //e melhor começares, e em caso precisares de ajuda nisso eu ajudo na boa
 //:ok_hand:
-
 //fuck me, como e q esta merda n consegue receber um valor t simples q aparece na bd
-//eu ate diria que talvez seja gluma cena da db mas nao e pois nao?
+//eu ate diria que talvez seja alguma cena da db mas nao e pois nao?
 //uhmmm u there?
 /*sry, went afk for some time
 //managed to get the error?*/
 /*tbh no mas eu tive a limpar uma beca do codigo que copiei e tb alterei so uma cena tua, 
 //em vez de meteres 2020 meti a cena do datetime year now*/
-/*eu n meti isso, mas i guess it alo works xd
+/*eu n meti isso, mas i guess it also works xd
 mas testaste a linha q eu pus no mysqlcommand na base de dados q te mandei?*/
 //como assim? qual linha
 /*"select IDSeccao from seccoes where Nome = \"@seccao\"" mas so q em vez do @seccao punhas o q puseste no select

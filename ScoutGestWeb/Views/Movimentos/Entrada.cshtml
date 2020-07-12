@@ -101,6 +101,10 @@
                     <span asp-validation-for="Atividade" class="text-danger"></span>
                 </div>
                 <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
+                @if (TempData["insert"] != null && bool.Parse(TempData["insert"].ToString()))
+                {
+                    <input type="hidden" name="id" value="@Model.IDMovimento" />
+                }
                 <input type="submit" value="Gravar" class="btn btn-primary" />
             </div>
         </div>

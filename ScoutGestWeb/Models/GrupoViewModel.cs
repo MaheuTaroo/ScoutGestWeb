@@ -19,6 +19,6 @@ namespace ScoutGestWeb.Models
         public string FotoDown { get; set; }
         [Required(ErrorMessage = "Secção do grupo em falta")]
         public string Seccao { get; set; }
-        public string Partips { get; set; }
+        public string Particips { get; set; }
     }
 }

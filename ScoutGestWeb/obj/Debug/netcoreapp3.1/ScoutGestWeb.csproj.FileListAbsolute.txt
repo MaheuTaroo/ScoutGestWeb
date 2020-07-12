@@ -82,7 +82,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Atividad
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Atividades\InserirAtividade.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\Index.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Grupos\Index.cshtml.g.cs
-D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Partial\_Header.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LoginLayout.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_MasterPage.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
@@ -212,3 +211,6 @@ D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposPag
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\TiposDocs\Eliminar.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Caixas\Eliminar.cshtml.g.cs
 D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Atividades\Eliminar.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Grupos\Eliminar.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\MovOrcam.cshtml.g.cs
+D:\GitHub\ScoutGestWeb\ScoutGestWeb\obj\Debug\netcoreapp3.1\Razor\Views\Movimentos\Analises\MovOrcam.cshtml.g.cs

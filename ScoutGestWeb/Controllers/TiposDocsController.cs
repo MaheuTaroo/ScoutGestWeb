@@ -155,6 +155,10 @@ namespace ScoutGestWeb.Controllers
                     else TempData["msg"] = "Tipo de documento eliminado com sucesso";
                 }
             }
+            catch (MySqlException mse)
+            {
+                if (mse.Number == 1451) TempData["msg"] = "este documentos tem dados associados a si mesmo, como movimentos referentes a este. Procure esses dados e remova as ligações a este documento, de modo a eliminá-lo com segurança.";
+            }
             catch (Exception e)
             {
                 TempData["msg"] = "Ocorreu um erro com a eliminação do registo: " + e.Message;

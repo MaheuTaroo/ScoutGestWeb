@@ -6,6 +6,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <div class="bg-danger rounded text-center container-fluid">@Html.ValidationSummary(false)</div>
         <form asp-action="InserirAtividade">
             <div class="split">
                 <div class="split left" style="margin-top:210px;margin-left:20%; width:20%">
@@ -78,14 +79,11 @@
                         </label>
                         <span asp-validation-for="Ativa" class="text-danger"></span>
                     </div>
-                    <!--como te disse ontem, se calhar e mlhr vires p o pe d mim p veres qd pds fzr build-->
-                    <!--okii-->
-                    <input type="submit" value="Inserir" class="btn btn-primary container-fluid" />
+                    <br />
+                    <input type="submit" value="Inserir" class="btn btn-primary container-fluid" /><br />
+                    <a asp-action="Index">Voltar à página anterior</a>
                 </div>
             </div>
         </form>
     </div>
-</div>
-<div>
-    <a asp-action="Index">Voltar</a>
 </div>

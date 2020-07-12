@@ -26,6 +26,17 @@
         <input type="submit" value="Procurar" class="btn btn-success" />
     }
 </div>
+@if (TempData["msg"] != null)
+{
+    if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
+    {
+        <div class="bg-danger rounded text-center"><b>@TempData["msg"]</b></div>
+    }
+    else
+    {
+        <div class="bg-success rounded text-center"><b>@TempData["msg"]</b></div>
+    }
+}
 <table class="table">
     <thead>
         <tr>
@@ -59,7 +70,11 @@
                         <b>|</b>
                     }
                     @Html.ActionLink("Detalhes", "Detalhes", new { id = item.ID })
-                    @*| @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                    @if (User.IsInRole("Administração de Agrupamento"))
+                    {
+                        <b>|</b>
+                        @Html.ActionLink("Eliminar", "Eliminar", new { id = item.ID })
+                    }
                 </td>
             </tr>
         }

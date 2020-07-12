@@ -90,13 +90,14 @@ namespace ScoutGestWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> InserirAtividade()
         {
+            insert = true;
             return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
         public async Task<IActionResult> InserirAtividade(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             insert = false;
-            return null;
+            return await Task.Run(() => View(model));
         }
         [HttpPost]
         public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
@@ -128,7 +129,6 @@ namespace ScoutGestWeb.Controllers
                     ModelState.AddModelError("Erro", "Erro na inserção na base de dados: " + mse.ToString());
                     return await Task.Run(() => View());
                 }
-                return await Task.Run(() => RedirectToAction("Index"));
             }
             return await Task.Run(() => View());
         }
@@ -141,7 +141,7 @@ namespace ScoutGestWeb.Controllers
                 AtividadeViewModel avm = new AtividadeViewModel();
                 using (MySqlCommand cmd = new MySqlCommand("select * from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -267,6 +267,10 @@ namespace ScoutGestWeb.Controllers
                     int i = await cmd.ExecuteNonQueryAsync();
                     if (i == 0) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
                 }
+            }
+            catch (MySqlException mse)
+            {
+                if (mse.Number == 1451) TempData["msg"] = "esta atividade tem dados associados a si mesmo, como registos de recursos e participantes associados a esta. Procure esses dados e remova as ligações a esta atividade, de modo a eliminá-la com segurança.";
             }
             catch (Exception e)
             {

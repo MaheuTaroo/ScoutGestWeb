@@ -137,7 +137,7 @@
     <div style="display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 1.2fr 0.8fr; grid-gap: 20px 20px; grid-template-areas: 'col1 col1 col1 col2 col2 col2 col3 col3 col3 col4 col4 col4' 'alerg alerg alerg medic medic medic prob prob prob observ observ observ'">
         <div style="grid-area: col1">
             <label asp-for="ID">ID de escuteiro:</label>
-            <input asp-for="ID" /><br />
+            <input asp-for="ID" min="@Model.ID"/><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
             <label asp-for="Nome">Nome:</label>
             <input asp-for="Nome" style="width: 100%" /><br />
