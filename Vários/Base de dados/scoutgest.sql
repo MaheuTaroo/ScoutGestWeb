@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 12-Jul-2020 às 22:07
+-- Tempo de geração: 13-Jul-2020 às 17:25
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `scoutgest`
+-- Banco de dados: `test2`
 --
 
 -- --------------------------------------------------------
@@ -989,6 +989,19 @@ INSERT INTO `participantes` (`IDAtividade`, `IDParticipante`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `recursos`
+--
+
+CREATE TABLE `recursos` (
+  `IDAtividade` int(11) NOT NULL,
+  `RecHumanos` text COLLATE utf8mb4_bin NOT NULL,
+  `RecMateriais` text COLLATE utf8mb4_bin NOT NULL,
+  `RecFinanceiros` text COLLATE utf8mb4_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `tipos_docs`
 --
 
@@ -1175,6 +1188,12 @@ ALTER TABLE `participantes`
   ADD KEY `IDParticipante` (`IDParticipante`);
 
 --
+-- Índices para tabela `recursos`
+--
+ALTER TABLE `recursos`
+  ADD PRIMARY KEY (`IDAtividade`);
+
+--
 -- Índices para tabela `tipos_docs`
 --
 ALTER TABLE `tipos_docs`
@@ -1314,6 +1333,12 @@ ALTER TABLE `numtelefones`
 ALTER TABLE `participantes`
   ADD CONSTRAINT `IDAtividade` FOREIGN KEY (`IDAtividade`) REFERENCES `atividades` (`IDAtividade`),
   ADD CONSTRAINT `participantes_ibfk_1` FOREIGN KEY (`IDParticipante`) REFERENCES `escuteiros` (`IDEscuteiro`);
+
+--
+-- Limitadores para a tabela `recursos`
+--
+ALTER TABLE `recursos`
+  ADD CONSTRAINT `recursos_ibfk_1` FOREIGN KEY (`IDAtividade`) REFERENCES `atividades` (`IDAtividade`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
