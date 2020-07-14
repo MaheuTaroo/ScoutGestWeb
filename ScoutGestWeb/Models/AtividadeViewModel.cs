@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Models
 {
@@ -26,15 +23,15 @@ namespace ScoutGestWeb.Models
         public DateTime DataInicio { get; set; }
         [Required(ErrorMessage = "Não foi definida uma data final à atividade")]
         public DateTime DataFim { get; set; }
-        [Required(ErrorMessage="Não foi definido um orçamento")]
+        [Required(ErrorMessage = "Não foi definido um orçamento")]
         [Range(0.00, 9999999999999999999999999999999999999999999999999999999.99, ErrorMessage = "O orçamento não se encontra dentro dos parâmetros")]
         public double Orcamento { get; set; }
         [Required(ErrorMessage = "Não foi confirmada a abertura da atividade a movimentos")]
         public bool Ativa { get; set; }
-        [Required(ErrorMessage = "Não foram adicionados participantes à atividade")]
+        [StringLength(1, ErrorMessage = "Não foram adicionados participantes à atividade")]
         public string Participantes { get; set; }
         public string RecHumanos { get; set; }
-        public string RecFinanc { get; set; }
+        public string RecFinanceiros { get; set; }
         public string RecMateriais { get; set; }
     }
 }

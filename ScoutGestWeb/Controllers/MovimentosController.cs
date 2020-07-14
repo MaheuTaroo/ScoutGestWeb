@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using MySql.Data.MySqlClient;
 using Rotativa.AspNetCore;
 using Rotativa.AspNetCore.Options;
@@ -8,10 +7,7 @@ using ScoutGestWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
@@ -239,7 +235,7 @@ namespace ScoutGestWeb.Controllers
                 ViewBag.documentos = nomesDocs;
                 ViewBag.pagamentos = nomesPags;
                 ViewBag.atividades = nomesAtivs;
-                return await Task.Run(() => View(model));
+                return await Task.Run(() => View("Entrada", model));
             }
             catch (Exception e)
             {
@@ -370,7 +366,7 @@ namespace ScoutGestWeb.Controllers
             ViewBag.documentos = nomesDocs;
             ViewBag.pagamentos = nomesPags;
             ViewBag.atividades = nomesAtivs;
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("Saida", model));
         }
         [HttpPost]
         public async Task<IActionResult> Saida(MovimentoViewModel mvm, int? id = null)
@@ -387,7 +383,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into movimentos(IDCaixa, Seccao, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @seccao, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);" : "update movimentos set IDCaixa = @caixa, Seccao = @seccao, IDDocumento = @documento, TipoMovimento = @tipomov, User = @user, DataHora = @data, Valor = @valor, TipoPag = @tipopag, Descricao = @descricao, Atividade = @atividade where IDMovimento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); 
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         if (id != null) cmd.Parameters.AddWithValue("@id", id);
                         cmd.Parameters.AddWithValue("@caixa", mvm.IDCaixa.Substring(0, mvm.IDCaixa.IndexOf(" - ")));
                         cmd.Parameters.AddWithValue("@documento", mvm.IDDocumento.Substring(0, mvm.IDDocumento.IndexOf(" - ")));
@@ -480,7 +476,7 @@ namespace ScoutGestWeb.Controllers
             ViewBag.documentos = nomesDocs;
             ViewBag.pagamentos = nomesPags;
             ViewBag.atividades = nomesAtivs;
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("Transferencia", model));
         }
         [HttpPost]
         public async Task<IActionResult> Transferencia(MovimTransfViewModel mtvm)
@@ -577,7 +573,7 @@ namespace ScoutGestWeb.Controllers
                     }
                 }
                 TempData["insert"] = false;
-                return await Task.Run(() => RedirectToAction(mvm.TipoMovimento.Contains("Entrada") ? "Entrada" : "Saida", (object)mvm));
+                return await Task.Run(() => mvm.TipoMovimento.Contains("Entrada") ? Entrada((object)mvm) : Saida((object)mvm));
             }
             catch (Exception e)
             {
@@ -627,7 +623,7 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => RedirectToAction("Index"));
         }
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> EliminarPost(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
@@ -712,7 +708,7 @@ namespace ScoutGestWeb.Controllers
                 else parametros += $"desde a data {inicio.Value.Date} ";
             }
             else parametros += "do movimento mais antigo ";
-            if (fim != null) 
+            if (fim != null)
             {
                 if (inicio != fim) parametros += $"até à data {fim}";
             }
@@ -926,7 +922,7 @@ namespace ScoutGestWeb.Controllers
             using (MySqlCommand cmd = new MySqlCommand("select movimentos.*, atividades.Nome from movimentos inner join atividades on movimentos.Atividade = atividades.IDAtividade where movimentos.IDMovimento > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
-                if (ativInicio != null || ativFim != null) 
+                if (ativInicio != null || ativFim != null)
                 {
                     if (int.Parse(ativInicio.Substring(0, ativInicio.IndexOf(" - "))) > int.Parse(ativFim.Substring(0, ativFim.IndexOf(" - "))))
                     {
@@ -1051,7 +1047,7 @@ namespace ScoutGestWeb.Controllers
             else parametros += ", ";
             ViewData["parametros"] = parametros + "ordem " + (ordem == null ? "ascendente" : char.ToLower(ordem[0]) + ordem.Substring(1));
             ViewData["TituloAnalise"] = "Rankings entre grupos";
-            return await Task.Run(() => new ViewAsPdf("Analises/RankingsGrupos", mvm, viewData: ViewData) 
+            return await Task.Run(() => new ViewAsPdf("Analises/RankingsGrupos", mvm, viewData: ViewData)
             {
                 PageOrientation = Orientation.Landscape,
                 PageMargins = new Margins(5, 5, 5, 5),
@@ -1092,7 +1088,7 @@ namespace ScoutGestWeb.Controllers
                             User = await _userManager.FindByNameAsync(dr["User"].ToString()),
                             DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
                             Valor = decimal.Parse(dr["Valor"].ToString()),
-                            TipoPagamento = dr["TipoPag"].ToString() + dr["DescPag"].ToString(),
+                            TipoPagamento = dr["TipoPag"].ToString() + " - " + dr["DescPag"].ToString(),
                             Descricao = dr["Descricao"].ToString()
                         });
                     }
@@ -1101,6 +1097,12 @@ namespace ScoutGestWeb.Controllers
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) ViewData["orcamento"] = dr["Orcamento"].ToString();
+                    }
+                    cmd.CommandText = "select count(IDParticipante) from participantes where IDAtividade = @ativ";
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) ViewData["countpartip"] = dr["count(IDParticipante)"].ToString();
                     }
                 }
                 ViewData["TituloAnalise"] = "Movimentos contra o orçamento";

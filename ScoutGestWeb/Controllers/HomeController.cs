@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScoutGestWeb.Models;
-using MySql.Data.MySqlClient;
-using System.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -29,7 +22,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return await Task.Run(() => !User.Identity.IsAuthenticated ? View("Login") : View("Dashboard"));
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? View("Login") : View("Dashboard")); ;
         }
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel login)
@@ -63,9 +56,11 @@ namespace ScoutGestWeb.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("Error/{statusCode}")]
+        public IActionResult Error(int statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.error = statusCode;
+            return View();
         }
     }
 }

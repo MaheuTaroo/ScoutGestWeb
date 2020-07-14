@@ -1,25 +1,73 @@
 ﻿@model ErrorViewModel
+@if (ViewBag.error.ToString() == "403")
+{
+    @inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager
+}
 @{
     ViewData["Title"] = "Error";
+    string role = (await UserManager.GetRolesAsync(await UserManager.GetUserAsync(User)))[0];
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+@*<h1 class="text-danger">Error.</h1>
+    <h2 class="text-danger">An error occurred while processing your request.</h2>
 
-@if (Model.ShowRequestId)
-{
+    @if (Model.ShowRequestId)
+    {
+        <p>
+            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+
+    <h3>Development Mode</h3>
     <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
     </p>
-}
+    <p>
+        <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
+        It can result in displaying sensitive information from exceptions to end users.
+        For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
+        and restarting the app.
+    </p>
+        text-center
+*@
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+<h1 class="text-danger">Ocorreu um erro ao aceder à página requerida</h1>
+@if (ViewBag.error.ToString() == "403")
+{
+    <h2 class="text-center">O utilizador não possui permissões para aceder a esta página</h2>
+    <span>O acesso a esta página está restrito a utilizadores com permissões de "@role" e inferiores. Considere utilizar uma conta de utilizador com permissões suficientes para aceder a esta página.</span>
+}
+else if (ViewBag.error.ToString() == "404")
+{
+    <h2 class="text-center">Um ou mais recursos requeridos não estão disponíveis</h2>
+    <span>Tente aceder a esta página mais tarde. Se o erro persistir, contacte o administrador de sistema. Se o erro continuar a ocorrer, contacte os programadores desta aplicação web através dos contactos presentes na página "Informações e logout"</span>
+}
+else if (ViewBag.error.ToString() == "500")
+{
+    <h2 class="text-center">O servidor reportou um erro inesperado ao carregar a página requerida</h2>
+    <span>
+        Contacte o administrador de sistema, e forneça a maior quantidade de informação possível, como:
+        <ul>
+            <li>Fornecer as circunstâncias em que o utilizador se encontrava antes de aceder a página</li>
+            <li>Fornecer o nome de utilizador</li>
+            <li>Descrever todos os passos seguidos até chegar a este erro</li>
+            <li>Se for pedido, fornecer uma captura de ecrã</li>
+        </ul>
+        Contudo, se o erro se mostrar insolúvel, contacte os programadores deste servidor web através dos contactos presentes através da página "Informações e logout".
+    </span>
+}
+else
+{
+    <h2 class="text-center">O servidor retornou o erro @(ViewBag.error.ToString())</h2>
+    <span>
+        Contacte o administrador de sistema, e forneça a maior quantidade de informação possível, como:
+        <ul>
+            <li>O número do erro fornecido</li>
+            <li>As circunstâncias em que o utilizador se encontrava antes de aceder a página</li>
+            <li>O seu nome de utilizador</li>
+            <li>Todos os passos seguidos até chegar a este erro</li>
+            <li>Se for pedido, fornecer uma captura de ecrã</li>
+        </ul>
+        Contudo, se o erro continuar a ocorrer, contacte os programadores desta aplicação web através dos contactos presentes na página "Informações e logout".
+    </span>
+}

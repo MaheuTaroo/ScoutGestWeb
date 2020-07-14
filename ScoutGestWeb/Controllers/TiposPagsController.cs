@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -46,7 +45,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             TempData["insert"] = insert;
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("NovoPagamento", model));
         }
         [HttpPost]
         public async Task<IActionResult> NovoPagamento(TiposPagsViewModel tpvm, string idold = null)
@@ -109,11 +108,11 @@ namespace ScoutGestWeb.Controllers
                 TempData["msg"] = "Ocorreu um erro com a edição do registo: " + e.Message;
                 return await Task.Run(() => RedirectToAction("Index"));
             }
-            return await Task.Run(() => RedirectToAction("NovoPagamento", (object)tpvm));
+            return await Task.Run(() => NovoPagamento((object)tpvm));
         }
         #endregion
         #region Eliminar
-        public async Task<IActionResult> EliminarGet(string id)
+        public async Task<IActionResult> Eliminar(string id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             TiposPagsViewModel tpvm = new TiposPagsViewModel();

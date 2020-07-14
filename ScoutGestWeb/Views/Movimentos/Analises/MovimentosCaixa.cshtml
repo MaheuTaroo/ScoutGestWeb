@@ -6,7 +6,7 @@
 <table class="table" style="border: 2px solid black; margin: auto 0 auto 0;">
     <thead>
         <tr>
-            @if ((bool)ViewData["detalhado"])
+            @if (ViewData["detalhado"] != null && (bool)ViewData["detalhado"])
             {
                 <th>Caixa</th>
                 <th>Documento</th>

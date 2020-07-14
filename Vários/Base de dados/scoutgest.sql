@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 13-Jul-2020 às 17:25
+-- Tempo de geração: 14-Jul-2020 às 02:06
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `test2`
+-- Banco de dados: `scoutgest`
 --
 
 -- --------------------------------------------------------

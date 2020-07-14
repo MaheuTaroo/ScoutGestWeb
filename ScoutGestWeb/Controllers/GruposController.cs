@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
 using SixLabors.ImageSharp;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -76,7 +74,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             TempData["insert"] = insert;
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("NovoGrupo", model));
         }
         [HttpPost]
         public async Task<IActionResult> NovoGrupo(GrupoViewModel gvm, int? id = null)
@@ -171,7 +169,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
-                    return await Task.Run(() => RedirectToAction("NovoGrupo", gvm));
+                    return await Task.Run(() => NovoGrupo((object)gvm));
                 }
             }
             catch (Exception e)

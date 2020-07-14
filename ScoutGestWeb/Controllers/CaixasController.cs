@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -69,7 +67,7 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) cvm[i].Responsavel = dr["Totem"].ToString() + " - " +  dr["Nome"].ToString();
+                        while (await dr.ReadAsync()) cvm[i].Responsavel = dr["Totem"].ToString() + " - " + dr["Nome"].ToString();
                     }
                 }
             }
@@ -80,6 +78,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovaCaixa()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (User.IsInRole("Comum")) return Forbid();
             insert = true;
             using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -97,6 +96,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovaCaixa(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             TempData["insert"] = insert;
             return await Task.Run(() => View("NovaCaixa", model));
         }
@@ -104,6 +104,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovaCaixa(CaixaViewModel cvm)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             if (ModelState.IsValid)
             {
                 try
@@ -190,10 +191,23 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Editar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             insert = false;
             CaixaViewModel cvm = new CaixaViewModel();
             try
             {
+
+                using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                {
+                    if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        List<string> grupos = new List<string>();
+                        while (await dr.ReadAsync()) grupos.Add(dr["Nome"].ToString());
+                        grupos.Sort();
+                        ViewBag.grupos = grupos;
+                    }
+                }
                 using (MySqlCommand cmd = new MySqlCommand("select * from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
@@ -226,8 +240,17 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync()) cvm.Grupo = dr["Nome"].ToString();
                     }
+                    cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.IndexOf(" where IDGrupo = @id"));
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        List<string> grupos = new List<string>();
+                        while (await dr.ReadAsync()) grupos.Add(dr["Nome"].ToString());
+                        grupos.Sort();
+                        ViewBag.grupos = grupos;
+                    }
                 }
-                return await Task.Run(() => View("NovoGrupo", (object)cvm));
+                return await Task.Run(() => NovaCaixa((object)cvm));
             }
             catch (Exception e)
             {
@@ -239,6 +262,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Eliminar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             CaixaViewModel cvm = new CaixaViewModel();
             try
             {
@@ -275,6 +299,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> EliminarPost(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand("delete from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 namespace ScoutGestWeb.Controllers
 {
     [RequireHttps]
@@ -90,19 +88,23 @@ namespace ScoutGestWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> InserirAtividade()
         {
+            if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             insert = true;
-            return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
+            return await Task.Run(() => View());
         }
         public async Task<IActionResult> InserirAtividade(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             insert = false;
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("InserirAtividade", model));
         }
         [HttpPost]
         public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             if (ModelState.IsValid)
             {
                 try
@@ -121,6 +123,32 @@ namespace ScoutGestWeb.Controllers
                         cmd.Parameters.AddWithValue("@ativa", avm.Ativa == true ? 1 : 0);
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
+                        avm.Participantes = avm.Participantes.Trim();
+                        avm.RecFinanceiros = avm.RecFinanceiros.Trim();
+                        avm.RecHumanos = avm.RecHumanos.Trim();
+                        avm.RecMateriais = avm.RecMateriais.Trim();
+                        if (!string.IsNullOrEmpty(avm.Participantes))
+                        {
+                            string[] participantes = avm.Participantes.Split("\r\n");
+                            cmd.CommandText = insert ? "insert into participantes values " : "delete from participantes where IDAtividade = @id; insert into participantes values ";
+                            for (int i = 0; i < participantes.Length; i++)
+                            {
+                                cmd.CommandText += $"(@id, @particip{i + 1}), ";
+                                cmd.Parameters.AddWithValue($"@particip{i + 1}", participantes[i]);
+                            }
+                            cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.LastIndexOf(", "));
+                            await cmd.PrepareAsync();
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                        if (!(string.IsNullOrEmpty(avm.RecFinanceiros) && string.IsNullOrEmpty(avm.RecHumanos) && string.IsNullOrEmpty(avm.RecMateriais)))
+                        {
+                            cmd.CommandText = insert ? "insert into recursos values (@id, @human, @mater, @financ" : "update recursos set RecHumanos = @human, RecMateriais = @mater, RecFinanceiros = @financ where IDAtividade = @id";
+                            cmd.Parameters.AddWithValue("@human", avm.RecHumanos);
+                            cmd.Parameters.AddWithValue("@mater", avm.RecMateriais);
+                            cmd.Parameters.AddWithValue("@financ", avm.RecFinanceiros);
+                            await cmd.PrepareAsync();
+                            await cmd.ExecuteNonQueryAsync();
+                        }
                     }
                     return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
                 }
@@ -136,6 +164,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Editar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
                 AtividadeViewModel avm = new AtividadeViewModel();
@@ -164,8 +193,26 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.CommandText = cmd.CommandText.Replace("atividades", "recursos");
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync())
+                        {
+                            avm.RecFinanceiros = dr["RecFinanceiros"].ToString();
+                            avm.RecHumanos = dr["RecHumanos"].ToString();
+                            avm.RecMateriais = dr["RecMateriais"].ToString();
+                        }
+                    }
+                    cmd.CommandText = "select participantes.IDParticipante, escuteiros.Totem from participantes inner join escuteiros on escuteiros.IDEscuteiro where participantes.IDAtividade = @id";
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) avm.Participantes += dr["Totem"].ToString() + "\r\n";
+                    }
+                    avm.Participantes = avm.Participantes.Substring(0, avm.Participantes.LastIndexOf("\r\n"));
                 }
-                return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
+                return await Task.Run(() => InserirAtividade((object)avm));
             }
             catch (Exception e)
             {
@@ -183,9 +230,10 @@ namespace ScoutGestWeb.Controllers
                 {
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
+                    await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
                         else
                         {
                             while (await dr.ReadAsync())
@@ -203,6 +251,24 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.CommandText = "select participantes.IDParticipante, escuteiros.Totem from participantes inner join escuteiros on participantes.IDParticipante = escuteiros.IDEscuteiro where IDAtividade = @id";
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) avm.Participantes += dr["Totem"].ToString() + "\r\n";
+                    }
+                    avm.Participantes = string.IsNullOrEmpty(avm.Participantes) ? "nenhum" : avm.Participantes.Substring(0, avm.Participantes.LastIndexOf("\r\n"));
+                    cmd.CommandText = "select * from recursos where IDAtividade = @id";
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync())
+                        {
+                            avm.RecFinanceiros = dr["RecFinanceiros"].ToString();
+                            avm.RecHumanos = dr["RecHumanos"].ToString();
+                            avm.RecMateriais = dr["RecMateriais"].ToString();
+                        }
+                    }
                 }
                 return await Task.Run(() => View(avm));
             }
@@ -216,6 +282,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Eliminar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
                 AtividadeViewModel avm = new AtividadeViewModel();
@@ -244,6 +311,23 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.CommandText = cmd.CommandText.Replace("atividades", "recursos");
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync())
+                        {
+                            avm.RecFinanceiros = dr["RecFinanceiros"].ToString();
+                            avm.RecHumanos = dr["RecHumanos"].ToString();
+                            avm.RecMateriais = dr["RecMateriais"].ToString();
+                        }
+                    }
+                    cmd.CommandText = "select count(*) from participantes where IDAtividade = @id";
+                    await cmd.PrepareAsync();
+                    using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        while (await dr.ReadAsync()) avm.Participantes = dr["count(*)"].ToString() + "participantes";
+                    }
                 }
                 return await Task.Run(() => View(avm));
             }
@@ -257,6 +341,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> EliminarPost(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand("delete from atividades where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
@@ -266,6 +351,12 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
                     if (i == 0) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                    cmd.CommandText = cmd.CommandText.Replace("atividades", "participantes");
+                    await cmd.PrepareAsync();
+                    await cmd.ExecuteNonQueryAsync();
+                    cmd.CommandText = cmd.CommandText.Replace("participantes", "recursos");
+                    await cmd.PrepareAsync();
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
             catch (MySqlException mse)

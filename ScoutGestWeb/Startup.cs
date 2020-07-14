@@ -1,19 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ScoutGestWeb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ScoutGestWeb.Models;
 using Rotativa.AspNetCore;
+using ScoutGestWeb.Data;
+using ScoutGestWeb.Models;
 
 namespace ScoutGestWeb
 {
@@ -48,6 +42,7 @@ namespace ScoutGestWeb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,10 +50,17 @@ namespace ScoutGestWeb
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode >= 400 && context.Response.StatusCode <= 599) context.Response.Redirect($"/Error/{context.Response.StatusCode}");
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

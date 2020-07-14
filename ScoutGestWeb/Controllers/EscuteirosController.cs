@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using ScoutGestWeb.Models;
 using MySql.Data.MySqlClient;
-using System.Data;
+using ScoutGestWeb.Models;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Security.Cryptography.X509Certificates;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -120,6 +115,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> InserirEscuteiro()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             insert = true;
             EscuteirosViewModel evm = new EscuteirosViewModel();
             using (MySqlCommand cmd = new MySqlCommand("select max(IDEscuteiro) from escuteiros", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
@@ -142,6 +138,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> InserirEscuteiro(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (User.IsInRole("Comum")) return Forbid();
             if (TempData["insert"] != null) TempData.Keep("insert");
             return await Task.Run(() => View("InserirEscuteiro", model));
         }
@@ -149,6 +146,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> InserirEscuteiro(EscuteirosViewModel insert, int? idold = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (User.IsInRole("Comum")) return Forbid();
             try
             {
                 if (ModelState.IsValid)
@@ -241,6 +239,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Editar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (User.IsInRole("Comum")) return Forbid();
             EscuteirosViewModel evm = new EscuteirosViewModel();
             try
             {
@@ -297,7 +296,7 @@ namespace ScoutGestWeb.Controllers
                     grupos.Sort();
                     ViewBag.grupos = grupos;
                     TempData["insert"] = insert = false;
-                    return await Task.Run(() => RedirectToAction("InserirEscuteiro", (object)evm));
+                    return await Task.Run(() => InserirEscuteiro((object)evm));
                 }
             }
             catch (Exception e)
@@ -364,6 +363,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Eliminar(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
                 EscuteirosViewModel evm = new EscuteirosViewModel();
@@ -419,6 +419,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> EliminarPost(int id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
+            if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
                 using (MySqlCommand cmd = new MySqlCommand("delete from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))

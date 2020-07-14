@@ -1,5 +1,3 @@
-using System;
-
 namespace ScoutGestWeb.Models
 {
     public class ErrorViewModel

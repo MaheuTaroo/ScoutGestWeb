@@ -1,14 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using SixLabors.ImageSharp;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
-using System.Collections;
 
 namespace ScoutGestWeb.Models
 {

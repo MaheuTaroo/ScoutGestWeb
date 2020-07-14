@@ -18,6 +18,7 @@
             page-break-after: auto;
             text-align: center;
         }
+
         body {
             overflow: initial;
             text-align: center;
@@ -26,7 +27,7 @@
     <div class="container-fluid bg-light text-center border-primary header p-1">
         <h1 style="color:rgb(82, 82, 82); margin-top: auto"><img src="~/imgs/logo.png" style="width: 3%; margin: 3px 0px 3px 0px;"><br />ScoutGest</h1>
     </div>
-    <h2>Atividade: @ViewData["atividade"]</h2>
+    <h2>Atividade: @ViewData["atividade"] <span style="font-size: 10px">@ViewData["countPartip"] participante(s)</span></h2>
     <table class="table">
         <thead>
             <tr>
@@ -61,7 +62,7 @@
                         @Html.DisplayFor(modelItem => item.TipoMovimento)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.DataHora.Date)
+                        @item.DataHora.Date.ToString().Substring(0, item.DataHora.Date.ToString().IndexOf(" 00:00:00"))
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Valor)€
@@ -76,24 +77,27 @@
             }
         </tbody>
     </table>
-    <div style="position: absolute; text-align: center; width: 100%">
-        <div style="float: left; margin: 25%"><b>Orçamento</b>: @ViewData["orcamento"]€</div>
-        <div style="float: right; margin: 25%"><b>Tot. movimentos</b>: @Model.Sum(x => x.Valor)€</div>
-        <br />
-        <div class="container-fluid">
-            @if (decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor) > 0)
-            {
-                <p style="color: red"><b>Dinheiro em falta</b>: @(decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor))</p>
-            }
-            else if (decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor) < 0)
-            {
-                <p style="color: green"><b>Dinheiro a mais</b>: @Math.Abs(decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor))</p>
-            }
-            else
-            {
-                <p style="color: blue"><b>Dinheiro em falta</b>: 0€</p>
-            }
-        </div>
+    <div style="text-align: center; margin: auto; font-size: 20px">Nº de participantes: </div>
+    <br />
+    <div style="position: relative; text-align: center; margin: 0 25% 0 25%; font-size: 20px">
+        <div style="float: left"><b>Orçamento</b>: @ViewData["orcamento"]€</div>
+        <div style="float: right"><b>Tot. movimentos</b>: @Model.Sum(x => x.Valor)€</div>
+    </div>
+    <br />
+    <br />
+    <div class="container-fluid">
+        @if (decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor) > 0)
+        {
+            <p style="color: red; font-size: 20px"><b>Dinheiro em falta</b>: @(decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor))€</p>
+        }
+        else if (decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor) < 0)
+        {
+            <p style="color: green; font-size: 20px"><b>Dinheiro a mais</b>: @Math.Abs(decimal.Parse(ViewData["orcamento"].ToString()) - Model.Sum(x => x.Valor))€</p>
+        }
+        else
+        {
+            <p style="color: blue; font-size: 20px"><b>Dinheiro em falta</b>: 0€</p>
+        }
     </div>
 </body>
 </html>

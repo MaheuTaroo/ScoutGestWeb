@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using ScoutGestWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
 {
@@ -43,7 +41,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             TempData["insert"] = insert;
-            return await Task.Run(() => View(model));
+            return await Task.Run(() => View("NovoDocumento", model));
         }
         [HttpPost]
         public async Task<IActionResult> NovoDocumento(TiposDocsViewModel tdvm, string idold = null)
@@ -105,7 +103,7 @@ namespace ScoutGestWeb.Controllers
                 TempData["msg"] = "Ocorreu um erro com a edição do registo: " + e.Message;
                 return await Task.Run(() => RedirectToAction("Index"));
             }
-            return await Task.Run(() => RedirectToAction("NovoPagamento", (object)tdvm));
+            return await Task.Run(() => NovoDocumento((object)tdvm));
         }
         #region Eliminar
         public async Task<IActionResult> EliminarGet(string id)
@@ -116,7 +114,7 @@ namespace ScoutGestWeb.Controllers
             {
                 using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where IDDocumento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    if (cmd.Connection.State == ConnectionState.Closed)cmd.Connection.Open();
+                    if (cmd.Connection.State == ConnectionState.Closed) cmd.Connection.Open();
                     cmd.Parameters.AddWithValue("@id", id);
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
@@ -139,7 +137,7 @@ namespace ScoutGestWeb.Controllers
             }
             return await Task.Run(() => View("Eliminar", tdvm));
         }
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> EliminarPost(string id)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
