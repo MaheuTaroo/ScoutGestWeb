@@ -50,13 +50,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DateTimeRangeAttribute">
-      <HintPath>C:\Users\pantu\Desktop\Private\.dlls\Feitos por mim\.NET Core\3.1\ASP.NET\DateTimeRangeAttribute.dll</HintPath>
-    </Reference>
+    <Folder Include="wwwroot\rotativa\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\rotativa\" />
+    <Reference Include="DateTimeRangeAttribute">
+      <HintPath>C:\Users\pantu\Desktop\Private\.dlls\Feitos por mim\.NET Core\3.1\ASP.NET\DateTimeRangeAttribute.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

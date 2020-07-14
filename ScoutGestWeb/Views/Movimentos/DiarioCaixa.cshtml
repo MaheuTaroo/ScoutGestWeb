@@ -10,44 +10,20 @@
     <div style="margin: auto; text-align: center">
         @using (Html.BeginForm("DiarioCaixa", "Movimentos", FormMethod.Post, new { @class="text-center" }))
         {
-        <label>
-            Caixa:
-            <select name="caixa">
-                @foreach (string s in ViewBag.caixas)
-                {
-                <option>@s</option>
-                }
-            </select>
-        </label><br />
-        <label>Início: <input type="date" min="1900-01-01" name="inicio" /></label>
-        <br />
-        <label>Fim: <input type="date" min="1900-01-01" name="fim" /></label>
-        <br />
-        <button type="submit">Criar análise</button>
+            <label>
+                Caixa:
+                <select name="caixa">
+                    @foreach (string s in ViewBag.caixas)
+                    {
+                    <option>@s</option>
+                    }
+                </select>
+            </label><br />
+            <label>Início: <input type="date" min="1900-01-01" name="inicio" /></label>
+            <br />
+            <label>Fim: <input type="date" min="1900-01-01" name="fim" /></label>
+            <br />
+            <button type="submit">Criar análise</button>
         }
     </div>
 </div>
-@*@using (Html.BeginForm("PDFCaixas", "Movimentos", FormMethod.Post))
-{
-    <label>
-        Caixa de início:
-        <select name="inicio">
-            @foreach (string s in ViewBag.caixas)
-            {
-                <option>@s</option>
-            }
-        </select>
-    </label>
-    <br />
-    <label>
-        Caixa de fim:
-        <select name="fim">
-            @foreach (string s in ViewBag.caixas)
-            {
-                <option>@s</option>
-            }
-        </select>
-    </label>
-    <br />
-    <button type="submit">Criar análise</button>
-}*@

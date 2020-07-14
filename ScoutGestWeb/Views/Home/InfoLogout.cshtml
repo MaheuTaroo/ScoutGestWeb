@@ -1,5 +1,7 @@
-﻿@{
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager
+@{
     ViewData["Title"] = "Informação e Logout";
+    string username = (await UserManager.GetUserAsync(User)).NormalizedUserName;
 }
 
 <div>
@@ -21,26 +23,26 @@
 </div>
 <div class="mainBody">
     <h1 style="text-align: center">Informações e Logout</h1>
+    <p style="text-align: center">Sessão iniciada como utilizador: <b>@User.Identity.Name (@username)</b></p>
     <br />
     <div class="bordlogout" style="padding-left: 10px;">
         <h2 style="text-align: center">Informação geral</h2><hr />
-        <p>Bem vindo a scoutgest. Esta aplicação foi criada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
+        <p>Benvindo/a à aplicação ScoutGest. Esta aplicação foi criada com o objetivo de ajudar líderes de grupos de escuteiros com a gestão de várias informações, tais como: </p>
 
         <p>-Gestão de atividades;</p>
         <p>-Gestão de escuteiros;</p>
         <p>-Gestão de grupos</p>
     </div>
     <br />
-    <div class="bordlogout" style="padding-left: 10px;">
+    <div class="bordlogout" style="padding-left: 10px; position: relative">
         <h2 style="text-align: center">Contactos</h2><hr />
-        <p>A mesma foi feita pelo JM e JJ, em caso de alguma dúvida, sugestão, ou a aplicação deixar de funcionar poderá contactar-nos através das seguintes formas:</p>
-
-        <p><b>JM</b></p>
-        <p>Email: emailfalso.com</p>
+        <p style="line-break: normal">Esta aplicação web foi criada pelos programadores João Martins e João Jesus. Se tiver uma dúvida ou sugestão, ou ocorrer um erro na aplicação, poderá contactar-nos através das seguintes formas:</p>
+        <br />
+        <p><b>João Martins</b></p>
+        <p>Email: falso@email.com.pt</p>
         <p>Telemóvel: (+351) 961234578</p><br />
-
-        <p><b>JJ</b></p>
-        <p>Email: emailfalso2.com</p>
+        <p><b>João Jesus</b></p>
+        <p>Email: email@falso.net</p>
         <p>Telemóvel: (+351) 912345678</p>
     </div>
     <br />

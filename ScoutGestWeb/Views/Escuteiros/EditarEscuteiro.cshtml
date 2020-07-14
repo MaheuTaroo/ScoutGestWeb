@@ -3,8 +3,6 @@
     ViewData["Title"] = "Editar escuteiro - Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
 }
-<!--Aqui esta o código para a página de inserir novos escuteiros -->
-<script src="~/js/site.js"></script>
 <h1>Inserir escuteiro</h1>
 
 <h4>Editar dados</h4>
@@ -54,7 +52,6 @@
         </div>
         <div class="col-xl-3 text-sm-left">
             <label>Cargo:</label><br />
-            <!--<input type="checkbox" asp-for="Guia.Selecionado" /> Guia <br />-->
             @Html.CheckBoxFor(modelItem => modelItem.Guia.Selecionado) Guia<br />
             @Html.CheckBoxFor(modelItem => modelItem.Animador.Selecionado) Animador<br />
             @Html.CheckBoxFor(modelItem => modelItem.Cozinheiro.Selecionado) Cozinheiro<br />
@@ -121,7 +118,6 @@
         <input class="text-center btn btn-primary container-fluid" type="submit" value="Create" />
     </form>
 </div>
-<!--botão para voltar à lista de escuteiros-->
 <p class="text-center">
     <a asp-action="Index">Voltar</a>
 </p>

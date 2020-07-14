@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14-Jul-2020 às 02:06
+-- Tempo de geração: 14-Jul-2020 às 20:26
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -998,6 +998,14 @@ CREATE TABLE `recursos` (
   `RecMateriais` text COLLATE utf8mb4_bin NOT NULL,
   `RecFinanceiros` text COLLATE utf8mb4_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+--
+-- Extraindo dados da tabela `recursos`
+--
+
+INSERT INTO `recursos` (`IDAtividade`, `RecHumanos`, `RecMateriais`, `RecFinanceiros`) VALUES
+(1, 'a', 'a', 'a'),
+(2, 'b', 'b', 'b');
 
 -- --------------------------------------------------------
 
