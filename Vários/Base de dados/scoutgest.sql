@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14-Jul-2020 às 20:26
+-- Tempo de geração: 15-Jul-2020 às 13:55
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.7
 
@@ -733,6 +733,12 @@ else
 		update caixas set Saldo = Saldo + old.Valor where IDCaixa = old.IDCaixa;
 	end if;
 end if
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `Stop_Insert_On_Closed_Atividade` BEFORE INSERT ON `movimentos` FOR EACH ROW if ((select Ativa from atividades where IDAtividade = new.Atividade) = 0) then
+	signal sqlstate '45000' set MESSAGE_TEXT = "A atividade está encerrada, impossibilitando a criação de novos movimentos";
+    end if
 $$
 DELIMITER ;
 
