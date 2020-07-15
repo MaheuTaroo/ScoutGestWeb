@@ -5,17 +5,20 @@
 
 <h1>MovOrcam</h1>
 
-@using (Html.BeginForm("MovOrcam", "Movimentos", FormMethod.Post))
-{
-    @if (TempData["errAtiv"] != null)
+<div style="margin: auto; text-align: center">
+    @using (Html.BeginForm("MovOrcam", "Movimentos", FormMethod.Post))
     {
-        <div class="bg-danger rounded text-center"><b>@TempData["errAtiv"].ToString()</b></div>
-    }
-    <select name="ativ">
-        @foreach (string s in ViewBag.ativs)
+        @if (TempData["errAtiv"] != null)
         {
-            <option>@s</option>
+            <div class="bg-danger rounded text-center"><b>@TempData["errAtiv"].ToString()</b></div>
         }
-    </select>
-    <button type="submit">Gerar relatório</button>
-}
+        <label>Atividade: </label>
+        <select name="ativ">
+            @foreach (string s in ViewBag.ativs)
+            {
+                <option>@s</option>
+            }
+        </select><br />
+        <button type="submit">Gerar relatório</button>
+    }
+</div>

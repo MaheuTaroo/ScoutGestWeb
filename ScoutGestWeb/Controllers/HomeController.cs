@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
 using ScoutGestWeb.Models;
 using System.Threading.Tasks;
@@ -14,11 +16,13 @@ namespace ScoutGestWeb.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly IHttpContextAccessor _accessor;
+        public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor accessor)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _accessor = accessor;
         }
         public async Task<IActionResult> Index()
         {
@@ -38,7 +42,11 @@ namespace ScoutGestWeb.Controllers
                         return await Task.Run(() => Index());
                     }
                     var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
-                    if (result.Succeeded) return await Task.Run(() => View("Dashboard"));
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation($"Sessão iniciada como {user.UserName} em {_accessor.HttpContext.Connection.RemoteIpAddress}");
+                        return await Task.Run(() => View("Dashboard"));
+                    }
                 }
                 ModelState.AddModelError("", "Credenciais incorretas");
                 return await Task.Run(() => Index());
@@ -54,7 +62,7 @@ namespace ScoutGestWeb.Controllers
         {
             return await Task.Run(() => !User.Identity.IsAuthenticated ? RedirectToAction("Index", "Home") : (IActionResult)View());
         }
-
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Route("Error/{statusCode}")]
         public IActionResult Error(int statusCode)
