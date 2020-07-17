@@ -17,7 +17,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index(string coluna, string procura)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["msg"] != null) TempData.Keep("msg");
+            if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
             List<AtividadeViewModel> avm = new List<AtividadeViewModel>();
             if (string.IsNullOrEmpty(coluna) && string.IsNullOrEmpty(procura))
             {

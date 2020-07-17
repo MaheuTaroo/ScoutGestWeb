@@ -40,18 +40,18 @@
 </div>
 <div class="mainBody">
     <h1>Escuteiros</h1>
-    @if (TempData["msg"] != null)
+    @if (TempData["msgKeep"] != null)
     {
-        if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
+        if (TempData["msgKeep"].ToString().Contains("Ocorreu um erro"))
         {
             <div class="bg-danger rounded text-center">
-                <b>@TempData["msg"]</b>
+                <b>@TempData["msgKeep"]</b>
             </div>
         }
         else
         {
             <div class="bg-success rounded text-center">
-                <b>@TempData["msg"]</b>
+                <b>@TempData["msgKeep"]</b>
             </div>
         }
     }
@@ -91,12 +91,12 @@
                             <input type="hidden" value="" />
                             <img src="@Html.DisplayFor(modelItem => item.FotoDown)" style="float:left;  min-height:180px; height: 180px;" />
                         </div>
-                        <div class="column" style="margin: calc(3vh / 2) 0 calc(3vh / 2) 0; width:200px">
-                            <div class="row cima" style="vertical-align: middle">@Html.DisplayFor(modelItem => item.Nome)</div><br />
-                            <div class="row centro" style="vertical-align: middle">Secção: @Html.DisplayFor(modelItem => item.Seccao)||Totem: @Html.DisplayFor(modelItem => item.Totem)</div><br />
-                            <div class="row baixo" style="vertical-align: middle">
-                                <a href="@Url.ActionLink("Detalhes", "Escuteiros", new { id = item.ID })" class="btn btn-secondary">Detalhes</a>
-                                <a href="@Url.ActionLink("Editar", "Escuteiros", new { id = item.ID })" class="btn btn-secondary">Editar</a>
+                        <div class="column" style="margin: auto 0 auto 0">
+                            <div class="row">@Html.DisplayFor(modelItem => item.Nome)</div><br />
+                            <div class="row">Secção: @Html.DisplayFor(modelItem => item.Seccao)||Totem: @Html.DisplayFor(modelItem => item.Totem)</div><br />
+                            <div class="row">
+                                <a href="@Url.ActionLink("Detalhes", "Escuteiros", new { id = item.ID })"><button class="btn btn-secondary">Detalhes</button></a>
+                                <a href="@Url.ActionLink("Editar", "Escuteiros", new { id = item.ID })"><button class="btn btn-secondary">Editar</button></a>
                             </div>
                         </div>
                     </div>

@@ -51,7 +51,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["msg"] != null) TempData.Keep("msg");
+            if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
             if (User.IsInRole("Administração de Agrupamento"))
             {
                 using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
@@ -169,7 +169,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Entrada()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insertMsg"] != null) TempData.Keep("insertMsg");
+            if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
             insert = true;
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
@@ -204,7 +204,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Entrada(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insert"] != null) TempData.Keep("insert");
+            if (TempData["insert"] != null) TempData["insertKeep"] = TempData["insert"];
             try
             {
                 List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
@@ -303,7 +303,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Saida()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insertMsg"] != null) TempData.Keep("insertMsg");
+            if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -337,7 +337,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Saida(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insert"] != null) TempData.Keep("insert");
+            if (TempData["insert"] != null) TempData["insertKeep"] = TempData["insert"];
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -387,6 +387,7 @@ namespace ScoutGestWeb.Controllers
                         if (id != null) cmd.Parameters.AddWithValue("@id", id);
                         cmd.Parameters.AddWithValue("@caixa", mvm.IDCaixa.Substring(0, mvm.IDCaixa.IndexOf(" - ")));
                         cmd.Parameters.AddWithValue("@documento", mvm.IDDocumento.Substring(0, mvm.IDDocumento.IndexOf(" - ")));
+                        cmd.Parameters.AddWithValue("@seccao", mvm.Seccao);
                         cmd.Parameters.AddWithValue("@tipomov", mvm.TipoMovimento);
                         cmd.Parameters.AddWithValue("@user", mvm.User.NormalizedUserName);
                         cmd.Parameters.AddWithValue("@data", mvm.DataHora);
@@ -414,7 +415,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Transferencia()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insertMsg"] != null) TempData.Keep("insertMsg");
+            if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -508,7 +509,8 @@ namespace ScoutGestWeb.Controllers
                         ModelState.AddModelError("", "A caixa de origem e a caixa de destino são iguais. Por favor, selecione caixas diferentes para a transferência de tesouraria");
                         return await Task.Run(() => Transferencia((object)mtvm));
                     }
-                    using (MySqlCommand cmd = new MySqlCommand("insert into movimentos(IDCaixa, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into movimentos(IDCaixa, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade)" +
+                        "values (@caixa, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@caixa", mtvm.IDCaixaOrigem.Contains(" - ") ? mtvm.IDCaixaOrigem.Substring(0, mtvm.IDCaixaOrigem.IndexOf(" - ")) : mtvm.IDCaixaOrigem);
@@ -733,7 +735,8 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View());
         }
         [HttpPost]
-        public async Task<IActionResult> MovParam(DateTime? dataInicio = null, DateTime? dataFim = null, string caixaInicio = null, string caixaFim = null, string tipoPagInicio = null, string tipoPagFim = null, string ativInicio = null, string ativFim = null, string seccaoInicio = null, string seccaoFim = null, bool detalhado = false)
+        public async Task<IActionResult> MovParam(DateTime? dataInicio = null, DateTime? dataFim = null, string caixaInicio = null, string caixaFim = null, string tipoPagInicio = null,
+            string tipoPagFim = null, string ativInicio = null, string ativFim = null, string seccaoInicio = null, string seccaoFim = null, bool detalhado = false)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<MovimentoViewModel> mvm = new List<MovimentoViewModel>();
@@ -788,22 +791,42 @@ namespace ScoutGestWeb.Controllers
                 caixaInicio = temp;
             }
             string datas = "";
-            if (dataInicio == dataFim) datas = string.Format("(cast(DataHora as date) between '{0}' and '{1}')", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataInicio == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}");
-            else datas = string.Format("cast(DataHora as date) between '{0}' and '{1}'", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataFim == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : $"{Convert.ToDateTime(dataFim).Year}-{Convert.ToDateTime(dataFim).Month}-{Convert.ToDateTime(dataFim).Day}");
+            if (dataInicio == dataFim)
+                datas = string.Format("(cast(DataHora as date) between '{0}' and '{1}')", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : 
+                    $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataInicio == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" :
+                        $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}");
+            else 
+                datas = string.Format("cast(DataHora as date) between '{0}' and '{1}'", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : 
+                    $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataFim == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : 
+                        $"{Convert.ToDateTime(dataFim).Year}-{Convert.ToDateTime(dataFim).Month}-{Convert.ToDateTime(dataFim).Day}");
             string pags = "";
-            if (tipoPagInicio == tipoPagFim) pags = string.Format("TipoPag like '{0}'", tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")));
-            else pags = string.Format("TipoPag between '{0}' and '{1}'", tipoPagInicio != null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
+            if 
+                (tipoPagInicio == tipoPagFim) pags = string.Format("TipoPag like '{0}'", tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")));
+            else 
+                pags = string.Format("TipoPag between '{0}' and '{1}'", tipoPagInicio != null ? tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")) : 
+                    listpags[0].Substring(0, listpags[0].IndexOf(" - ")), tipoPagFim == null ? tipoPagFim.Substring(0, tipoPagFim.IndexOf(" - ")) : 
+                        listpags[^1].Substring(0, listpags[^1].IndexOf(" - ")));
             string ativs = "";
-            if (ativInicio == ativFim) ativs = string.Format("Atividade = {0}", ativInicio.Substring(0, ativFim.IndexOf(" - ")));
-            else ativs = string.Format("Atividade between {0} and {1}", ativInicio != null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim != null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
+            if (ativInicio == ativFim) 
+                ativs = string.Format("Atividade = {0}", ativInicio.Substring(0, ativFim.IndexOf(" - ")));
+            else ativs = string.Format("Atividade between {0} and {1}", ativInicio != null ? ativInicio.Substring(0, ativInicio.IndexOf(" - ")) : 
+                listativs[0].Substring(0, listativs[0].IndexOf(" - ")), ativFim != null ? ativFim.Substring(0, ativFim.IndexOf(" - ")) : 
+                    listativs[^1].Substring(0, this.listativs[^1].IndexOf(" - ")));
             string seccoes = "";
-            if (seccaoInicio == seccaoFim) seccoes = string.Format("Seccao like '{0}'", seccaoInicio ?? "Agrupamento");
-            //else if (seccaoInicio == "Agrupamento" || seccaoFim == "Agrupamento") seccoes = string.Format("Seccao like '{0}'", seccaoInicio ?? "Agrupamento");
-            else seccoes = string.Format("Seccao between '{0}' and '{1}'", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
+            if (seccaoInicio == seccaoFim)
+                seccoes = string.Format("Seccao like '{0}'", seccaoInicio ?? "Agrupamento");
+            else
+                seccoes = string.Format("Seccao between '{0}' and '{1}'", seccaoInicio ?? "Agrupamento", seccaoFim ?? "Agrupamento");
             string caixas = "";
-            if (caixaInicio == caixaFim) caixas = string.Format("IDCaixa = {0}", caixaInicio.Substring(0, ativFim.IndexOf(" - ")));
-            else caixas = string.Format("IDCaixa between {0} and {1}", caixaInicio == null ? listcaixas[0] : caixaInicio.Substring(0, caixaInicio.IndexOf(" - ")), caixaFim == null ? listcaixas[^1] : caixaFim.Substring(0, caixaFim.IndexOf(" - ")));
-            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes and @caixas;"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            if (caixaInicio == caixaFim) 
+                caixas = string.Format("IDCaixa = {0}", caixaInicio.Substring(0, ativFim.IndexOf(" - ")));
+            else 
+                caixas = string.Format("IDCaixa between {0} and {1}", caixaInicio == null ? listcaixas[0] : 
+                    caixaInicio.Substring(0, caixaInicio.IndexOf(" - ")), caixaFim == null ? listcaixas[^1] : 
+                        caixaFim.Substring(0, caixaFim.IndexOf(" - ")));
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null &&
+                tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes and @caixas;"),
+                new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 await cmd.PrepareAsync();

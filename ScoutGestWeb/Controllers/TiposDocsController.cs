@@ -15,7 +15,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["msg"] != null) TempData.Keep("msg");
+            if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
             List<TiposDocsViewModel> tdvm = new List<TiposDocsViewModel>();
             using (MySqlCommand cmd = new MySqlCommand("select * from tipos_docs where Descricao not like \"Teste\"", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {

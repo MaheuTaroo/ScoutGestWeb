@@ -20,7 +20,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["msg"] != null) TempData.Keep("msg");
+            if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
             using (MySqlCommand cmd = new MySqlCommand("select * from caixas", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ScoutGestWeb.Controllers
@@ -22,7 +23,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                if (TempData["msg"] != null) TempData.Keep("msg");
+                if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
                 //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
                 List<EscuteirosViewModel> escuteiros = new List<EscuteirosViewModel>();
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
@@ -139,7 +140,17 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (User.IsInRole("Comum")) return Forbid();
-            if (TempData["insert"] != null) TempData.Keep("insert");
+            using (MySqlCommand cmd = new MySqlCommand("select IDGrupo, Nome from grupos", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            {
+                if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
+                using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync()) grupos.Add($"{dr["IDGrupo"]} - {dr["Nome"]}");
+                }
+            }
+            grupos.Sort();
+            ViewBag.grupos = grupos;
+            if (TempData["insert"] != null) TempData["insertKeep"] = TempData["insert"];
             return await Task.Run(() => View("InserirEscuteiro", model));
         }
         [HttpPost]
@@ -221,6 +232,7 @@ namespace ScoutGestWeb.Controllers
                 }
                 using (MySqlCommand cmd = new MySqlCommand("select IDGrupo, Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await dr.ReadAsync()) grupos.Add($"{dr["IDGrupo"]} - {dr["Nome"]}");
@@ -228,7 +240,7 @@ namespace ScoutGestWeb.Controllers
                 }
                 grupos.Sort();
                 ViewBag.grupos = grupos;
-                return await Task.Run(() => View("InserirEscuteiro"));
+                return await Task.Run(() => View("Index"));
             }
             catch (Exception e)
             {
@@ -293,7 +305,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync()) evm.NumTelefone += dr["NumTelefone"].ToString() + ", ";
                     }
-                    evm.NumTelefone = evm.NumTelefone.Substring(0, evm.NumTelefone.LastIndexOf(", "));
+                    evm.NumTelefone = evm.NumTelefone == null ? "" : evm.NumTelefone.Substring(0, evm.NumTelefone.LastIndexOf(", "));
                     grupos.Sort();
                     ViewBag.grupos = grupos;
                     TempData["insert"] = insert = false;

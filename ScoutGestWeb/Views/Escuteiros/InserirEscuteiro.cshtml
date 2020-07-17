@@ -13,7 +13,7 @@
             <input asp-for="ID" min="@Model.ID"/><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
             <label asp-for="Nome">Nome:</label>
-            <input asp-for="Nome" style="width: 100%" /><br />
+            <input asp-for="Nome" style="width: 100%; direction: ltr;" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.Nome)</div>
             <br />
             <label asp-for="Totem">Totem:</label>
@@ -116,7 +116,7 @@
             <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
     </div>
-    @if (TempData["insert"] != null && bool.Parse(TempData["insert"].ToString()))
+    @if (TempData["insertKeep"] != null && bool.Parse(TempData["insertKeep"].ToString()))
     {
         <input type="hidden" name="idold" value="@Model.ID" />
     }

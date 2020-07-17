@@ -8,19 +8,19 @@
 <h1>Criar nova transferência</h1>
 <hr />
 <div>
-    <div class="col-md-4">
-        @if (TempData["insertMsg"] != null)
+    <div class="container-fluid">
+        @if (TempData["insertMsgKeep"] != null)
         {
-            if (TempData["insertMsg"].ToString().Contains("Ocorreu um erro"))
+            if (TempData["insertMsgKeep"].ToString().Contains("Ocorreu um erro"))
             {
                 <div class="bg-danger rounded text-center">
-                    <b>@TempData["insertMsg"].ToString()</b>
+                    <b>@TempData["insertMsgKeep"].ToString()</b>
                 </div>
             }
             else
             {
                 <div class="bg-success rounded text-center">
-                    <b>@TempData["insertMsg"].ToString()</b>
+                    <b>@TempData["insertMsgKeep"].ToString()</b>
                 </div>
             }
         }
@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="DataHora" class="control-label">Data</label>
-                        <input asp-for="DataHora.Date" class="form-control" />
+                        <input asp-for="DataHora" type="date" class="form-control" />
                         <span asp-validation-for="DataHora" class="text-danger"></span>
                     </div>
                     <div class="form-group">

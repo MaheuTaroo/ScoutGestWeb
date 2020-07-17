@@ -22,18 +22,18 @@
 </div>
 <div class="mainBody">
     <h1>Pagamentos</h1>
-    @if (TempData["msg"] != null)
+    @if (TempData["msgKeep"] != null)
     {
-        if (TempData["msg"].ToString().Contains("Ocorreu um erro"))
+        if (TempData["msgKeep"].ToString().Contains("Ocorreu um erro"))
         {
             <div class="bg-danger rounded text-center">
-                <b>@TempData["msg"]</b>
+                <b>@TempData["msgKeep"]</b>
             </div>
         }
         else
         {
             <div class="bg-success rounded text-center">
-                <b>@TempData["msg"]</b>
+                <b>@TempData["msgKeep"]</b>
             </div>
         }
     }

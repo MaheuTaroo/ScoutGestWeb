@@ -123,6 +123,10 @@ body > div > h1 {
     color: red;
     transform: translate(10%, -10%);
 }
+.linksMovs a[name="MovParam"]:hover {
+    color: red;
+    transform: translate(calc(5% / 2), calc(-5% / 2));
+}
 
 .linksEscut {
     margin-bottom: 15px;
@@ -260,9 +264,7 @@ body > div > h1 {
 }
 
 .container {
-    right: 0; /*nao alterar se nao da cabo da imagem*/
     background-color: transparent;
-    height: 30%; /*menor vai para cima*/
     width: 100%; 
     animation: fadeIn ease 3s;
     -webkit-animation: fadeIn ease 3s;
@@ -301,7 +303,6 @@ table th {
 
 footer {
     text-align: center;
-    /*padding: 3px;*/
     color: black;
     left: 0;
     bottom: 0;
@@ -316,7 +317,6 @@ footer {
     padding: 10px;
 }
 
-/* Clear floats after the columns */
 .row:after {
     content: "";
     display: table;
@@ -409,7 +409,6 @@ footer {
     width: 100%;  
 }
 
-/* Clear floats (clearfix hack) */
 .tesoura-group:after {
     content: "";
     clear: both;
@@ -417,7 +416,7 @@ footer {
 }
 
 .tesoura-group button:not(:last-child) {
-    border-right: none; /* Prevent double borders */
+    border-right: none;
 }
 
 @media screen and (width: 1024px) and (height: 768px) {
@@ -431,241 +430,4 @@ footer {
     .mainBody {
         margin-left: 15vw;
     }
-    /*.col2 input[type=file] {
-        width: 58%;
-    }*/
 }
-
-/*just a question: why "rowdeth" instead of "rowdet"? why the 'h'?*/
-/*look dude it works ok? i just gave it that name so it wouldn't use the ouhter rows*/
-/*calma, era so curiosidade, n tava a querer mudar nd*/
-/*este botao parece me igual ao botao q aparece no btn-secondary*/
-/*entao apaga e altera aqueles que estao com obottaoin*/
-/*mas deixa so comparar primeiro*/
-/*ok enquanto isso vou ver a view*/
-/*it does look like b4 i asked u to remake it now*/
-/*and ok, maybe o bottaoin e um bocado mais claro do q o btn-secondary. mas still close*/
-/*sim ja vi que e para alterar*/
-/*btw o q e q e o .imagedeth?*/
-/*first off eu suspeito que seja daquele dia que tentei fazer o bc com a imagem mas eu nao me lembro tr posto 300 no width*/
-/*ok then lemme check where it is called
-    its not called anywhere, just in here. maybe let us delete, it aint useful rn*/
-/*okii, there now if u excuse me im going to see if i find a solution to our problem*/
-/*esta fonte dps fica mal c o tamanho d texto q pus, e n acho q fique mt bem. n te importas, pois n? a fonte n precisa d ser mudada imo*/
-/*ooh, o que qeures que eu faça com o side nav? */
-/*tenta fzr c q a caixa principal recupere o tamanho total. eu pus a margem esquerda igual a largura do sidenav,
-    mas n tou a conseguir c q ela recupere essa margem. tenta fzr isso pfv*/
-/*okiii*/
-/*tipo assim?*/
-/*o q e q tentaste fzr?*/
-/*nao era assim pois nao?*/
-/*simplesmente comentei o main pq o main é utilizado para meter as cenas de lado do side nav */
-/*eu vou tirar, ja percebi que nao era isso que querias */
-/*onde e q comentaste? n encontro*/
-/*acho q tnh uma ideia, pera ai*/
-/*diz la*/
-/*queres que eu continue com o que tava a fazer com o side nav, ou queres que eu continue com o tentar eliminar
-    o branco?*/
-/*como assim eliminar o branco? o branco n e p eliminar*/
-/*diminuir o body, quis dizer isso*/
-/*eu tb tou a ver como isso se faz, pq n consigo ver mt bem as mnh alteracoes
-    p isso e q n me tas a ver a fzr nd*/
-/*eu nao tou concentrado no que tas a fazer, eu simplesmente tou a ver coisas relacionadas com isso, eu tb so
-    tou a perguntar pq tu dizeste pera ai, 
-*/
-/*o meu plano falhou*/
-/*oki*/
-/*..................................ooooooooooooooooooooooooooooooorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr..........................................................*/
-/*yes?*/
-/*problem solved. now to fix the font being too big problem*/
-/*thats easy just diminuir font*/
-/*e ja que tamos a fazer da tua maneira mais vale tirar o que eu fiz para nao ficar um indentation estranho*/
-/*nos tamos a fzr da tua maneira, so q uma medida diferente*/
-/*mas disseste no whats para nao fazer da minha maneira*/
-/*em relacao ao resizing do body q tavas a fzr, o q eu fiz foi so tratar da margem e do width*/
-/*eu nao tava a fazer resizing, isso foi a tua ideia*/
-/*mas sbs q p inserir uma cena no mm espaco e preciso mudar a medida q as duas coisas ocupam, n sbs? isso e q e resizing
-    e tu tavas a fzr um resizing q era so praticamente mover txt
-    o q eu fiz foi por o sidebar a ocupar 20% do viewport e por uma margem d esses 20% no div
-    foi por isso q me viste a meter width 20vh no sidebar e margin-left 20vh no body*/
-/*look dude tbh idc o que importa e que temos isto feito, but now if u excuse me vou fazer o almoço*/
-/*piece of shit internet, walks slow
-    also, fair enough*/
-
-/*ja pds comecar, tirei td o q era relacionado c cookies
-    e o site e principalmente feito so p grupos, atividades e tesouraria
-    also correct your mistypings lmao*/
-/*ja vi o que tinha de ver, eee podes me dizer quais mistypings? im not very good at my own language u know Xp*/
-/*se fores la vais ver, tb n sao mistypes graves*/
-/*essa classe dei mesmo o nome assim para meter aqui no css, mas por alem disso há algum mistype em relação ao tetxo?*/
-/*ve*/
-/*oki*/
-/*isto e preciso p q?*/
-/*isso a partida era para alinhar as cenas com o side nav, tava no cod quano o tirei */
-/*acho que ja sei como resolver, este main nao estava a fazer o seu trabalho pq o div de onde estava as cenas nao 
-    estava a class= main, e por isso nao tava a funcionar*/
-/*yayaya finalmente descobri o coiso*/
-/*q coiso?*/
-/*as cenas tavam a ficar atras do nav bar e tava a tentar resolver isso, e consegui*/
-/*posso testar?*/
-/*yeah so que agora falta meter o titulo ao lado tb */
-/*...ainda estao atras...*/
-/*u mean the tittle right? e o header*/
-/*e q tal incorporares o sidebar juntamente c o ecra da master page e diminuir o tamanho do body?*/
-/*a cena e que nao da para adicionar um link to the image aqui no css */
-/*ja consegui alinhar as animacoes, agr so preciso d fzr c q o texto fique em cada canto em vez do topo*/
-/*right on it gonna see if there is a way to put/the animation ends  in the center */
-/*n mexas na animacao
-    como se costuma dzr, se funciona n mexas
-    o q tou a dzr e p pegar no paragrafo ou no q tu quiseres q tenha o txt e por num canto
-    eu dps vou por imgs numa metade d cada div,portanto vou ter d fzr 2 divs como no login*/
-/*entao o que tas a dizer e dividir cada caixa e meter iuma imagen e texto como esta no log in?*/
-/*yes*/
-/*oki then, mas isso deve ser facil entao, nao envolve so o mesmo codigo do log in? claro com algumas alterações 
-    se for necessário*/
-/*ainda tnh d fzr as imgs, mas o q te peco p fzrs e p veres como alinhar o texto ao canto*/
-/*ok im right on it*/
-/*ja dividi as cenas, so qr agr q alinhes ao canto*/
-/*yea tou agora a acabar de ver isso*/
-/*ok mostra me aqui onde o texto esta, as in which css thing is it located  */
-/*btww ja que nao consigo fazer muita coisa tou a ver as cenas dos links*/
-/*isto em ecras maiores ou menores n vai resultar
-        hold up, eu vi uma resolucao na net*/
-/*oki*/
-/*so how does it look for u?*/
-/*a c t u a l l y   c e n t e r e d
-        you?*/
-/*same*/
-/*well i have to go make dinner , so see ya*/
-/*ja?*/
-/*now onto how to work with this shit*/ /*also have u been able to create the other files?*/
-/*yea, i guess*/ /*well that's good news ;-; im sorry that i couldnt do much now*/
-/*ainda tou a tentar perceber esta merda, portanto estamos os dois no caralho*/
-/*oHo*/
-/*eu tou a tentar perguntar ao professor se ele me consegue esclarecer nesta merda*/
-/*okii*/
-/*mas ele devE ESTAR NUMA CHAMADA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*/
-/*aa indeed well today was kinda of a bust*/
-/*ok back */
-/*ok o que tenho de fazer hoje?*/
-/*what stuff that I need to do*/
-/*eu agr tou a ver um prob q temos c a insercao d escuteiros na tabela, tou a perguntar num discord server q criei ontem e q ja tem cerca d 90 pessoas dentro lmao
-        original post here https://www.reddit.com/r/csharp/comments/gz2i8w/anyone_want_to_start_a_beginners_discord_support/ftgekta/?context=3*/
-/*damm that's nice mas qual e o prob que esta a axontecerc */
-/*cant insert cargos in the list<cargos> shit in the model*/
-/*besides the obvious stuff did u see if everything is spelled corrrectly*/
-/*i think so, the other fields are working fine, and i did spell it nice, if that wasnt the case i wouldve gotten an error already on the asp-for tag part (i think)
-        also care to join the server? maybe can take some questions related to c# there, there are some c# veterans there*/
-/*i guess i can join*/
-/*send me an invite link */
-/*its in the reddit post lmao
-        go down the comment list
-        i keep forgetting not to ping @everyone lmao*/
-/*lol, well moving on o que e que eu tenho tratar em relação as views?*/
-/*o q eu tava a pensar em relacao ao dashboard era fzr c q as labels fizessem fade in do centro do ecra p o centro do div respetivo
-        tenta fzr isso e dps avancamos p o proximo passo*/
-/*oki il start with it that*/
-/*i t   t h a t*/
-/*posso comecar o server real quicc? preciso d gravar um vid p o server*/
-/*ok ja tenho a animação mas agora so falta resolver o fact de a animação ficar parado no sitio also brb  */
-/*there esta com animation e esta centrado,o que falta fazer no log in?*/
-/*fzr com q qd o ecra for pequeno apareca a img como fundo do form em vez d pareado, i think
-    enquanto isso, vou tentando perceber como tratar do body do dashboard*/
-/*podes dividir em 4 caixas e dp e so alterar cor*/
-/*eu sei, mas o body ta a extender ate atras do footer qd n e suposto*/
-/*oh oki*/
-/*o login n ta centrado*/
-/*nao tou a conseguir encontrar codigo codigo que faça o que tavas a pedir, e em relaçao
-    ao log in, vou ja tratar disso*/
-/*how about now? how does it looked?*/
-/*answer in wpp*/
-/*i saw it don't worry*/
-/*try it now*/
-/*whatsapp*/
-/*por favor deixa isto estar como esta por agora*/
-/*ok entao what should i do for now?*/
-/*tentar ver como por a img a esquerda sem mexer na estrutura do form, apenas p o por a direita*/
-/*oki vou ver isso entao*/
-/*wait what happened? o coiso tava no meio*/
-/*eu n fiz nd,ja ta assim ha bastante tempo*/
-/*eu nao fiz nada eu passei maioria do tempo a procura de um cod... eu vou ver o que fiz*/
-/*a cena e q eu queria incluir o corpo td e a assinatura, mas dps fica c um border q n sei tirar*/
-/*nao ha algo do genero  de um image escale que podiamos utilizar? maybe com width 100 e height auto?  */
-/*doesnt work*/
-/*yeah saw it*/
-/*da para utilizar java? in this project*/
-/*nos ja temos um ficheiro javascript, mas eu queria evitar usar isso pq as pessoas podem desativa-lo*/
-/*oh oki*/
-/*hey queres parar por agora para ires estudar uma beca?*/
-/*e dp continuamos?*/
-/*se calhar e mlhr*/
-/*ok lembra te com calma e boa sorte*/
-/*habits*/
-/*tens mais algumas ideias para o log in?*/
-/*oh wait maybe we could add fb and insta button but for that i think we need those type of links that give us
-    resources, idk what do u think?*/
-/*i think this should be better*/
-/*u mean leaving less space open?*/
-/*yea, and beautifying this*/
-/*well we could add the footer and change the button style and some fonts but how about we try moving both of the st
-    stuff more to the center the image a bit more.*/
-/*queres que eu tente puxar mais o log in para o centro da pag ou esta good e avanço para detalhes do log in ?*/
-/*ta bom acho eu, deixa ver
-    acho q deviamos tirar o footer e fzr c q o "benvindo ao scoutgest" fosse uma animacao em q aparecesse e
-    desaparecesse 1 seg dps, p dps aparecer o form e a img dps disso*/
-/*animaçao fine by me, mas achas que deviamos mesmo tirar o footer?*/
-/*estorva um bocado*/
-/*mmmm oki entao vou ja tirar e dp começo a tratar da animação*/
-/*o prob e q o login da p fzr scroll horizontal, e n e suposto
-    consegues tratar disso?*/
-/*il see what i can do in the meantime vou tb ver essa parte da animação*/
-/*mas trata primeiro do scroll*/
-/*okii*/
-/*scrollbar gone now animations and brb*/
-/*im back*/
-/*nav barr*/
-/*!--nao tou a encontrar any other way than to dividir a parte onde estão as cenas em dois */
-/*u there?*/
-/*tou, so q tou a trabalhar numa cena diferente*/
-/*okiii. btw ja ta ficar tarde e tenho de ir fzer o jantar e dp ou das me a resposta no whats ou amanha  */
-/*posso começar?*/
-/*sim mas queres dividiar a cena em dois?*/
-/*yep*/
-/*oki then*/
-/*brb*/
-/*can i start?*/
-/*brb again lmao*/
-/*okii*/
-/*vou estar a ver os vids d formacao, qq cena manda p o whatsapp*/
-/*tb*/
-/*n acho q essa cor fique mt bem
-        e tb acho q o navbar podia ficar d lado. o q achas?*/
-/*o light green ye concordo, e em relação ao navbar, i guess mas tenho de ver como e que vou fazer isso mas tas 
-        a falar tipo clica e aparece ou esta sempre la?*/
-/*e fixo
-        also brb*/
-/*oki*/
-/*bacc, i is*/
-/*searching is a i*/
-/*like it think it look good, but whatd do u think?*/
-/*i dont have any fuckin idea, unless we mess up with the media tag*/
-/*lunch time, see ya at 14h
-    want me to let this open? i can do it*/
-/*let me just try this then il go*/
-/*u can turn it off */
-/*cya at 14h then
-        vais fzr o teste d melhoria?*/
-/*i still haven't decided */
-/*.toptesoura img {
-    width: 100%;
-    height:auto;
-    opacity: 0.5;
-}
-.toptesoura button {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    position: absolute;
-}*/
-/*nao te esqueças que outras coisas utilizem o split*/
-/*eu so vim ver o q e q tava aqui, n sei se reparaste q eu tou a fzr as alteracoes la*/

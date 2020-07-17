@@ -14,7 +14,7 @@ namespace ScoutGestWeb.Controllers
         bool insert = true;
         public async Task<IActionResult> Index()
         {
-            if (TempData["msg"] != null) TempData.Keep("msg");
+            if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<TiposPagsViewModel> tpvm = new List<TiposPagsViewModel>();
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
