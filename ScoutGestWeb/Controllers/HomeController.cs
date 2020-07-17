@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
 using ScoutGestWeb.Models;
 using System.Threading.Tasks;
@@ -42,11 +41,7 @@ namespace ScoutGestWeb.Controllers
                         return await Task.Run(() => Index());
                     }
                     var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, false, false);
-                    if (result.Succeeded)
-                    {
-                        _logger.LogInformation($"Sessão iniciada como {user.UserName} em {_accessor.HttpContext.Connection.RemoteIpAddress}");
-                        return await Task.Run(() => View("Dashboard"));
-                    }
+                    if (result.Succeeded) return await Task.Run(() => View("Dashboard"));
                 }
                 ModelState.AddModelError("", "Credenciais incorretas");
                 return await Task.Run(() => Index());

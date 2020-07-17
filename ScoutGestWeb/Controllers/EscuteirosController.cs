@@ -202,6 +202,7 @@ namespace ScoutGestWeb.Controllers
                             cmd.Parameters.AddWithValue("@medicacao", insert.Medicacao);
                             cmd.Parameters.AddWithValue("@problemas", insert.Problemas);
                             cmd.Parameters.AddWithValue("@observacoes", insert.Observacoes);
+                            if (!this.insert && idold != null) cmd.Parameters.AddWithValue("@idold", idold);
                             await cmd.PrepareAsync();
                             await cmd.ExecuteNonQueryAsync();
                             cmd.CommandText = this.insert ? "insert into numtelefones values(@id, @telefone)" : "update numtelefones set IDEscuteiro = @id, NumTelefone = @telefone where IDEscuteiro = @idold";
