@@ -64,8 +64,7 @@
                     <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                     @if (User.IsInRole("Administração de Agrupamento"))
                     {
-                        <br />
-                        <a href="@Url.ActionLink("Eliminar", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Eliminar</button></a>
+                        <span>&#32;</span><a href="@Url.ActionLink("Eliminar", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Eliminar</button></a>
                     }
 
                 </div>
@@ -185,10 +184,6 @@ else
                                 De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
                             </h5>
                         </p>
-                        <p>
-                            <h6>Descrição:</h6>
-                        </p>
-                        <!--botao dos detalhes-->
                         <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                     </div>
                 }
@@ -212,12 +207,10 @@ else
                                 </h2>
                             </p>
                             <p>
-                                <!--Data das atividades-->
                                 <h5>
                                     De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
                                 </h5>
                             </p>
-                            <!--botao dos detalhes-->
                             <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                         </div>
                     </div>
@@ -234,12 +227,10 @@ else
                                 </h2>
                             </p>
                             <p>
-                                <!--Data das atividades-->
                                 <h5>
                                     De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
                                 </h5>
                             </p>
-                            <!--botao dos detalhes-->
                             <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                         </div>
                     </div>
@@ -256,12 +247,10 @@ else
                                 </h2>
                             </p>
                             <p>
-                                <!--Data das atividades-->
                                 <h5>
                                     De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
                                 </h5>
                             </p>
-                            <!--botao dos detalhes-->
                             <a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })"><button class="btn btn-secondary text-white">Detalhes</button></a>
                         </div>
                     </div>
@@ -270,123 +259,3 @@ else
         }
     </div>
 }
-@*foreach (var item in Model.Where(Html.DisplayFor(modelItem => item.DataInicio), @Html.DisplayFor(modelItem => item.DataFim)) => @Html.DisplayFor(modelItem => item.DataFim) !=dl )
-    {
-        <div class="container-fluid" style="padding: 0 0 0 0">
-            <p>
-                <h2>
-                    @Html.DisplayFor(modelItem => item.Nome)
-                </h2>
-            </p>
-            <p>
-                <!--Data das atividades-->
-                <h5>
-                    De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
-                </h5>
-            </p>
-            <!--botao dos detalhes-->
-            <button class="btn btn-secondary text-white"><a href="@Url.ActionLink("Detalhes", "Atividades", new { id = item.IDAtividade })">Detalhes</a></button>
-        </div>
-    }*@
-<!--</div>
-<!--can i start?-->
-<!--ya-->
-<!--brb-->
-<!--oki quando voltares vai ao site.css-->
-<!--qrs comecar p testar qq cena?-->
-<!--yea-->
-<!--u can login-->
-<!--so? how is it?-->
-<!--tbh i think it's looking great, and i think besides adding stuff we don't need to change anything-->
-<!--imo o visual sinto q ta um pouco pobre tho-->
-<!--queres alterar as cores, ou ppreferes adicinar imagens?-->
-<!--acho q p agr n e preciso imgs, e so mm a parte visual
-    e o texto ta um bocado grande
-    p ex o tamanho do cabecalho do logo tem demasiado padding-->
-<!--well thats easy to fix i think XD eu vou diminuir as letras e tb tratar do  padding-->
-<!--acho q se pode tirar o texto antes da navbar e centra-la-->
-<!--tb eu tb so meti aquilo so para ver como ficava -->
-<!--brb-->
-<!--oki-->
-<!--- i managed to get out somehow smh
-    but now my cursor is broken-->
-<!--want to restart?-->
-<!--i have to, idk where i am messing up with the fooken code-->
-<!--me is gonna start server-->
-<!--okiii-->
-<!--
-   arroba Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ })
-   arroba Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
--->
-<!--como é que queres que a parte do botão de detalhes seja feita? also brb-->
-<!--sry taking so long, was creating a trigger on the database
-    i was thinking about a button-->
-<!--yeah but how is it going to work, tipo se abre uma janela, ou pop up or what? -->
-<!--se calhar podemos ir p o modal-->
-<!--e da para meter tipo uma imagem ou so queres texto a descrever a atividade?-->
-<!--p a atividade se calhar pomos um texto
-wdyt?-->
-<!--yeah mas a cena para meter um texto temos de arrajnar uma forma pq nao pode ficar dentro do foreach  -->
-<!--ent n sei se pomos num modal ou n, pq p mim acho q fiaria mais facil por um so campo invisivel c o id da ativ e d passar esse id p a outra pag
-    mas se tiveres uma ideia d como fzr p ficar o modal ent conta ai, pq n tou a ver agr-->
-<!--a cena e que eu tb nao tou a ver mais ideias a nao ser criamos mais paginas e uma fica para cada atividade-->
-<!--so precisamos d uma pag, dps no controllador passamos a informacao p a view, n precisamos d criar crls d pags-->
-<!--oh oki entao queres fazer dessa forma?-->
-<!--pelo menos p mim ficava menos confuso-->
-<!--oki then lets do it
-    diz me o codigo que eu tenho de fazer tho-->
-<!--n tou a ver mt bem como vamos passar o id p o controller, o q e q sugeres?-->
-<!--talvez se for possivel ao clicar no botao guarda o id e leva para o controller?-->
-<!--e se fizessemos um form so c um input hidden c o id e o botao dos detalhes? faziamos um div p cada form desses
-    deixa ver os tutoriais q ainda n percebi mt bem como passar ids lmao-->
-<!--como assim?-->
-<!--oki, tas a ver os do indiano? XD-->
-<!--n, ate agr so vi os vids quase tds do tuga-->
-<!--tipo o gajo explicava bem so que ele e tao chato XD-->
-<!--lmao tava a por os fones p ouvir o video, mas n tava a dar som
-    ainda n tinha posto os fones-->
-<!--oh i hate when that happens to me XD-->
-<!--a cena e q eu tnh 2 perfis d audio
-    qd tnh o audio a sair p os altifalantes, o audio ta mutado
-    so qd tnh fones no jack e q sai audio-->
-<!--damm so basically u don't know if its the com ou se tens fones-->
-<!--olha btw volto aqui a tarde , see yah then -->
-<!--how about aqui no foreach em vez ser por td é por <p> ou metemos toda a informação dentro de um
-<p> ou deixamos cada um em <p> diferentes no entanto metemos o html.dislay name for em cima de cada tópico
-        mas so metemos o nome,data de inicio e final e tb tiramos algumas cenas que nao precisam de aparecer -->
-<!--pds meter nome e datas, dps aparece um link a dzr "detalhes" e ai aparece tudo o q ta na bd (exceto probably o id)-->
-<!--oki will do-->
-<!--se calhar pomos o id num hidden input p dps ser mais facil aceder aos detalhes qd for fzr a logica-->
-<!--yea we could do that -->
-<!--well in that case vou ter d mudar a logica no controller lmao
-        consegues mudar a pagina d modo a q as atividades aparecam dentro d cartoes em vez d numa tabela?-->
-<!--que tal por agora deixarmos dentro das tabelas e dp se virmos que fica mal alteramos?-->
-<!--fica mal dentro d tabelas imo
-    pelo menos isto e os eventos-->
-<!--oki then give me a few minutes to see what i can do-->
-<!--tenta n fzr isto dentro do corpo d uma tabela-->
-<!--I know im still removing the table elements-->
-<!--podemos utilizar isto para fazer a parte dos detalhes e tb as funções que estão aqui, ou achas que devemos
-   tirar um ou dois?-->
-<!--so deixamos editar e eliminar se o user for o adminagr
-o resto pd td ver detalhes-->
-<!--okiii doquiiiiiiiiiiiiii-->
-<!--lmao este main n tava aqui a fzr nd
-    come with me-->
-<!--consegues aceder ao github?-->
-<!--i guess, why?-->
-<!--pq eu estou a tentar ir à minha conta mas não estou a conseguir aceder-->
-<!--lemme check
-    tu fzs smp logout?-->
-<!--nevermind its working again-->
-<!--<p>
-A seguinte atividade foi realizada neste local: arroba Html.DisplayFor(modelItem => item.Local)  ,aqui apanhamos um gato pq ele era um gato
-</p>-->
-<!--<div class="main">-->
-<!--qd acabares avisa-->
-<!--TB-->
-<!--prontos ja esta-->
-<!--ent desliga o server sff-->
-<!--ja o desliguei?-->
-<!--no u didnt, still on-->
-<!--sim ja fechei as pags e delisguei o-->

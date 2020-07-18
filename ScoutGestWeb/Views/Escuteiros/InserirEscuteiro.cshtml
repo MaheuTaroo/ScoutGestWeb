@@ -2,15 +2,26 @@
 @{
     ViewData["Title"] = "Inserir escuteiro - Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
+    bool inserirBool = TempData["insertKeep"] != null ? bool.Parse(TempData["insertKeep"].ToString()) : true;
 }
 <h1>Inserir escuteiro</h1>
 <hr />
-
+@if (TempData["insertMsgKeep"] != null)
+{
+    if (TempData["insertMsgKeep"].ToString().Contains("Ocorreu um erro"))
+    {
+        <div class="bg-danger rounded text-center"><b>@TempData["insertMsgKeep"]</b></div>
+    }
+    else
+    {
+        <div class="bg-success rounded text-center"><b>@TempData["insertMsgKeep"]</b></div>
+    }
+}
 <form asp-action="InserirEscuteiro" enctype="multipart/form-data" method="post">
     <div style="display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: 1.2fr 0.8fr; grid-gap: 20px 20px; grid-template-areas: 'col1 col1 col1 col2 col2 col2 col3 col3 col3 col4 col4 col4' 'alerg alerg alerg medic medic medic prob prob prob observ observ observ'">
         <div style="grid-area: col1">
             <label asp-for="ID">ID de escuteiro:</label>
-            <input asp-for="ID" min="@Model.ID"/><br />
+            <input asp-for="ID" min="@Model.ID" /><br />
             <div class="bg-danger rounded-lg text-center">@Html.ValidationMessageFor(x => x.ID)</div>
             <label asp-for="Nome">Nome:</label>
             <input asp-for="Nome" style="width: 100%; direction: ltr;" /><br />
@@ -120,6 +131,7 @@
     {
         <input type="hidden" name="idold" value="@Model.ID" />
     }
+    <input type="hidden" name="inserir" value="@(TempData["insertKeep"] != null ? inserirBool ? "True": "False" : "True")" />
     <input class="text-center btn btn-primary container-fluid" type="submit" value="Criar ficha de escuteiro" />
 </form>
 

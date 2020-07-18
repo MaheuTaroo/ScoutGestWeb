@@ -125,7 +125,7 @@ body > div > h1 {
 }
 .linksMovs a[name="MovParam"]:hover {
     color: red;
-    transform: translate(calc(5% / 2), calc(-5% / 2));
+    transform: translate(2%, -2%);
 }
 
 .linksEscut {

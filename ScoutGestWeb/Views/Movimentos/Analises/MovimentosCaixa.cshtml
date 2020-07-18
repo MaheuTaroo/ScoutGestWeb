@@ -33,7 +33,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            if ((bool)ViewData["detalhado"])
+            if (ViewData["detalhado"] != null && (bool)ViewData["detalhado"])
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.IDCaixa)</td>

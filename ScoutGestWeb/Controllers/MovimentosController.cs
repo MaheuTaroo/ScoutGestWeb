@@ -20,7 +20,6 @@ namespace ScoutGestWeb.Controllers
         private readonly List<int> caixas = new List<int>();
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly List<string> listcaixas = new List<string>(), listpags = new List<string>(), listativs = new List<string>(), listseccoes = new List<string>();
-        bool insert = true;
         #endregion
         public MovimentosController(UserManager<ApplicationUser> userManager)
         {
@@ -43,6 +42,7 @@ namespace ScoutGestWeb.Controllers
                     while (dr.Read()) listativs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
                 listseccoes.AddRange(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
+                cmd.Connection.Close();
             }
             listcaixas = listcaixas.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length).ToList();
             listpags = listpags.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length).ToList();
@@ -54,7 +54,7 @@ namespace ScoutGestWeb.Controllers
             if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
             if (User.IsInRole("Administração de Agrupamento"))
             {
-                using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                using (MySqlCommand cmd = new MySqlCommand("select movimentos.*, atividades.Nome as NomeAtiv from movimentos inner join atividades on movimentos.Atividade = atividades.IDAtividade where IDMovimento > 0 order by DataHora desc;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); ;
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
@@ -65,6 +65,9 @@ namespace ScoutGestWeb.Controllers
                             {
                                 IDMovimento = int.Parse(dr["IDMovimento"].ToString()),
                                 IDDocumento = dr["IDDocumento"].ToString(),
+                                Seccao = dr["Seccao"].ToString(),
+                                Atividade = $"{dr["Atividade"]} - {dr["NomeAtiv"]}",
+                                User = await _userManager.FindByNameAsync(dr["User"].ToString()),
                                 TipoMovimento = dr["TipoMovimento"].ToString() == "1" ? "Entrada de Tesouraria" : "Saída de Tesouraria",
                                 DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
                                 Valor = decimal.Parse(dr["Valor"].ToString()),
@@ -85,6 +88,7 @@ namespace ScoutGestWeb.Controllers
                         }
                         cmd.Parameters.Clear();
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => View(mvm));
             }
@@ -123,14 +127,16 @@ namespace ScoutGestWeb.Controllers
                         }
                         cmd.Parameters.Clear();
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => View(mvm));
             }
-            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos where IDMovimento > 0 and IDCaixa in (select IDCaixa from caixas where Grupo = @id);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select movimentos.*, atividades.Nome as NomeAtiv from movimentos inner join atividades on movimentos.Atividade = atividades.IDAtividade where movimentos.IDMovimento > 0 and movimentos.IDCaixa in (select IDCaixa from caixas where Grupo = @id);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                 var user = await _userManager.GetUserAsync(User);
                 cmd.Parameters.AddWithValue("@id", user.IDGrupo);
+                await cmd.PrepareAsync();
                 using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                 {
                     while (await dr.ReadAsync())
@@ -141,10 +147,12 @@ namespace ScoutGestWeb.Controllers
                             IDDocumento = dr["IDDocumento"].ToString(),
                             Seccao = dr["Seccao"].ToString(),
                             TipoMovimento = dr["TipoMovimento"].ToString() == "1" ? "Entrada de Tesouraria" : "Saída de Tesouraria",
+                            User = await _userManager.FindByNameAsync(dr["User"].ToString()),
                             DataHora = Convert.ToDateTime(dr["DataHora"].ToString()),
                             Valor = decimal.Parse(dr["Valor"].ToString()),
                             TipoPagamento = dr["TipoPag"].ToString(),
-                            Descricao = dr["Descricao"].ToString()
+                            Descricao = dr["Descricao"].ToString(),
+                            Atividade = $"{dr["Atividade"]} - {dr["NomeAtiv"]}"
                         });
                         caixas.Add(int.Parse(dr["IDCaixa"].ToString()));
                     }
@@ -160,6 +168,7 @@ namespace ScoutGestWeb.Controllers
                     }
                     cmd.Parameters.Clear();
                 }
+                cmd.Connection.Close();
             }
             return await Task.Run(() => View(mvm));
         }
@@ -170,7 +179,6 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
-            insert = true;
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -194,6 +202,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) nomesAtivs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             ViewBag.caixas = nomesCaixas;
             ViewBag.documentos = nomesDocs;
@@ -230,6 +239,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync()) nomesAtivs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                     }
+                    cmd.Connection.Close();
                 }
                 ViewBag.caixas = nomesCaixas;
                 ViewBag.documentos = nomesDocs;
@@ -244,7 +254,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View("Index"));
         }
         [HttpPost]
-        public async Task<IActionResult> Entrada(MovimentoViewModel mvm, int? id = null)
+        public async Task<IActionResult> Entrada(MovimentoViewModel mvm, int? id = null, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             try
@@ -261,6 +271,7 @@ namespace ScoutGestWeb.Controllers
                         {
                             while (await dr.ReadAsync()) mvm.IDCaixa = dr["IDCaixa"].ToString();
                         }
+                        cmd.Connection.Close();
                     }
                 }
                 mvm.TipoMovimento = "Entrada de tesouraria";
@@ -269,7 +280,7 @@ namespace ScoutGestWeb.Controllers
                 TryValidateModel(mvm);
                 if (ModelState.IsValid)
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into movimentos(IDCaixa, Seccao, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @seccao, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);" : "update movimentos set IDCaixa = @caixa, Seccao = @seccao, IDDocumento = @documento, TipoMovimento = @tipomov, User = @user, DataHora = @data, Valor = @valor, TipoPag = @tipopag, Descricao = @descricao, Atividade = @atividade where IDMovimento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into movimentos(IDCaixa, Seccao, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @seccao, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);" : "update movimentos set IDCaixa = @caixa, Seccao = @seccao, IDDocumento = @documento, TipoMovimento = @tipomov, User = @user, DataHora = @data, Valor = @valor, TipoPag = @tipopag, Descricao = @descricao, Atividade = @atividade where IDMovimento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         if (id != null) cmd.Parameters.AddWithValue("@id", id);
@@ -285,17 +296,17 @@ namespace ScoutGestWeb.Controllers
                         cmd.Parameters.AddWithValue("@atividade", mvm.Atividade.Substring(0, mvm.Atividade.IndexOf(" - ")));
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
+                        cmd.Connection.Close();
                     }
                     TempData["insertMsg"] = "Movimento gravado com sucesso";
                     return await Task.Run(() => Entrada());
                 }
-                return await Task.Run(() => Entrada((object)mvm));
             }
             catch (Exception e)
             {
                 TempData["insertMsg"] = "Ocorreu um erro com a inserção do registo: " + e.Message;
             }
-            return await Task.Run(() => View());
+            return await Task.Run(() => Entrada((object)mvm));
         }
         #endregion
         #region Saídas
@@ -327,6 +338,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) nomesAtivs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             ViewBag.caixas = nomesCaixas;
             ViewBag.documentos = nomesDocs;
@@ -361,6 +373,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) nomesAtivs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             ViewBag.caixas = nomesCaixas;
             ViewBag.documentos = nomesDocs;
@@ -369,19 +382,19 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View("Saida", model));
         }
         [HttpPost]
-        public async Task<IActionResult> Saida(MovimentoViewModel mvm, int? id = null)
+        public async Task<IActionResult> Saida(MovimentoViewModel mvm, int? id = null, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             try
             {
-                mvm.TipoMovimento = "Saida de tesouraria";
+                mvm.TipoMovimento = "Saída de tesouraria";
                 mvm.User = await _userManager.GetUserAsync(User);
                 if (mvm.DataHora == DateTime.MinValue) mvm.DataHora = DateTime.Now;
                 ModelState.Clear();
                 TryValidateModel(mvm);
                 if (ModelState.IsValid)
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into movimentos(IDCaixa, Seccao, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @seccao, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);" : "update movimentos set IDCaixa = @caixa, Seccao = @seccao, IDDocumento = @documento, TipoMovimento = @tipomov, User = @user, DataHora = @data, Valor = @valor, TipoPag = @tipopag, Descricao = @descricao, Atividade = @atividade where IDMovimento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into movimentos(IDCaixa, Seccao, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @seccao, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);" : "update movimentos set IDCaixa = @caixa, Seccao = @seccao, IDDocumento = @documento, TipoMovimento = @tipomov, User = @user, DataHora = @data, Valor = @valor, TipoPag = @tipopag, Descricao = @descricao, Atividade = @atividade where IDMovimento = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         if (id != null) cmd.Parameters.AddWithValue("@id", id);
@@ -398,16 +411,16 @@ namespace ScoutGestWeb.Controllers
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
                         TempData["insertMsg"] = "Movimento gravado com sucesso";
+                        cmd.Connection.Close();
                     }
                     return await Task.Run(() => Saida());
                 }
-                return await Task.Run(() => Saida((object)mvm));
             }
             catch (Exception e)
             {
                 TempData["insertMsg"] = "Ocorreu um erro com a inserção do registo: " + e.Message;
             }
-            return await Task.Run(() => View());
+            return await Task.Run(() => Saida((object)mvm));
         }
         #endregion
         #region Transferências
@@ -439,6 +452,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) nomesAtivs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             ViewBag.caixas = nomesCaixas;
             ViewBag.documentos = nomesDocs;
@@ -472,6 +486,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) nomesAtivs.Add(dr["IDAtividade"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             ViewBag.caixas = nomesCaixas;
             ViewBag.documentos = nomesDocs;
@@ -497,6 +512,7 @@ namespace ScoutGestWeb.Controllers
                         {
                             while (await dr.ReadAsync()) mtvm.IDCaixaOrigem = dr["IDCaixa"].ToString();
                         }
+                        cmd.Connection.Close();
                     }
                 }
                 mtvm.TipoMovimento = "Saída de tesouraria";
@@ -509,12 +525,12 @@ namespace ScoutGestWeb.Controllers
                         ModelState.AddModelError("", "A caixa de origem e a caixa de destino são iguais. Por favor, selecione caixas diferentes para a transferência de tesouraria");
                         return await Task.Run(() => Transferencia((object)mtvm));
                     }
-                    using (MySqlCommand cmd = new MySqlCommand("insert into movimentos(IDCaixa, IDDocumento, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade)" +
-                        "values (@caixa, @documento, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand("insert into movimentos(IDCaixa, IDDocumento, Seccao, TipoMovimento, User, DataHora, Valor, TipoPag, Descricao, Atividade) values (@caixa, @documento, @seccao, @tipomov, @user, @data, @valor, @tipopag, @descricao, @atividade);", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@caixa", mtvm.IDCaixaOrigem.Contains(" - ") ? mtvm.IDCaixaOrigem.Substring(0, mtvm.IDCaixaOrigem.IndexOf(" - ")) : mtvm.IDCaixaOrigem);
                         cmd.Parameters.AddWithValue("@documento", mtvm.IDDocumento.Substring(0, mtvm.IDDocumento.IndexOf(" - ")));
+                        cmd.Parameters.AddWithValue("@seccao", mtvm.Seccao);
                         cmd.Parameters.AddWithValue("@tipomov", mtvm.TipoMovimento);
                         cmd.Parameters.AddWithValue("@user", mtvm.User.NormalizedUserName);
                         cmd.Parameters.AddWithValue("@data", mtvm.DataHora);
@@ -529,16 +545,17 @@ namespace ScoutGestWeb.Controllers
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
                         TempData["insertMsg"] = "Movimento gravado com sucesso";
+                        cmd.Connection.Close();
                     }
                     return await Task.Run(() => Transferencia());
                 }
-                return await Task.Run(() => Transferencia((object)mtvm));
             }
             catch (Exception e)
             {
                 TempData["insertMsg"] = "Ocorreu um erro com a inserção do registo: " + e.Message;
             }
-            return await Task.Run(() => View());
+
+            return await Task.Run(() => Transferencia((object)mtvm));
         }
         #endregion
         public async Task<IActionResult> Editar(int id)
@@ -554,7 +571,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -573,6 +594,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                 }
                 TempData["insert"] = false;
                 return await Task.Run(() => mvm.TipoMovimento.Contains("Entrada") ? Entrada((object)mvm) : Saida((object)mvm));
@@ -597,7 +619,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -616,6 +642,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => View(mvm));
             }
@@ -638,6 +665,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
+                    cmd.Connection.Close();
                     if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
                 }
             }
@@ -663,6 +691,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) caixas.Add(dr["IDCaixa"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             ViewBag.caixas = caixas;
             return await Task.Run(() => View());
@@ -691,6 +720,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         IDMovimento = int.Parse(dr["IDMovimento"].ToString()),
                         IDCaixa = dr["IDCaixa"].ToString(),
+                        Seccao = dr["Seccao"].ToString(),
                         IDDocumento = dr["IDDocumento"].ToString(),
                         TipoMovimento = dr["TipoMovimento"].ToString(),
                         User = await _userManager.FindByNameAsync(dr["User"].ToString()),
@@ -701,6 +731,7 @@ namespace ScoutGestWeb.Controllers
                         Atividade = dr["Atividade"].ToString()
                     });
                 }
+                cmd.Connection.Close();
             }
             ViewData["TituloAnalise"] = "Diário de caixa";
             string parametros = $"caixa {caixa}, ";
@@ -716,6 +747,7 @@ namespace ScoutGestWeb.Controllers
             }
             else parametros += "até ao movimento mais recente";
             ViewData["parametros"] = parametros;
+            ViewData["detalhado"] = true;
             return await Task.Run(() => new ViewAsPdf("Analises/MovimentosCaixa", listmvm, viewData: ViewData)
             {
                 PageOrientation = Orientation.Landscape,
@@ -735,8 +767,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View());
         }
         [HttpPost]
-        public async Task<IActionResult> MovParam(DateTime? dataInicio = null, DateTime? dataFim = null, string caixaInicio = null, string caixaFim = null, string tipoPagInicio = null,
-            string tipoPagFim = null, string ativInicio = null, string ativFim = null, string seccaoInicio = null, string seccaoFim = null, bool detalhado = false)
+        public async Task<IActionResult> MovParam(DateTime? dataInicio = null, DateTime? dataFim = null, string caixaInicio = null, string caixaFim = null, string tipoPagInicio = null,string tipoPagFim = null, string ativInicio = null, string ativFim = null, string seccaoInicio = null, string seccaoFim = null, bool detalhado = false)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             List<MovimentoViewModel> mvm = new List<MovimentoViewModel>();
@@ -791,14 +822,8 @@ namespace ScoutGestWeb.Controllers
                 caixaInicio = temp;
             }
             string datas = "";
-            if (dataInicio == dataFim)
-                datas = string.Format("(cast(DataHora as date) between '{0}' and '{1}')", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : 
-                    $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataInicio == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" :
-                        $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}");
-            else 
-                datas = string.Format("cast(DataHora as date) between '{0}' and '{1}'", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : 
-                    $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataFim == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : 
-                        $"{Convert.ToDateTime(dataFim).Year}-{Convert.ToDateTime(dataFim).Month}-{Convert.ToDateTime(dataFim).Day}");
+            if (dataInicio == dataFim) datas = string.Format("(cast(DataHora as date) between '{0}' and '{1}')", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataInicio == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}");
+            else datas = string.Format("cast(DataHora as date) between '{0}' and '{1}'", dataInicio == null ? $"1900-{DateTime.MinValue.Month}-{DateTime.MinValue.Day}" : $"{Convert.ToDateTime(dataInicio).Year}-{Convert.ToDateTime(dataInicio).Month}-{Convert.ToDateTime(dataInicio).Day}", dataFim == null ? $"{DateTime.MaxValue.Year}-{DateTime.MaxValue.Month}-{DateTime.MaxValue.Day}" : $"{Convert.ToDateTime(dataFim).Year}-{Convert.ToDateTime(dataFim).Month}-{Convert.ToDateTime(dataFim).Day}");
             string pags = "";
             if 
                 (tipoPagInicio == tipoPagFim) pags = string.Format("TipoPag like '{0}'", tipoPagInicio.Substring(0, tipoPagInicio.IndexOf(" - ")));
@@ -824,9 +849,7 @@ namespace ScoutGestWeb.Controllers
                 caixas = string.Format("IDCaixa between {0} and {1}", caixaInicio == null ? listcaixas[0] : 
                     caixaInicio.Substring(0, caixaInicio.IndexOf(" - ")), caixaFim == null ? listcaixas[^1] : 
                         caixaFim.Substring(0, caixaFim.IndexOf(" - ")));
-            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null &&
-                tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes and @caixas;"),
-                new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+            using (MySqlCommand cmd = new MySqlCommand("select * from movimentos" + (dataInicio == null && dataFim == null && caixaInicio == null && caixaFim == null && tipoPagInicio == null && tipoPagFim == null && ativInicio == null && ativFim == null && seccaoInicio == null && seccaoFim == null ? "" : " where @datas and @pags and @ativs and @seccoes and @caixas;"), new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                 await cmd.PrepareAsync();
@@ -848,6 +871,7 @@ namespace ScoutGestWeb.Controllers
                         Atividade = dr["Atividade"].ToString()
                     });
                 }
+                cmd.Connection.Close();
             }
             string parametros = "";
             if (dataInicio != null)
@@ -932,6 +956,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             grupos.Sort();
             ViewBag.grupos = grupos.OrderBy(x => x.Substring(0, x.IndexOf(" - ")).Length).ToList();
@@ -961,6 +986,7 @@ namespace ScoutGestWeb.Controllers
                         if (ativFim == null) cmd.CommandText = cmd.CommandText.Replace("@fim", "(select (max(IDAtividade) from atividades)");
                         else cmd.Parameters.AddWithValue("@fim", ativFim.Substring(0, ativFim.IndexOf(" - ")));
                     }
+                    cmd.Connection.Close();
                 }
                 if (ordem != null) cmd.CommandText += " order by movimentos.Valor" + (ordem == "Ascendente" ? " asc" : " desc");
                 if (cmd.CommandText.Contains("@inicio")) await cmd.PrepareAsync();
@@ -1012,7 +1038,6 @@ namespace ScoutGestWeb.Controllers
             using (MySqlCommand cmd = new MySqlCommand("select movimentos.*, caixas.Nome from movimentos inner join caixas on movimentos.IDCaixa = caixas.IDCaixa where movimentos.IDMovimento > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
-
                 if (grupoInicio != null || grupoFim != null)
                 {
                     if (int.Parse(grupoInicio.Substring(0, grupoInicio.IndexOf(" - "))) > int.Parse(grupoFim.Substring(0, grupoFim.IndexOf(" - "))))
@@ -1058,6 +1083,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     while (await dr.ReadAsync()) grupos.Add(dr["IDGrupo"].ToString() + " - " + dr["Nome"].ToString());
                 }
+                cmd.Connection.Close();
             }
             string parametros = "";
             if (grupoInicio != null)
@@ -1127,6 +1153,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync()) ViewData["countpartip"] = dr["count(IDParticipante)"].ToString();
                     }
+                    cmd.Connection.Close();
                 }
                 ViewData["TituloAnalise"] = "Movimentos contra o orçamento";
                 return await Task.Run(() => new ViewAsPdf("Analises/MovOrcam", listmvm, viewData: ViewData)

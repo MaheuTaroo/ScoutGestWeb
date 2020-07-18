@@ -7,11 +7,11 @@
 <h1>Detalhes</h1>
 <hr />
 <div>
-    <dl class="row" style="margin-left:32%; margin-top:7%">
+    <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nome):
         </dt>
-        <dd class="col-sm-2">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nome)
         </dd>
         <dt class="col-sm-2">
@@ -40,7 +40,7 @@
         </dd>
     </dl>
 </div>
-<div style="margin-left:33%">
+<div>
     @Html.ActionLink("Editar", "Editar", new { id = Model.IDAtividade }) |
     <a asp-action="Index">Voltar</a>
 </div>

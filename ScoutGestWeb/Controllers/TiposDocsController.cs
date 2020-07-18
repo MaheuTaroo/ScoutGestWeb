@@ -28,6 +28,7 @@ namespace ScoutGestWeb.Controllers
                         Descricao = dr["Descricao"].ToString()
                     });
                 }
+                cmd.Connection.Close();
             }
             return await Task.Run(() => View(tdvm));
         }
@@ -59,6 +60,7 @@ namespace ScoutGestWeb.Controllers
                         if (idold != null) cmd.Parameters.AddWithValue("@idold", idold);
                         await cmd.PrepareAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
+                        cmd.Connection.Close();
                         if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{idold}\"");
                         TempData["msg"] = "Tipo de documento " + (insert ? "inserido" : "alterado") + " com sucesso";
                     }
@@ -85,7 +87,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             insert = false;
@@ -96,6 +102,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                 }
             }
             catch (Exception e)
@@ -118,7 +125,11 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -128,6 +139,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                 }
             }
             catch (Exception e)
@@ -149,6 +161,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
+                    cmd.Connection.Close();
                     if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
                     else TempData["msg"] = "Tipo de documento eliminado com sucesso";
                 }

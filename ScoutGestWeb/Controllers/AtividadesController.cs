@@ -41,6 +41,7 @@ namespace ScoutGestWeb.Controllers
                             });
                         }
                     }
+                    cmd.Connection.Close();
                 }
             }
             else
@@ -73,6 +74,7 @@ namespace ScoutGestWeb.Controllers
                                 cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Ativa = " + bool.Parse(procura));
                                 break;
                         }
+                        cmd.Connection.Close();
                     }
                 }
                 catch (Exception e)
@@ -149,6 +151,7 @@ namespace ScoutGestWeb.Controllers
                             await cmd.PrepareAsync();
                             await cmd.ExecuteNonQueryAsync();
                         }
+                        cmd.Connection.Close();
                     }
                     return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
                 }
@@ -175,7 +178,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -211,6 +218,7 @@ namespace ScoutGestWeb.Controllers
                         while (await dr.ReadAsync()) avm.Participantes += dr["Totem"].ToString() + "\r\n";
                     }
                     avm.Participantes = avm.Participantes.Substring(0, avm.Participantes.LastIndexOf("\r\n"));
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => InserirAtividade((object)avm));
             }
@@ -233,7 +241,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -269,6 +281,7 @@ namespace ScoutGestWeb.Controllers
                             avm.RecMateriais = dr["RecMateriais"].ToString();
                         }
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => View(avm));
             }
@@ -293,7 +306,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -328,6 +345,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync()) avm.Participantes = dr["count(*)"].ToString() + "participantes";
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => View(avm));
             }
@@ -350,13 +368,18 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
-                    if (i == 0) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                    if (i == 0)
+                    {
+                        cmd.Connection.Close();
+                        throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                    }
                     cmd.CommandText = cmd.CommandText.Replace("atividades", "participantes");
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
                     cmd.CommandText = cmd.CommandText.Replace("participantes", "recursos");
                     await cmd.PrepareAsync();
                     await cmd.ExecuteNonQueryAsync();
+                    cmd.Connection.Close();
                 }
             }
             catch (MySqlException mse)

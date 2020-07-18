@@ -32,6 +32,7 @@ namespace ScoutGestWeb.Controllers
                         });
                     }
                 }
+                cmd.Connection.Close();
             }
             return await Task.Run(() => View(tpvm));
         }
@@ -63,6 +64,7 @@ namespace ScoutGestWeb.Controllers
                         if (idold == null) cmd.Parameters.AddWithValue("@idold", idold);
                         await cmd.PrepareAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
+                        cmd.Connection.Close();
                         if (i == 0) throw new Exception($"não foi encontrado um registo com o ID {idold}");
                         else TempData["msg"] = "Tipo de pagamento " + (insert ? "inserido" : "atualizado") + " com sucesso";
                     }
@@ -90,7 +92,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             insert = false;
@@ -101,6 +107,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                 }
             }
             catch (Exception e)
@@ -127,6 +134,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         if (!dr.HasRows)
                         {
+                            cmd.Connection.Close();
                             throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
                         }
                         while (await dr.ReadAsync())
@@ -135,6 +143,7 @@ namespace ScoutGestWeb.Controllers
                             tpvm.Pagamento = dr["Pagamento"].ToString();
                         }
                     }
+                    cmd.Connection.Close();
                 }
             }
             catch (Exception e)
@@ -156,6 +165,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
+                    cmd.Connection.Close();
                     if (i == 0) throw new ApplicationException($"não existe nenhum registo com o ID \"{id}\"");
                     TempData["msg"] = "Tipo de pagamento apagado com sucesso";
                 }

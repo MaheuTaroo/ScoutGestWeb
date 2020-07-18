@@ -70,6 +70,7 @@ namespace ScoutGestWeb.Controllers
                         while (await dr.ReadAsync()) cvm[i].Responsavel = dr["Totem"].ToString() + " - " + dr["Nome"].ToString();
                     }
                 }
+                cmd.Connection.Close();
             }
             return await Task.Run(() => View(cvm));
         }
@@ -90,6 +91,7 @@ namespace ScoutGestWeb.Controllers
                     grupos.Sort();
                     ViewBag.grupos = grupos;
                 }
+                cmd.Connection.Close();
             }
             return await Task.Run(() => View());
         }
@@ -151,31 +153,12 @@ namespace ScoutGestWeb.Controllers
                                 }
                                 else while (await dr2.ReadAsync()) cmd.Parameters.AddWithValue("@responsavel", int.Parse(dr2["IDEscuteiro"].ToString()));
                             }
-
-                            ///try
-                            ///{
-                            ///    cmd.Parameters.AddWithValue("@id", int.Parse(cvm.Responsavel));
-                            ///}
-                            ///catch (FormatException)
-                            ///{
-                            ///    cmd.CommandText = cmd.CommandText.Replace("IDEscuteiro = @id", "Nome = @nome or Totem = @totem");
-                            ///    cmd.Parameters.AddWithValue("@nome", cvm.Responsavel);
-                            ///    cmd.Parameters.AddWithValue("@totem", cvm.Responsavel);
-                            ///}
-                            ///cmd.Prepare();
-                            ///using (MySqlDataReader dr = cmd.ExecuteReader())
-                            ///{
-                            ///    if (!dr.HasRows)
-                            ///    {
-                            ///        ViewBag.Error = "Não foi encontrado um escuteiro com o ID, nome ou totem fornecido. Por favor, forneça um ID, nome ou totem de escuteiro válido";
-                            ///        return RedirectToAction("NovaCaixa");
-                            ///    }
-                            ///}
-
+                            cmd.Connection.Close();
                         }
                         if (insert) cmd.Parameters.AddWithValue("@id", cvm.ID);
                         await cmd.PrepareAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
+                        cmd.Connection.Close();
                         if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{cvm.ID}\"");
                     }
                     return await Task.Run(() => RedirectToAction("Index"));
@@ -207,6 +190,7 @@ namespace ScoutGestWeb.Controllers
                         grupos.Sort();
                         ViewBag.grupos = grupos;
                     }
+                    cmd.Connection.Close();
                 }
                 using (MySqlCommand cmd = new MySqlCommand("select * from caixas where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
@@ -215,7 +199,11 @@ namespace ScoutGestWeb.Controllers
                     cmd.Prepare();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado um registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -249,6 +237,7 @@ namespace ScoutGestWeb.Controllers
                         grupos.Sort();
                         ViewBag.grupos = grupos;
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => NovaCaixa((object)cvm));
             }
@@ -273,7 +262,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não existe nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não existe nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -286,6 +279,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => View("Eliminar", cvm));
             }
@@ -308,6 +302,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
+                    cmd.Connection.Close();
                     if (i == 0) throw new Exception($"não existe nenhum registo com o ID \"{id}\"");
                 }
             }

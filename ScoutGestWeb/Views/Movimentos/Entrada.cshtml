@@ -3,6 +3,7 @@
 @model ScoutGestWeb.Models.MovimentoViewModel
 @{
     ViewData["Title"] = "Nova entrada - Tesouraria";
+    bool inserirBool = TempData["insertKeep"] != null ? bool.Parse(TempData["insertKeep"].ToString()) : true;
 }
 <h1>Criar nova entrada</h1>
 <hr />
@@ -101,10 +102,11 @@
                     <span asp-validation-for="Atividade" class="text-danger"></span>
                 </div>
                 <input type="hidden" asp-for="User" value="@UserManager.GetUserAsync(User).Result" />
-                @if (TempData["insertKeep"] != null && bool.Parse(TempData["insertKeep"].ToString()))
+                @if (TempData["insertKeep"] != null && !bool.Parse(TempData["insertKeep"].ToString()))
                 {
                     <input type="hidden" name="id" value="@Model.IDMovimento" />
                 }
+                <input type="hidden" name="inserir" value="@(TempData["insertKeep"] != null ? inserirBool ? "True": "False" : "True")" />
                 <input type="submit" value="Gravar" class="btn btn-primary" />
             </div>
         </div>

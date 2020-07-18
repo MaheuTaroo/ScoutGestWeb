@@ -58,6 +58,7 @@ namespace ScoutGestWeb.Controllers
                         });
                     }
                 }
+                cmd.Connection.Close();
             }
             return await Task.Run(() => View(gvm));
         }
@@ -95,6 +96,7 @@ namespace ScoutGestWeb.Controllers
                         i.SaveAsPng(ms);
                         cmd.Parameters.AddWithValue("@foto", ms.ToArray());
                     }
+                    cmd.Connection.Close();
                 }
                 return await Task.Run(() => RedirectToAction("Index"));
             }
@@ -115,7 +117,11 @@ namespace ScoutGestWeb.Controllers
                     cmd.Prepare();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync()) gvm = new GrupoViewModel()
@@ -135,6 +141,7 @@ namespace ScoutGestWeb.Controllers
                         while (await dr.ReadAsync()) gvm.Particips += dr["Totem"].ToString() + "<br />";
                     }
                     gvm.Particips = gvm.Particips == "" ? "nenhum participante" : gvm.Particips.Substring(0, gvm.Particips.LastIndexOf("<br />"));
+                    cmd.Connection.Close();
                 }
                 return View(gvm);
             }
@@ -157,7 +164,11 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -169,6 +180,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    cmd.Connection.Close();
                     return await Task.Run(() => NovoGrupo((object)gvm));
                 }
             }
@@ -192,7 +204,11 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        if (!dr.HasRows) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        if (!dr.HasRows)
+                        {
+                            cmd.Connection.Close();
+                            throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
+                        }
                         else
                         {
                             while (await dr.ReadAsync())
@@ -213,6 +229,7 @@ namespace ScoutGestWeb.Controllers
                         }
                     }
                     gvm.Particips = gvm.Particips == "" ? "nenhum participante" : gvm.Particips.Substring(0, gvm.Particips.LastIndexOf("<br />"));
+                    cmd.Connection.Close();
                     return await Task.Run(() => View(gvm));
                 }
             }
@@ -234,6 +251,7 @@ namespace ScoutGestWeb.Controllers
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
                     int i = await cmd.ExecuteNonQueryAsync();
+                    cmd.Connection.Close();
                     if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");
                 }
             }
