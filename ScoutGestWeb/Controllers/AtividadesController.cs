@@ -61,7 +61,7 @@ namespace ScoutGestWeb.Controllers
                             case "Tipo":
                             case "Tema":
                             case "Local":
-                                cmd.CommandText = cmd.CommandText.Replace("pesquisa", coluna + " like '%" + procura + "%'"); ;
+                                cmd.CommandText = cmd.CommandText.Replace("pesquisa", coluna + " like '%" + procura + "%'");
                                 break;
                             case "Data inicial":
                             case "Data final":

@@ -54,7 +54,7 @@ namespace ScoutGestWeb.Controllers
                 {
                     using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into tipos_docs values (@id, @descricao);" : "update tipos_docs set IDDocumento = @id and Descricao = @descricao where IDDocumento = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); ;
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@id", tdvm.IDDocumento);
                         cmd.Parameters.AddWithValue("@descricao", tdvm.Descricao);
                         if (idold != null) cmd.Parameters.AddWithValue("@idold", idold);

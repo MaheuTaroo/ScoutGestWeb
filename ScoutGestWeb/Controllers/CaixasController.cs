@@ -113,11 +113,11 @@ namespace ScoutGestWeb.Controllers
                 {
                     using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);" : "update caixas set Nome = @nome, Grupo = @grupo, Responsavel = @responsavel where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
-                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); ;
+                        if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@nome", cvm.Nome);
                         using (MySqlCommand cmd2 = new MySqlCommand("select IDGrupo from grupos where Nome = @nome", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                         {
-                            if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync(); ;
+                            if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                             cmd2.Parameters.AddWithValue("@nome", cvm.Grupo);
                             await cmd2.PrepareAsync();
                             using (MySqlDataReader dr2 = cmd2.ExecuteReader())

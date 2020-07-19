@@ -25,7 +25,7 @@ namespace ScoutGestWeb.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return await Task.Run(() => !User.Identity.IsAuthenticated ? View("Login") : View("Dashboard")); ;
+            return await Task.Run(() => !User.Identity.IsAuthenticated ? View("Login") : View("Dashboard"));
         }
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel login)

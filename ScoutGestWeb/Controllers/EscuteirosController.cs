@@ -28,7 +28,7 @@ namespace ScoutGestWeb.Controllers
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     //Abrir a ligação
-                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync(); ;
+                    if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
                     {
                         cmd.CommandText = cmd.CommandText.Replace(";", " and Seccao = @seccao;");
