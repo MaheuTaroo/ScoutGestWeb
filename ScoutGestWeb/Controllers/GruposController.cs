@@ -14,7 +14,7 @@ namespace ScoutGestWeb.Controllers
     [RequireHttps]
     public class GruposController : Controller
     {
-        bool insert = true;
+        //bool insert = true;
         private readonly UserManager<ApplicationUser> _userManager;
         public GruposController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index(string coluna, string procura)
@@ -67,23 +67,23 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovoGrupo()
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            insert = true;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             ViewBag.seccoes = new List<string>(new string[6] { "Lobitos", "Exploradores", "Pioneiros", "Caminheiros", "Dirigentes", "Agrupamento" });
             return await Task.Run(() => View());
         }
         public async Task<IActionResult> NovoGrupo(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            TempData["insert"] = insert;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             return await Task.Run(() => View("NovoGrupo", model));
         }
         [HttpPost]
-        public async Task<IActionResult> NovoGrupo(GrupoViewModel gvm, int? id = null)
+        public async Task<IActionResult> NovoGrupo(GrupoViewModel gvm, int? id = null, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
-                using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into grupos(Nome, Sigla, Foto, Seccao, Pseudonimo) values (@nome, @sigla, @foto, @seccao, @pseudonimo)" : "update grupos set Nome = @nome, Sigla = @sigla, Foto =  @foto, Seccao = @seccao, Pseudonimo = @pseudonimo where IDGrupo = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into grupos(Nome, Sigla, Foto, Seccao, Pseudonimo) values (@nome, @sigla, @foto, @seccao, @pseudonimo)" : "update grupos set Nome = @nome, Sigla = @sigla, Foto =  @foto, Seccao = @seccao, Pseudonimo = @pseudonimo where IDGrupo = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                     if (id != null) cmd.Parameters.AddWithValue("@id", id);

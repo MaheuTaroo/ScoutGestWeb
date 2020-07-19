@@ -23,11 +23,9 @@ namespace ScoutGestWeb.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
-                //Ligar à base de dados e selecionar todos os valores de escuteiros onde IDEscuteiro é maior que 0
                 List<EscuteirosViewModel> escuteiros = new List<EscuteirosViewModel>();
                 using (MySqlCommand cmd = new MySqlCommand("select * from escuteiros where IDEscuteiro > 0;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
-                    //Abrir a ligação
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     if (User.IsInRole("Equipa de Animação") || User.IsInRole("Comum"))
                     {
@@ -82,7 +80,6 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        //Vai buscar a seguinte informação à base de dados e coloca na tabela
                         int i = 0;
                         while (await dr.ReadAsync())
                         {
@@ -140,6 +137,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (User.IsInRole("Comum")) return Forbid();
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             using (MySqlCommand cmd = new MySqlCommand("select IDGrupo, Nome from grupos", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
@@ -180,7 +178,7 @@ namespace ScoutGestWeb.Controllers
                     }
                     try
                     {
-                        using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into escuteiros values(@id, @nome, @totem, @foto, @grupo, @seccao, @estado, @cargos, @idade, @morada, @morada2, @codpostal, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)" : "update escuteiros set IDEscuteiro = @id, Nome = @nome, Totem = @totem, Cargo = @cargos, Grupo = @grupo, Morada = @morada, Morada2 = @morada2, CodPostal = @codpostal, Localidade = @localidade, Alergias = @alergias, Medicacao = @medicacao, Problemas = @problemas, Observacoes = @observacoes, Seccao = @seccao, Estado = @estado, Idade = @idade, Foto = @foto where IDEscuteiro = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                        using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into escuteiros values(@id, @nome, @totem, @foto, @grupo, @seccao, @estado, @cargos, @idade, @morada, @morada2, @codpostal, @localidade, @gruposanguineo, @alergias, @medicacao, @problemas, @observacoes)" : "update escuteiros set IDEscuteiro = @id, Nome = @nome, Totem = @totem, Cargo = @cargos, Grupo = @grupo, Morada = @morada, Morada2 = @morada2, CodPostal = @codpostal, Localidade = @localidade, Alergias = @alergias, Medicacao = @medicacao, Problemas = @problemas, Observacoes = @observacoes, Seccao = @seccao, Estado = @estado, Idade = @idade, Foto = @foto where IDEscuteiro = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                         {
                             if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                             cmd.Parameters.AddWithValue("@id", insert.ID);
@@ -206,6 +204,7 @@ namespace ScoutGestWeb.Controllers
                             cmd.Parameters.AddWithValue("@morada", insert.Morada);
                             cmd.Parameters.AddWithValue("@morada2", insert.Morada2);
                             cmd.Parameters.AddWithValue("@codpostal", insert.CodPostal);
+                            cmd.Parameters.AddWithValue("@localidade", insert.Localidade);
                             cmd.Parameters.AddWithValue("@gruposanguineo", insert.GrupoSanguineo);
                             cmd.Parameters.AddWithValue("@alergias", insert.Alergias);
                             cmd.Parameters.AddWithValue("@medicacao", insert.Medicacao);
@@ -214,25 +213,26 @@ namespace ScoutGestWeb.Controllers
                             if (!(bool)inserir && idold != null) cmd.Parameters.AddWithValue("@idold", idold);
                             await cmd.PrepareAsync();
                             await cmd.ExecuteNonQueryAsync();
-                            cmd.CommandText = (bool)inserir ? "insert into numtelefones values(@id, @telefone)" : "update numtelefones set IDEscuteiro = @id, NumTelefone = @telefone where IDEscuteiro = @idold";
+                            cmd.CommandText = (bool)inserir ? "insert into numtelefones values(@id, @telefone)" :
+                                "update numtelefones set IDEscuteiro = @id, NumTelefone = @telefone where IDEscuteiro = @idold";
                             cmd.Parameters.AddWithValue("@telefone", "+351" + insert.NumTelefone.Replace(" ", ""));
                             await cmd.PrepareAsync();
                             await cmd.ExecuteNonQueryAsync();
                             cmd.Connection.Close();
                         }
                         TempData["insertMsg"] = "Escuteiro gravado com sucesso";
-                        return await Task.Run(() => RedirectToAction("InserirEscuteiro"));
+                        return await Task.Run(() => InserirEscuteiro());
                     }
                     catch (MySqlException mse)
                     {
                         ModelState.AddModelError("Erro de inserção na base de dados", mse.Message);
                         TempData["insertMsg"] = $"Ocorreu um erro com a {((bool)inserir ? "inserção" : "atualização")} do registo: {mse.Message}";
-                        return await Task.Run(() => View("InserirEscuteiro", insert));
+                        return await Task.Run(() => InserirEscuteiro((object)insert));
                     }
                     catch (Exception e)
                     {
                         TempData["insertMsg"] = $"Ocorreu um erro com a {((bool)inserir ? "inserção" : "atualização")} do registo: {e.Message}";
-                        return await Task.Run(() => View("InserirEscuteiro", insert));
+                        return await Task.Run(() => InserirEscuteiro((object)insert));
                     }
                 }
                 using (MySqlCommand cmd = new MySqlCommand("select IDGrupo, Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
@@ -259,6 +259,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (User.IsInRole("Comum")) return Forbid();
+
             EscuteirosViewModel evm = new EscuteirosViewModel();
             try
             {
@@ -318,7 +319,7 @@ namespace ScoutGestWeb.Controllers
                     evm.NumTelefone = evm.NumTelefone == null ? "" : evm.NumTelefone.Substring(0, evm.NumTelefone.LastIndexOf(", "));
                     grupos.Sort();
                     ViewBag.grupos = grupos;
-                    TempData["insert"] = false;
+                    TempData["inserir"] = false;
                     cmd.Connection.Close();
                     return await Task.Run(() => InserirEscuteiro((object)evm));
                 }
@@ -456,11 +457,13 @@ namespace ScoutGestWeb.Controllers
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             try
             {
-                using (MySqlCommand cmd = new MySqlCommand("delete from escuteiros where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                using (MySqlCommand cmd = new MySqlCommand("delete from numtelefones where IDEscuteiro = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State == ConnectionState.Closed) await cmd.Connection.OpenAsync();
                     cmd.Parameters.AddWithValue("@id", id);
                     await cmd.PrepareAsync();
+                    await cmd.ExecuteNonQueryAsync();
+                    cmd.CommandText = cmd.CommandText.Replace("numtelefones", "escuteiros");
                     int i = await cmd.ExecuteNonQueryAsync();
                     cmd.Connection.Close();
                     if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{id}\"");

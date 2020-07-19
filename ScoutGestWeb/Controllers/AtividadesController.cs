@@ -12,7 +12,6 @@ namespace ScoutGestWeb.Controllers
     public class AtividadesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        bool insert = true;
         public AtividadesController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index(string coluna, string procura)
         {
@@ -93,18 +92,18 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
-            insert = true;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             return await Task.Run(() => View());
         }
         public async Task<IActionResult> InserirAtividade(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
-            insert = false;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             return await Task.Run(() => View("InserirAtividade", model));
         }
         [HttpPost]
-        public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm)
+        public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
@@ -112,7 +111,7 @@ namespace ScoutGestWeb.Controllers
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into atividades(Nome, Tipo, Tema, Seccao, Local, DataInicio, DataFim, Orcamento, Ativa) values (@nome, @tipo, @tema, @seccao, @local, @inicio, @fim, @orcamento, @ativa);" : "update atividades set Nome = @nome, Tipo = @tipo, Tema = @tema, Seccao = @seccao, Local = @local, DataInicio = @dataInicio, DataFim = @dataFim, Orcamento = @orcamento, Ativa = @ativa where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into atividades(Nome, Tipo, Tema, Seccao, Local, DataInicio, DataFim, Orcamento, Ativa) values (@nome, @tipo, @tema, @seccao, @local, @inicio, @fim, @orcamento, @ativa);" : "update atividades set Nome = @nome, Tipo = @tipo, Tema = @tema, Seccao = @seccao, Local = @local, DataInicio = @dataInicio, DataFim = @dataFim, Orcamento = @orcamento, Ativa = @ativa where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@nome", avm.Nome);
@@ -133,7 +132,7 @@ namespace ScoutGestWeb.Controllers
                         if (!string.IsNullOrEmpty(avm.Participantes))
                         {
                             string[] participantes = avm.Participantes.Split("\r\n");
-                            cmd.CommandText = insert ? "insert into participantes values " : "delete from participantes where IDAtividade = @id; insert into participantes values ";
+                            cmd.CommandText = (bool)inserir ? "insert into participantes values " : "delete from participantes where IDAtividade = @id; insert into participantes values ";
                             for (int i = 0; i < participantes.Length; i++)
                             {
                                 cmd.CommandText += $"(@id, @particip{i + 1}), ";
@@ -145,7 +144,8 @@ namespace ScoutGestWeb.Controllers
                         }
                         if (!(string.IsNullOrEmpty(avm.RecFinanceiros) && string.IsNullOrEmpty(avm.RecHumanos) && string.IsNullOrEmpty(avm.RecMateriais)))
                         {
-                            cmd.CommandText = insert ? "insert into recursos values (@id, @human, @mater, @financ" : "update recursos set RecHumanos = @human, RecMateriais = @mater, RecFinanceiros = @financ where IDAtividade = @id";
+                            cmd.CommandText = (bool)inserir ? "insert into recursos values (@id, @human, @mater, @financ" : "update recursos set RecHumanos = @human, RecMateriais = @mater, RecFinanceiros = @financ where IDAtividade = @id";
+                            cmd.Parameters.AddWithValue("@id", avm.IDAtividade);
                             cmd.Parameters.AddWithValue("@human", avm.RecHumanos);
                             cmd.Parameters.AddWithValue("@mater", avm.RecMateriais);
                             cmd.Parameters.AddWithValue("@financ", avm.RecFinanceiros);
@@ -225,6 +225,7 @@ namespace ScoutGestWeb.Controllers
                         while (await dr.ReadAsync()) avm.Participantes += dr["Totem"].ToString() + "\r\n";
                     }
                     avm.Participantes = avm.Participantes == null ? "" : avm.Participantes.Substring(0, avm.Participantes.LastIndexOf("\r\n"));
+                    TempData["inserir"] = false;
                     cmd.Connection.Close();
                 }
                 return await Task.Run(() => InserirAtividade((object)avm));

@@ -41,18 +41,18 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovoDocumento(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            TempData["insert"] = insert;
+            TempData["inserir"] = insert;
             return await Task.Run(() => View("NovoDocumento", model));
         }
         [HttpPost]
-        public async Task<IActionResult> NovoDocumento(TiposDocsViewModel tdvm, string idold = null)
+        public async Task<IActionResult> NovoDocumento(TiposDocsViewModel tdvm, string idold = null, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into tipos_docs values (@id, @descricao);" : "update tipos_docs set IDDocumento = @id and Descricao = @descricao where IDDocumento = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir? "insert into tipos_docs values (@id, @descricao);" : "update tipos_docs set IDDocumento = @id and Descricao = @descricao where IDDocumento = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@id", tdvm.IDDocumento);
@@ -62,7 +62,7 @@ namespace ScoutGestWeb.Controllers
                         int i = await cmd.ExecuteNonQueryAsync();
                         cmd.Connection.Close();
                         if (i == 0) throw new Exception($"não foi encontrado nenhum registo com o ID \"{idold}\"");
-                        TempData["msg"] = "Tipo de documento " + (insert ? "inserido" : "alterado") + " com sucesso";
+                        TempData["msg"] = "Tipo de documento " + ((bool)inserir ? "inserido" : "alterado") + " com sucesso";
                     }
                 }
                 catch (Exception e)

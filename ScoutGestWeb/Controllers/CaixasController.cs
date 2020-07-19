@@ -80,7 +80,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (User.IsInRole("Comum")) return Forbid();
-            insert = true;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             using (MySqlCommand cmd = new MySqlCommand("select Nome from grupos;", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
                 if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
@@ -99,11 +99,11 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
-            TempData["insert"] = insert;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             return await Task.Run(() => View("NovaCaixa", model));
         }
         [HttpPost]
-        public async Task<IActionResult> NovaCaixa(CaixaViewModel cvm)
+        public async Task<IActionResult> NovaCaixa(CaixaViewModel cvm, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
@@ -111,7 +111,7 @@ namespace ScoutGestWeb.Controllers
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);" : "update caixas set Nome = @nome, Grupo = @grupo, Responsavel = @responsavel where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into caixas(Nome, Grupo, Responsavel) values (@nome, @grupo, @responsavel);" : "update caixas set Nome = @nome, Grupo = @grupo, Responsavel = @responsavel where IDCaixa = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@nome", cvm.Nome);
@@ -155,7 +155,7 @@ namespace ScoutGestWeb.Controllers
                             }
                             cmd.Connection.Close();
                         }
-                        if (insert) cmd.Parameters.AddWithValue("@id", cvm.ID);
+                        if ((bool)inserir) cmd.Parameters.AddWithValue("@id", cvm.ID);
                         await cmd.PrepareAsync();
                         int i = await cmd.ExecuteNonQueryAsync();
                         cmd.Connection.Close();
@@ -175,7 +175,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
-            insert = false;
+            TempData["inserir"] = false;
             CaixaViewModel cvm = new CaixaViewModel();
             try
             {
@@ -319,11 +319,3 @@ namespace ScoutGestWeb.Controllers
         #endregion
     }
 }
-
-
-
-
-//aproveita e v se o botao ja ta ao lado da imagem
-//n ta
-//Martins consegui passar o texto e o titulo, mas da maneira que eu fiz não dá para passar o botão
-//Pq form não dá para meter dentro de um p, mas vou tentar mudar para um div para ver se consigo

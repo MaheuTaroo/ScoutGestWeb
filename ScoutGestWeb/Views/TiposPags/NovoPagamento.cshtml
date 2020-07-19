@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Novo pagamento - Tesouraria";
+    bool inserirBool = TempData["inserirKeep"] != null ? bool.Parse(TempData["inserirKeep"].ToString()) : true;
 }
 
 <h1>Novo pagamento</h1>
@@ -20,6 +21,11 @@
                 <input asp-for="Pagamento" class="form-control" />
                 <span asp-validation-for="Pagamento" class="text-danger"></span>
             </div>
+            @if (TempData["inserirKeep"] != null)
+            {
+                <input type="hidden" name="idold" value="@Model.IDPagamento" />
+            }
+            <input type="hidden" name="inserir" value="@(TempData["inserirKeep"] != null ? inserirBool ? "True": "False" : "True")" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

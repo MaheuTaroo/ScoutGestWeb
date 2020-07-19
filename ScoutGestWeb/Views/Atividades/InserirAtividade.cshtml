@@ -1,6 +1,7 @@
 ﻿@model ScoutGestWeb.Models.AtividadeViewModel
 @{
     ViewData["Title"] = "Inserir atividade - Atividades";
+    bool inserirBool = TempData["inserirKeep"] != null ? bool.Parse(TempData["inserirKeep"].ToString()) : true;
 }
 <h1>Nova atividade</h1>
 <hr />
@@ -93,24 +94,25 @@
                     <label asp-for="RecHumanos" style="width: 100%; height: 100%">
                         Recursos humanos:
                         <br />
-                        <textarea style="width: 100%; height: 400px; resize: none"></textarea>
+                        <textarea asp-for="RecHumanos" style="width: 100%; height: 400px; resize: none"></textarea>
                     </label>
                 </div>
                 <div style="grid-area: recMat; padding: 0 10px 0 10px">
                     <label asp-for="RecMateriais" style="width: 100%; height: 100%">
                         Recursos materiais:
                         <br />
-                        <textarea style="width: 100%; height: 400px; resize: none"></textarea>
+                        <textarea asp-for="RecMateriais" style="width: 100%; height: 400px; resize: none"></textarea>
                     </label>
                 </div>
                 <div style="grid-area: recFinanc; padding: 0 10px 0 10px">
                     <label asp-for="RecFinanceiros" style="width: 100%; height: 100%">
                         Recursos financeiros:
                         <br />
-                        <textarea style="min-width: 100%; min-height: 400px"></textarea>
+                        <textarea asp-for="RecFinanceiros" style="min-width: 100%; min-height: 400px"></textarea>
                     </label>
                 </div>
             </div>
+            <input type="hidden" name="inserir" value="@(TempData["inserirKeep"] != null ? inserirBool ? "True": "False" : "True")" />
             <div class="text-center">
                 <input type="submit" value="Inserir" class="btn btn-primary container-fluid" />
                 <br />

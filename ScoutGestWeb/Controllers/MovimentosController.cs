@@ -213,7 +213,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Entrada(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insert"] != null) TempData["insertKeep"] = TempData["insert"];
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             try
             {
                 List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
@@ -349,7 +349,7 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> Saida(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            if (TempData["insert"] != null) TempData["insertKeep"] = TempData["insert"];
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             List<string> nomesCaixas = new List<string>(), nomesDocs = new List<string>(), nomesPags = new List<string>(), nomesAtivs = new List<string>();
             using (MySqlCommand cmd = new MySqlCommand("select IDCaixa, Nome from caixas where IDCaixa > 0", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
             {
@@ -554,7 +554,6 @@ namespace ScoutGestWeb.Controllers
             {
                 TempData["insertMsg"] = "Ocorreu um erro com a inserção do registo: " + e.Message;
             }
-
             return await Task.Run(() => Transferencia((object)mtvm));
         }
         #endregion
@@ -596,7 +595,7 @@ namespace ScoutGestWeb.Controllers
                     }
                     cmd.Connection.Close();
                 }
-                TempData["insert"] = false;
+                TempData["inserir"] = false;
                 return await Task.Run(() => mvm.TipoMovimento.Contains("Entrada") ? Entrada((object)mvm) : Saida((object)mvm));
             }
             catch (Exception e)

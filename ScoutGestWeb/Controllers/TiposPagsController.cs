@@ -45,18 +45,18 @@ namespace ScoutGestWeb.Controllers
         public async Task<IActionResult> NovoPagamento(object model)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
-            TempData["insert"] = insert;
+            if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
             return await Task.Run(() => View("NovoPagamento", model));
         }
         [HttpPost]
-        public async Task<IActionResult> NovoPagamento(TiposPagsViewModel tpvm, string idold = null)
+        public async Task<IActionResult> NovoPagamento(TiposPagsViewModel tpvm, string idold = null, bool? inserir = true)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand(insert ? "insert into tipos_pags values(@id, @pagamento);" : "update tipos_pags set IDPag = @id, Pagamento = @pagamento where IDPag = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into tipos_pags values(@id, @pagamento);" : "update tipos_pags set IDPag = @id, Pagamento = @pagamento where IDPag = @idold", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
                         cmd.Parameters.AddWithValue("@id", tpvm.IDPagamento);
@@ -66,7 +66,7 @@ namespace ScoutGestWeb.Controllers
                         int i = await cmd.ExecuteNonQueryAsync();
                         cmd.Connection.Close();
                         if (i == 0) throw new Exception($"não foi encontrado um registo com o ID {idold}");
-                        else TempData["msg"] = "Tipo de pagamento " + (insert ? "inserido" : "atualizado") + " com sucesso";
+                        else TempData["msg"] = "Tipo de pagamento " + ((bool)inserir ? "inserido" : "atualizado") + " com sucesso";
                     }
                 }
                 catch (Exception e)
@@ -107,6 +107,7 @@ namespace ScoutGestWeb.Controllers
                             }
                         }
                     }
+                    TempData["inserir"] = true;
                     cmd.Connection.Close();
                 }
             }

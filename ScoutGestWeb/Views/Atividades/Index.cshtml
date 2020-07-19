@@ -166,7 +166,6 @@ else
                 <input type="submit" value="Procurar" class="btn btn-success" />
             }
         </div>
-        <!--<div style="margin-left:30%"></div>-->
         @if (User.IsInRole("Administração de Agrupamento") || User.IsInRole("Equipa de Animação"))
         {
             <div style="text-align: center">
@@ -179,7 +178,6 @@ else
                             </h2>
                         </p>
                         <p>
-                            <!--Data das atividades-->
                             <h5>
                                 De @Html.DisplayFor(modelItem => item.DataInicio) até @Html.DisplayFor(modelItem => item.DataFim)
                             </h5>

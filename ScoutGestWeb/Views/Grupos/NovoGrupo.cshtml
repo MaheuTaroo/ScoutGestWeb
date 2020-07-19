@@ -1,7 +1,7 @@
 ﻿@model ScoutGestWeb.Models.GrupoViewModel
-
 @{
     ViewData["Title"] = "Novo grupo - Escuteiros";
+    bool inserirBool = TempData["inserirKeep"] != null ? bool.Parse(TempData["inserirKeep"].ToString()) : true;
 }
 
 <h4>Novo grupo</h4>
@@ -35,6 +35,11 @@
                 <input asp-for="FotoUp" type="file" />
                 <span asp-validation-for="FotoUp" class="text-danger"></span>
             </div>
+            @if (TempData["inserirKeep"] != null)
+            {
+                <input type="hidden" name="idold" value="@Model.ID" />
+            }
+            <input type="hidden" name="inserir" value="@(TempData["inserirKeep"] != null ? inserirBool ? "True": "False" : "True")" />
             <div class="form-group">
                 <input type="submit" value="Criar caixa" class="btn btn-primary container-fluid" />-
             </div>

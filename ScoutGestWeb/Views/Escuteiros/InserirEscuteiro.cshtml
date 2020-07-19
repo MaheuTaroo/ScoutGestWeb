@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Inserir escuteiro - Escuteiros";
     Layout = "~/Views/Shared/_MasterPage.cshtml";
-    bool inserirBool = TempData["insertKeep"] != null ? bool.Parse(TempData["insertKeep"].ToString()) : true;
+    bool inserirBool = TempData["inserirKeep"] != null ? bool.Parse(TempData["inserirKeep"].ToString()) : true;
 }
 <h1>Inserir escuteiro</h1>
 <hr />
@@ -127,11 +127,11 @@
             <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
     </div>
-    @if (TempData["insertKeep"] != null && bool.Parse(TempData["insertKeep"].ToString()))
+    @if (TempData["inserirKeep"] != null && bool.Parse(TempData["inserirKeep"].ToString()))
     {
         <input type="hidden" name="idold" value="@Model.ID" />
     }
-    <input type="hidden" name="inserir" value="@(TempData["insertKeep"] != null ? inserirBool ? "True": "False" : "True")" />
+    <input type="hidden" name="inserir" value="@(TempData["inserirKeep"] != null ? inserirBool ? "True": "False" : "True")" />
     <input class="text-center btn btn-primary container-fluid" type="submit" value="Criar ficha de escuteiro" />
 </form>
 
