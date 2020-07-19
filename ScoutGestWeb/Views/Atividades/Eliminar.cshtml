@@ -75,14 +75,14 @@
         {
             <dd class="col-sm-10">Não</dd>
         }
-        <dt>Nº participantes:</dt>
-        <dd>@Html.DisplayFor(model => model.Participantes)</dd>
-        <dt>Recursos financeiros:</dt>
-        <dd>@Html.DisplayFor(model => model.RecFinanceiros)</dd>
-        <dt>Recursos humanos:</dt>
-        <dd>@Html.DisplayFor(model => model.RecHumanos)</dd>
-        <dt>Recursos materiais:</dt>
-        <dd>@Html.DisplayFor(model => model.RecMateriais)</dd>
+        <dt class="col-sm-2">Nº participantes:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Participantes)</dd>
+        <dt class="col-sm-2">Recursos financeiros:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.RecFinanceiros)</dd>
+        <dt class="col-sm-2">Recursos humanos:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.RecHumanos)</dd>
+        <dt class="col-sm-2">Recursos materiais:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.RecMateriais)</dd>
     </dl>
     <form asp-action="EliminarPost" asp-route-id="@Model.IDAtividade">
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |

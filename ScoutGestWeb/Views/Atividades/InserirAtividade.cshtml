@@ -4,6 +4,17 @@
 }
 <h1>Nova atividade</h1>
 <hr />
+@if (TempData["insertMsgKeep"] != null)
+{
+    if (TempData["insertMsgKeep"].ToString().Contains("Ocorreu um erro"))
+    {
+        <div class="bg-danger rounded text-center"><b>@TempData["insertMsgKeep"]</b></div>
+    }
+    else
+    {
+        <div class="bg-success rounded text-center"><b>@TempData["insertMsgKeep"]</b></div>
+    }
+}
 <div class="row">
     <div style="width: 100%">
         <div class="bg-danger rounded text-center container-fluid">@Html.ValidationSummary(false)</div>
@@ -63,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Orcamento" class="control-label">Orçamento</label>
-                        <input type="number" asp-for="Orcamento" step="0.01" class="form-control" />
+                        <input asp-for="Orcamento" class="form-control" />
                         <span asp-validation-for="Orcamento" class="text-danger"></span>
                     </div>
                     <div class="form-group">

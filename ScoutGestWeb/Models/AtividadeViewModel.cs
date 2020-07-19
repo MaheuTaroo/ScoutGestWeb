@@ -25,7 +25,7 @@ namespace ScoutGestWeb.Models
         public DateTime DataFim { get; set; }
         [Required(ErrorMessage = "Não foi definido um orçamento")]
         [Range(0.00, 9999999999999999999999999999999999999999999999999999999.99, ErrorMessage = "O orçamento não se encontra dentro dos parâmetros")]
-        public double Orcamento { get; set; }
+        public decimal Orcamento { get; set; }
         [Required(ErrorMessage = "Não foi confirmada a abertura da atividade a movimentos")]
         public bool Ativa { get; set; }
         [StringLength(1, ErrorMessage = "Não foram adicionados participantes à atividade")]

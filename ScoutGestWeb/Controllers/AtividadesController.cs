@@ -92,6 +92,7 @@ namespace ScoutGestWeb.Controllers
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
+            if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
             insert = true;
             return await Task.Run(() => View());
         }
@@ -125,10 +126,10 @@ namespace ScoutGestWeb.Controllers
                         cmd.Parameters.AddWithValue("@ativa", avm.Ativa == true ? 1 : 0);
                         await cmd.PrepareAsync();
                         await cmd.ExecuteNonQueryAsync();
-                        avm.Participantes = avm.Participantes.Trim();
-                        avm.RecFinanceiros = avm.RecFinanceiros.Trim();
-                        avm.RecHumanos = avm.RecHumanos.Trim();
-                        avm.RecMateriais = avm.RecMateriais.Trim();
+                        avm.Participantes = avm.Participantes == null ? "" : avm.Participantes.Trim();
+                        avm.RecFinanceiros = avm.RecFinanceiros == null? "" : avm.RecFinanceiros.Trim();
+                        avm.RecHumanos = avm.RecHumanos == null ? "" : avm.RecHumanos.Trim();
+                        avm.RecMateriais = avm.RecMateriais == null ? "" : avm.RecMateriais.Trim();
                         if (!string.IsNullOrEmpty(avm.Participantes))
                         {
                             string[] participantes = avm.Participantes.Split("\r\n");
@@ -153,15 +154,21 @@ namespace ScoutGestWeb.Controllers
                         }
                         cmd.Connection.Close();
                     }
-                    return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
+                    TempData["insertMsg"] = "Atividade inserida com sucesso";
+                    return await Task.Run(() => RedirectToAction("InserirEscuteiro"));
                 }
                 catch (MySqlException mse)
                 {
-                    ModelState.AddModelError("Erro", "Erro na inserção na base de dados: " + mse.ToString());
+                    TempData["insertMsg"] = "Erro na inserção na base de dados: " + mse.Message;
+                    return await Task.Run(() => View());
+                }
+                catch (Exception e)
+                {
+                    TempData["insertMsg"] = "Ocorreu um erro: " + e.Message;
                     return await Task.Run(() => View());
                 }
             }
-            return await Task.Run(() => View());
+            return await Task.Run(() => RedirectToAction("InserirAtividade", (object)avm));
         }
         #endregion
         public async Task<IActionResult> Editar(int id)
@@ -195,7 +202,7 @@ namespace ScoutGestWeb.Controllers
                                 avm.Local = dr["Local"].ToString();
                                 avm.DataInicio = Convert.ToDateTime(dr["DataInicio"].ToString());
                                 avm.DataFim = Convert.ToDateTime(dr["DataFim"].ToString());
-                                avm.Orcamento = double.Parse(dr["Orcamento"].ToString());
+                                avm.Orcamento = decimal.Parse(dr["Orcamento"].ToString());
                                 avm.Ativa = bool.Parse(dr["Ativa"].ToString());
                             }
                         }
@@ -217,7 +224,7 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync()) avm.Participantes += dr["Totem"].ToString() + "\r\n";
                     }
-                    avm.Participantes = avm.Participantes.Substring(0, avm.Participantes.LastIndexOf("\r\n"));
+                    avm.Participantes = avm.Participantes == null ? "" : avm.Participantes.Substring(0, avm.Participantes.LastIndexOf("\r\n"));
                     cmd.Connection.Close();
                 }
                 return await Task.Run(() => InserirAtividade((object)avm));
@@ -258,7 +265,7 @@ namespace ScoutGestWeb.Controllers
                                 avm.Local = dr["Local"].ToString();
                                 avm.DataInicio = DateTime.Parse(dr["DataInicio"].ToString());
                                 avm.DataFim = DateTime.Parse(dr["DataInicio"].ToString());
-                                avm.Orcamento = double.Parse(dr["Orcamento"].ToString());
+                                avm.Orcamento = decimal.Parse(dr["Orcamento"].ToString());
                                 avm.Ativa = bool.Parse(dr["Ativa"].ToString());
                             }
                         }
@@ -276,9 +283,9 @@ namespace ScoutGestWeb.Controllers
                     {
                         while (await dr.ReadAsync())
                         {
-                            avm.RecFinanceiros = dr["RecFinanceiros"].ToString();
-                            avm.RecHumanos = dr["RecHumanos"].ToString();
-                            avm.RecMateriais = dr["RecMateriais"].ToString();
+                            avm.RecFinanceiros = string.IsNullOrEmpty(dr["RecFinanceiros"].ToString()) ? "nenhum" : dr["RecFinanceiros"].ToString();
+                            avm.RecHumanos = string.IsNullOrEmpty(dr["RecHumanos"].ToString()) ? "nenhum" : dr["RecHumanos"].ToString();
+                            avm.RecMateriais = string.IsNullOrEmpty(dr["RecMateriais"].ToString()) ? "nenhum" : dr["RecMateriais"].ToString();
                         }
                     }
                     cmd.Connection.Close();
@@ -323,7 +330,7 @@ namespace ScoutGestWeb.Controllers
                                 avm.Local = dr["Local"].ToString();
                                 avm.DataInicio = Convert.ToDateTime(dr["DataInicio"].ToString());
                                 avm.DataFim = Convert.ToDateTime(dr["DataFim"].ToString());
-                                avm.Orcamento = double.Parse(dr["Orcamento"].ToString());
+                                avm.Orcamento = decimal.Parse(dr["Orcamento"].ToString());
                                 avm.Ativa = bool.Parse(dr["Ativa"].ToString());
                             }
                         }
@@ -343,7 +350,7 @@ namespace ScoutGestWeb.Controllers
                     await cmd.PrepareAsync();
                     using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
                     {
-                        while (await dr.ReadAsync()) avm.Participantes = dr["count(*)"].ToString() + "participantes";
+                        while (await dr.ReadAsync()) avm.Participantes = dr["count(*)"].ToString() + " participantes";
                     }
                     cmd.Connection.Close();
                 }
