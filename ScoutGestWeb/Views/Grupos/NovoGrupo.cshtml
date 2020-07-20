@@ -35,7 +35,7 @@
                 <input asp-for="FotoUp" type="file" />
                 <span asp-validation-for="FotoUp" class="text-danger"></span>
             </div>
-            @if (TempData["inserirKeep"] != null)
+            @if (TempData["inserirKeep"] != null && !bool.Parse(TempData["inserirKeep"].ToString()))
             {
                 <input type="hidden" name="idold" value="@Model.ID" />
             }

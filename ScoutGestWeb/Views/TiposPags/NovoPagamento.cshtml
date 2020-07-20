@@ -21,7 +21,7 @@
                 <input asp-for="Pagamento" class="form-control" />
                 <span asp-validation-for="Pagamento" class="text-danger"></span>
             </div>
-            @if (TempData["inserirKeep"] != null)
+            @if (TempData["inserirKeep"] != null && !bool.Parse(TempData["inserirKeep"].ToString()))
             {
                 <input type="hidden" name="idold" value="@Model.IDPagamento" />
             }

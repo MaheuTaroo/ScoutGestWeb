@@ -73,6 +73,20 @@ namespace ScoutGestWeb.Controllers
                                 cmd.CommandText = cmd.CommandText.Replace("pesquisa", "Ativa = " + bool.Parse(procura));
                                 break;
                         }
+                        await cmd.PrepareAsync();
+                        using (MySqlDataReader dr = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                        {
+                            while (await dr.ReadAsync())
+                            {
+                                avm.Add(new AtividadeViewModel()
+                                {
+                                    IDAtividade = int.Parse(dr["IDAtividade"].ToString()),
+                                    Nome = dr["Nome"].ToString(),
+                                    DataInicio = DateTime.Parse(dr["DataInicio"].ToString()),
+                                    DataFim = DateTime.Parse(dr["DataFim"].ToString())
+                                });
+                            }
+                        }
                         cmd.Connection.Close();
                     }
                 }
@@ -100,10 +114,11 @@ namespace ScoutGestWeb.Controllers
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
             if (TempData["inserir"] != null) TempData["inserirKeep"] = TempData["inserir"];
+            if (TempData["insertMsg"] != null) TempData["insertMsgKeep"] = TempData["insertMsg"];
             return await Task.Run(() => View("InserirAtividade", model));
         }
         [HttpPost]
-        public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm, bool? inserir = null)
+        public async Task<IActionResult> InserirAtividade(AtividadeViewModel avm, int? idold = null, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (!User.IsInRole("Administração de Agrupamento")) return Forbid();
@@ -111,9 +126,10 @@ namespace ScoutGestWeb.Controllers
             {
                 try
                 {
-                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into atividades(Nome, Tipo, Tema, Seccao, Local, DataInicio, DataFim, Orcamento, Ativa) values (@nome, @tipo, @tema, @seccao, @local, @inicio, @fim, @orcamento, @ativa);" : "update atividades set Nome = @nome, Tipo = @tipo, Tema = @tema, Seccao = @seccao, Local = @local, DataInicio = @dataInicio, DataFim = @dataFim, Orcamento = @orcamento, Ativa = @ativa where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                    using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into atividades(Nome, Tipo, Tema, Seccao, Local, DataInicio, DataFim, Orcamento, Ativa) values (@nome, @tipo, @tema, @seccao, @local, @inicio, @fim, @orcamento, @ativa);" : "update atividades set Nome = @nome, Tipo = @tipo, Tema = @tema, Seccao = @seccao, Local = @local, DataInicio = @inicio, DataFim = @fim, Orcamento = @orcamento, Ativa = @ativa where IDAtividade = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                     {
                         if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
+                        if (idold != null) cmd.Parameters.AddWithValue("@id", avm.IDAtividade);
                         cmd.Parameters.AddWithValue("@nome", avm.Nome);
                         cmd.Parameters.AddWithValue("@tipo", avm.Tipo);
                         cmd.Parameters.AddWithValue("@tema", avm.Tema);
@@ -135,10 +151,25 @@ namespace ScoutGestWeb.Controllers
                             cmd.CommandText = (bool)inserir ? "insert into participantes values " : "delete from participantes where IDAtividade = @id; insert into participantes values ";
                             for (int i = 0; i < participantes.Length; i++)
                             {
-                                cmd.CommandText += $"(@id, @particip{i + 1}), ";
+                                cmd.CommandText += $"(@id{i + 1}, @particip{i + 1}), ";
                                 cmd.Parameters.AddWithValue($"@particip{i + 1}", participantes[i]);
                             }
                             cmd.CommandText = cmd.CommandText.Remove(cmd.CommandText.LastIndexOf(", "));
+                            if ((bool)inserir)
+                            {
+                                using (MySqlCommand cmd2 = new MySqlCommand("select max(IDAtividade) from atividades", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
+                                {
+                                    await cmd.PrepareAsync();
+                                    using (MySqlDataReader dr2 = (MySqlDataReader)await cmd.ExecuteReaderAsync())
+                                    {
+                                        for (int i = 0; i < participantes.Length; i++)
+                                        {
+                                            cmd.Parameters.AddWithValue($"@id{i + 1}", dr2["IDAtividade"].ToString());
+                                        }
+                                    }
+                                    cmd.Connection.Close();
+                                }
+                            }
                             await cmd.PrepareAsync();
                             await cmd.ExecuteNonQueryAsync();
                         }
@@ -155,7 +186,7 @@ namespace ScoutGestWeb.Controllers
                         cmd.Connection.Close();
                     }
                     TempData["insertMsg"] = "Atividade inserida com sucesso";
-                    return await Task.Run(() => RedirectToAction("InserirEscuteiro"));
+                    return await Task.Run(() => RedirectToAction("InserirAtividade"));
                 }
                 catch (MySqlException mse)
                 {

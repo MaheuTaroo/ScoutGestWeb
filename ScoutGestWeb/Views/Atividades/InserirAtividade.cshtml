@@ -7,7 +7,7 @@
 <hr />
 @if (TempData["insertMsgKeep"] != null)
 {
-    if (TempData["insertMsgKeep"].ToString().Contains("Ocorreu um erro"))
+    if (TempData["insertMsgKeep"].ToString().Contains("Ocorreu um erro") || TempData["insertMsgKeep"].ToString().Contains("Erro"))
     {
         <div class="bg-danger rounded text-center"><b>@TempData["insertMsgKeep"]</b></div>
     }
@@ -112,6 +112,10 @@
                     </label>
                 </div>
             </div>
+            @if (TempData["inserirKeep"] != null && !bool.Parse(TempData["inserirKeep"].ToString()))
+            {
+                <input type="hidden" name="idold" value="@Model.IDAtividade" />
+            }
             <input type="hidden" name="inserir" value="@(TempData["inserirKeep"] != null ? inserirBool ? "True": "False" : "True")" />
             <div class="text-center">
                 <input type="submit" value="Inserir" class="btn btn-primary container-fluid" />

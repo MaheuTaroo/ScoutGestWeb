@@ -127,7 +127,7 @@
             <textarea asp-for="Observacoes" style="width: 100%; resize: none" rows="10"></textarea>
         </div>
     </div>
-    @if (TempData["inserirKeep"] != null && bool.Parse(TempData["inserirKeep"].ToString()))
+    @if (TempData["inserirKeep"] != null && !bool.Parse(TempData["inserirKeep"].ToString()))
     {
         <input type="hidden" name="idold" value="@Model.ID" />
     }

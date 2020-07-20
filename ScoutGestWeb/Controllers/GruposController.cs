@@ -78,7 +78,7 @@ namespace ScoutGestWeb.Controllers
             return await Task.Run(() => View("NovoGrupo", model));
         }
         [HttpPost]
-        public async Task<IActionResult> NovoGrupo(GrupoViewModel gvm, int? id = null, bool? inserir = null)
+        public async Task<IActionResult> NovoGrupo(GrupoViewModel gvm, int? idold = null, bool? inserir = null)
         {
             if (!User.Identity.IsAuthenticated) return await Task.Run(() => RedirectToAction("Index", "Home"));
             if (ModelState.IsValid)
@@ -86,7 +86,7 @@ namespace ScoutGestWeb.Controllers
                 using (MySqlCommand cmd = new MySqlCommand((bool)inserir ? "insert into grupos(Nome, Sigla, Foto, Seccao, Pseudonimo) values (@nome, @sigla, @foto, @seccao, @pseudonimo)" : "update grupos set Nome = @nome, Sigla = @sigla, Foto =  @foto, Seccao = @seccao, Pseudonimo = @pseudonimo where IDGrupo = @id", new MySqlConnection("server=localhost; port=3306; database=scoutgest; user=root")))
                 {
                     if (cmd.Connection.State != ConnectionState.Open) await cmd.Connection.OpenAsync();
-                    if (id != null) cmd.Parameters.AddWithValue("@id", id);
+                    if (idold != null) cmd.Parameters.AddWithValue("@id", idold);
                     cmd.Parameters.AddWithValue("@nome", gvm.Nome);
                     cmd.Parameters.AddWithValue("@sigla", gvm.Sigla);
                     cmd.Parameters.AddWithValue("@seccao", gvm.Seccao);
