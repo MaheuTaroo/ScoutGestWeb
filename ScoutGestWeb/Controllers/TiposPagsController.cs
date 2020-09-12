@@ -11,7 +11,6 @@ namespace ScoutGestWeb.Controllers
     [RequireHttps]
     public class TiposPagsController : Controller
     {
-        bool insert = true;
         public async Task<IActionResult> Index()
         {
             if (TempData["msg"] != null) TempData["msgKeep"] = TempData["msg"];
@@ -99,7 +98,6 @@ namespace ScoutGestWeb.Controllers
                         }
                         else
                         {
-                            insert = false;
                             while (await dr.ReadAsync())
                             {
                                 tpvm.IDPagamento = dr["IDPag"].ToString();

@@ -15,7 +15,6 @@ namespace ScoutGestWeb.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly List<CaixaViewModel> cvm = new List<CaixaViewModel>();
         private readonly List<int> grupos = new List<int>(), responsaveis = new List<int>();
-        bool insert = true;
         public CaixasController(UserManager<ApplicationUser> userManager) => _userManager = userManager;
         public async Task<IActionResult> Index()
         {
