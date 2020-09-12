@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20-Jul-2020 às 03:22
+-- Tempo de geração: 12-Set-2020 às 15:59
 -- Versão do servidor: 10.4.13-MariaDB
 -- versão do PHP: 7.4.8
 
@@ -268,7 +268,7 @@ INSERT INTO `caixas` (`IDCaixa`, `Nome`, `Grupo`, `Responsavel`, `Saldo`) VALUES
 (6, 'Patrulha Coati', 6, 26, '0.00'),
 (7, 'Patrulha Esquilo', 7, 30, '0.00'),
 (8, 'Patrulha Falcão', 8, 34, '0.00'),
-(9, 'Patrulha Mocho', 9, 38, '45.00'),
+(9, 'Patrulha Mocho', 9, 38, '-90.00'),
 (10, 'Patrulha Pantera', 10, 42, '0.00'),
 (11, 'Patrulha Raposa', 11, 46, '0.00'),
 (12, 'Patrulha Tigre', 12, 50, '0.00'),
@@ -287,7 +287,7 @@ INSERT INTO `caixas` (`IDCaixa`, `Nome`, `Grupo`, `Responsavel`, `Saldo`) VALUES
 (25, 'Expedição', 25, 102, '0.00'),
 (26, 'Comunidade', 26, 109, '0.00'),
 (27, 'Clã', 27, 114, '0.00'),
-(28, 'Administração de Agrupamento', 28, 118, '6.00');
+(28, 'Administração de Agrupamento', 28, 118, '186.00');
 
 -- --------------------------------------------------------
 
@@ -593,7 +593,10 @@ INSERT INTO `movimentos` (`IDMovimento`, `IDCaixa`, `Seccao`, `IDDocumento`, `Ti
 (5, 3, 'Agrupamento', 'CA', 'Saída de tesouraria', 'AdminAgr', '2018-02-20', '6.00', 'BC', 'Entrega de calendários', 1),
 (6, 28, 'Agrupamento', 'CA', 'Entrada de tesouraria', 'AdminAgr', '2018-02-20', '6.00', 'BC', 'Entrega de calendários', 1),
 (7, 22, 'Agrupamento', 'TC', 'Saída de tesouraria', 'AdminAgr', '2020-07-18', '10.49', 'BC', 'Compra de terços', 4),
-(8, 15, 'Agrupamento', 'TC', 'Entrada de tesouraria', 'AdminAgr', '2020-07-18', '10.49', 'BC', 'Compra de terços', 4);
+(8, 15, 'Agrupamento', 'TC', 'Entrada de tesouraria', 'AdminAgr', '2020-07-18', '10.49', 'BC', 'Compra de terços', 4),
+(9, 28, 'Agrupamento', 'CA', 'Entrada de tesouraria', 'AdminAgr', '2020-07-20', '45.00', 'DI', 'Venda de calendârios', 1),
+(10, 9, 'Agrupamento', 'QU', 'Saída de tesouraria', 'AdminAgr', '2020-07-19', '135.00', 'MB', 'Quotas de 3 elementos', 4),
+(11, 28, 'Agrupamento', 'QU', 'Entrada de tesouraria', 'AdminAgr', '2020-07-19', '135.00', 'MB', 'Quotas de 3 elementos', 4);
 
 --
 -- Acionadores `movimentos`
@@ -1051,7 +1054,7 @@ ALTER TABLE `aspnetuserclaims`
 -- AUTO_INCREMENT de tabela `atividades`
 --
 ALTER TABLE `atividades`
-  MODIFY `IDAtividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `IDAtividade` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `caixas`
@@ -1069,7 +1072,7 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT de tabela `movimentos`
 --
 ALTER TABLE `movimentos`
-  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `IDMovimento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restrições para despejos de tabelas
